@@ -1,0 +1,36 @@
+.main {
+  display: grid;
+  height: 100vh;
+  place-items: center;
+}
+
+.form {
+  background-color: var(--background-white);
+  border-radius: var(--border-radius-12);
+  box-shadow: var(--box-shadow);
+  display: grid;
+  gap: 20px;
+  grid-auto-flow: row;
+  height: auto;
+  padding: 40px 50px;
+  width: 480px;
+}
+
+.header {
+  display: grid;
+  place-items: center;
+}
+.header h1 {
+  color: var(--color-blue);
+  font-size: 25px;
+}
+.header h2 {
+  color: var(--color-gray);
+  font-size: 20px;
+}
+
+.errorLogin {
+  color: var(--color-error);
+  font-size: 14px;
+  text-align: center;
+}
