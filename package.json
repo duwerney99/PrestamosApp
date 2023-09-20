@@ -2,13 +2,39 @@
   "name": "app-tienda",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "email": "kevintobon11@gmail.com",
+    "name": "Kevin Tobón"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
+  "dependencies": {
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "@headlessui/react": "1.7.17",
+    "@heroicons/react": "2.0.18",
+    "@mui/icons-material": "5.14.9",
+    "@mui/material": "5.14.10",
+    "@reduxjs/toolkit": "1.9.5",
+    "encoding": "0.1.13",
+    "eslint": "8.49.0",
+    "eslint-config-next": "13.5.1",
+    "firebase": "10.4.0",
+    "next": "13.5.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-redux": "8.1.2",
+    "recharts": "^2.8.0",
+    "redux": "4.2.1"
+  },
   "devDependencies": {
-    "tailwindcss": "^3.3.2"
+    "autoprefixer": "10.4.15",
+    "flowbite": "1.6.5",
+    "postcss": "8.4.30",
+    "tailwindcss": "3.3.3"
   }
 }
