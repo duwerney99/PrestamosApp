@@ -1,28 +1,30 @@
 
-import { editProduct } from '@redux/reducers/productReducer';
+import { TextField } from '@mui/material';
+import { editarColeccion } from '@redux/reducers/coleccionReducer';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-export const FormEdit = ({product, updateShowEditProduct}) => {
+export const FormEdit = ({coleccion, actualizarEditarColeccion}) => {
 
-    const [productEdit, setProductEdit] = useState({ codigo: product.codigo, nombre: product.nombre, descripcion: product.descripcion,
-        costo: product.costo, valorVenta: product.valorVenta, totalProductos: product.totalProductos });
+    const [coleccionEditar, setColeccionEditar] = useState({ codigo: coleccion.codigo,
+        nombre: coleccion.nombre,
+        fecha_creacion: coleccion.fecha_creacion });
     const dispatch = useDispatch();
 
     const handleClickCancel = () => {
-        updateShowEditProduct(false);
+        actualizarEditarColeccion(false);
     };
 
     const handleClickEdit = () => {
-        updateShowEditProduct(false);
-        dispatch(editProduct(productEdit));
+        actualizarEditarColeccion(false);
+        dispatch(editarColeccion(coleccionEditar));
     };
 
     const onChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        setProductEdit({
-            ...productEdit,
+        setColeccionEditar({
+            ...coleccionEditar,
             [name]: value,
         })
     }
@@ -32,16 +34,47 @@ export const FormEdit = ({product, updateShowEditProduct}) => {
                     <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
                         <div className='mb-4 flex items-center justify-center'>
                             <div className="space-y-4">
-                                <h3 className='text-xl font-bold text-gray-900 mb-2'>Edición de producto</h3>
+                                <h3 className='text-xl font-bold text-gray-900 mb-2'>Edición de colecciono</h3>
                                 <div className="flex">
-                                    <input onChange={onChange} disabled={true} type="text" defaultValue={product.codigo} name='codigo' placeholder="Código" className="bg-gray-200 block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
-                                    <input onChange={onChange} type="text" defaultValue={product.nombre} name='nombre' placeholder="Nombre" className="block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
-                                    <input onChange={onChange} type="text" defaultValue={product.descripcion} name='descripcion' placeholder="Descripción" className="block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
-                                </div>
-                                <div className="flex">
-                                    <input onChange={onChange} type="number" defaultValue={product.costo} name='costo' placeholder="Costo" className="block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
-                                    <input onChange={onChange} type="number" defaultValue={product.valorVenta} name='valorVenta' placeholder="Valor Venta" className="block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
-                                    <input onChange={onChange} defaultValue={product.totalProductos} type="number" name='totalProductos' placeholder="Cantidad" className="block text-sm py-3 px-4 mr-4 rounded-lg w-full border outline-none" />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="text"
+                                        name="codigo"
+                                        label="Código"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '1rem' }}
+                                        fullWidth
+                                        disabled={true}
+                                        defaultValue={coleccionEditar.codigo}
+                                        error={!coleccionEditar.codigo}
+                                        helperText={!coleccionEditar.codigo ? 'Campo obligatorio.' : ''}
+                                    />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="text"
+                                        name="nombre"
+                                        label="Nombre"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '1rem' }}
+                                        fullWidth
+                                        defaultValue={coleccionEditar.nombre}
+                                        error={!coleccionEditar.nombre}
+                                        helperText={!coleccionEditar.nombre ? 'Campo obligatorio.' : ''}
+                                    />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="date"
+                                        name="fecha_creacion"
+                                        label="Fecha Creación"
+                                        defaultValue={coleccionEditar.fecha_creacion}
+                                        size="small"
+                                        style={{ marginRight: '1rem' }}
+                                        fullWidth
+                                        error={!coleccionEditar.fecha_creacion}
+                                        helperText={!coleccionEditar.fecha_creacion ? 'Campo obligatorio.' : ''}
+                                    />
                                 </div>
                             </div>
                         </div>

@@ -1,43 +1,43 @@
 'use client'
 import { TextField } from '@mui/material';
-import { saveProduct } from '@redux/reducers/productReducer';
+import { guardarColeccion } from '@redux/reducers/coleccionReducer';
 import moment from 'moment/moment';
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-export const FormCreate = ({updateShowCreateProduct}) => {
+export const FormCreate = ({actualizarCrearColeccion}) => {
 
-    const [product, setProduct] = useState({ codigo: null, nombre: null, fecha: null })
-    const [existProduct, setExistProduct] = useState(false)
+    const [coleccion, setColeccion] = useState({ codigo: null, nombre: null, fecha_creacion: moment(new Date()).format('YYYY-MM-DD') })
+    const [existeColeccion, setExisteColeccion] = useState(false)
     const [initialComponent, setInitialComponent] = useState(true)
     const dispatch = useDispatch();
-    const productReducer = useSelector((state) => state.productReducer)
+    const coleccionReducer = useSelector((state) => state.coleccionReducer)
     const dateFormat = moment(new Date()).format('YYYY-MM-DD');
 
 
     const handleClickCancel = () => {
-        updateShowCreateProduct(false);
+        actualizarCrearColeccion(false);
     };
 
     const handleClickSave = () => {
         setInitialComponent(false)
-        if (productReducer.productos.some(productExist => productExist.codigo === product.codigo)) return setExistProduct(true)
-        const producValues = Object.values(product)
+        if (coleccionReducer.colecciones.some(coleccionExiste => coleccionExiste.codigo === coleccion.codigo)) return setExisteColeccion(true)
+        const producValues = Object.values(coleccion)
         const hasNull =  producValues.some((value) => value === null || value === '')
         if (hasNull) {
             return
         }
-        updateShowCreateProduct(false);
-        dispatch(saveProduct(product));
-        setExistProduct(false)
+        actualizarCrearColeccion(false);
+        dispatch(guardarColeccion(coleccion));
+        setExisteColeccion(false)
     }
 
     const onChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        if (name === 'codigo') setExistProduct(false)
-        setProduct({
-            ...product,
+        if (name === 'codigo') setExisteColeccion(false)
+        setColeccion({
+            ...coleccion,
             [name]: value,
         })
     }
@@ -58,8 +58,8 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && (existProduct || !product.codigo)}
-                                        helperText={!initialComponent && existProduct ? 'El código ya existe.' : !initialComponent && !product.codigo ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && (existeColeccion || !coleccion.codigo)}
+                                        helperText={!initialComponent && existeColeccion ? 'El código ya existe.' : !initialComponent && !coleccion.codigo ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -70,17 +70,20 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.nombre}
-                                        helperText={!initialComponent && !product.nombre ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !coleccion.nombre}
+                                        helperText={!initialComponent && !coleccion.nombre ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
+                                        onChange={onChange}
                                         type="date"
-                                        name="fecha"
+                                        name="fecha_creacion"
                                         label="Fecha Creación"
                                         defaultValue={dateFormat}
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
+                                        error={!initialComponent && !coleccion.fecha_creacion}
+                                        helperText={!initialComponent && !coleccion.fecha_creacion ? 'Campo obligatorio.' : ''}
                                     />
                                 </div>
                             </div>

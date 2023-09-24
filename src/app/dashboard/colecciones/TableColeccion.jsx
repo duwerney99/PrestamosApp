@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 export const colorIcon = '#0284c7';
 
-export const TableColeccion = ({showCreateProduct, editProductTable}) => {
+export const TableColeccion = ({mostrarCrearColeccion, editProductTable}) => {
     const productReducer = useSelector((state) => state.coleccionReducer)
 
     const handleClick = (item) => {
@@ -54,7 +54,7 @@ export const TableColeccion = ({showCreateProduct, editProductTable}) => {
                                             {item?.fecha_creacion}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            <IconButton disabled={showCreateProduct} onClick={() => handleClick(item)} aria-label="Editar">
+                                            <IconButton disabled={mostrarCrearColeccion} onClick={() => handleClick(item)} aria-label="Editar">
                                                 <PencilSquareIcon color={colorIcon} width={20} height={20}/>
                                             </IconButton> 
                                         </td>

@@ -10,20 +10,20 @@ import { agregarColeccion } from '@redux/actions/coleccionActions';
 const data = [
     {
         codigo: "0001",
-        fecha_creacion: "12-12-12",
+        fecha_creacion: "2022-09-30",
         nombre: "Coleccion uno"
     },
     {
         codigo: "0002",
-        fecha_creacion: "11-11-11",
+        fecha_creacion: "2021-09-30",
         nombre: "Coleccion dos"
     }
 ]
 
 export default function Page () {
-    const [showCreateProduct, setShowCreateProduct] = useState(false);
-    const [showEditProduct, setShowEditProduct] = useState(false);
-    const [product, setProduct] = useState({});
+    const [mostrarCrearColeccion, setActualizarCrearColeccion] = useState(false);
+    const [mostrarEditarColeccion, setEditarColeccion] = useState(false);
+    const [coleccion, setColeccion] = useState({});
     const coleccionReducer = useSelector((state) => state.coleccionReducer)
     const dispatch = useDispatch();
 
@@ -32,26 +32,26 @@ export default function Page () {
     }, []);
 
 
-    const updateShowCreateProduct = (value) => {
-        setShowCreateProduct(value);
+    const actualizarCrearColeccion = (value) => {
+        setActualizarCrearColeccion(value);
     }
 
-    const updateShowEditProduct = (value) => {
-        setShowEditProduct(value);
+    const actualizarEditarColeccion = (value) => {
+        setEditarColeccion(value);
     }
 
     const editProductTable = (value, item) => {
-        setProduct(item);
-        setShowEditProduct(value);
+        setColeccion(item);
+        setEditarColeccion(value);
     }
     
     return (
         <div>
             <div className='pt-6 px-4 justify-center items-center'>
-                { showCreateProduct && <FormCreate updateShowCreateProduct={updateShowCreateProduct}/>}
+                { mostrarCrearColeccion && <FormCreate actualizarCrearColeccion={actualizarCrearColeccion}/>}
             </div>
             <div className='pt-6 px-4'>
-                { showEditProduct && <FormEdit product={product} updateShowEditProduct={updateShowEditProduct} />}
+                { mostrarEditarColeccion && <FormEdit coleccion={coleccion} actualizarEditarColeccion={actualizarEditarColeccion} />}
             </div>
             <div className='pt-6 px-4'>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4'>
@@ -61,17 +61,17 @@ export default function Page () {
                                     <h3 className='text-xl font-bold text-gray-900 mb-2'>Colecciones</h3>
                                 </div>
                                 <div className='flex-shrink-0'>
-                                    <button disabled={showEditProduct || showCreateProduct}
-                                        onClick={() => setShowCreateProduct(true)}
+                                    <button disabled={mostrarEditarColeccion || mostrarCrearColeccion}
+                                        onClick={() => setActualizarCrearColeccion(true)}
                                         className={`text-lg font-medium ${
-                                            showEditProduct || showCreateProduct ? 'text-gray-500' : 'text-sky-600 hover:bg-gray-100'
+                                            mostrarEditarColeccion || mostrarCrearColeccion ? 'text-gray-500' : 'text-sky-600 hover:bg-gray-100'
                                         } rounded-lg p-2`}>
                                         Crear Colección
                                     </button>
                                     
                                 </div>
                             </div>
-                            <TableColeccion showCreateProduct={showCreateProduct} editProductTable={editProductTable}/>
+                            <TableColeccion mostrarCrearColeccion={mostrarCrearColeccion} editProductTable={editProductTable}/>
                         </div>
                 </div>
             </div>
