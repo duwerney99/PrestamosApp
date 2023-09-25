@@ -9,24 +9,22 @@ export const FormCreate = ({actualizarCrearColeccion}) => {
 
     const [coleccion, setColeccion] = useState({ codigo: null, nombre: null, fecha_creacion: moment(new Date()).format('YYYY-MM-DD') })
     const [existeColeccion, setExisteColeccion] = useState(false)
-    const [initialComponent, setInitialComponent] = useState(true)
+    const [inicialComponente, setInicialComponente] = useState(true)
     const dispatch = useDispatch();
     const coleccionReducer = useSelector((state) => state.coleccionReducer)
     const dateFormat = moment(new Date()).format('YYYY-MM-DD');
 
 
-    const handleClickCancel = () => {
+    const cancelar = () => {
         actualizarCrearColeccion(false);
     };
 
-    const handleClickSave = () => {
-        setInitialComponent(false)
+    const guardar = () => {
+        setInicialComponente(false)
         if (coleccionReducer.colecciones.some(coleccionExiste => coleccionExiste.codigo === coleccion.codigo)) return setExisteColeccion(true)
-        const producValues = Object.values(coleccion)
-        const hasNull =  producValues.some((value) => value === null || value === '')
-        if (hasNull) {
-            return
-        }
+        const valorColeccion = Object.values(coleccion)
+        const tieneNull =  valorColeccion.some((value) => value === null || value === '')
+        if (tieneNull) return
         actualizarCrearColeccion(false);
         dispatch(guardarColeccion(coleccion));
         setExisteColeccion(false)
@@ -58,8 +56,8 @@ export const FormCreate = ({actualizarCrearColeccion}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && (existeColeccion || !coleccion.codigo)}
-                                        helperText={!initialComponent && existeColeccion ? 'El código ya existe.' : !initialComponent && !coleccion.codigo ? 'Campo obligatorio.' : ''}
+                                        error={!inicialComponente && (existeColeccion || !coleccion.codigo)}
+                                        helperText={!inicialComponente && existeColeccion ? 'El código ya existe.' : !inicialComponente && !coleccion.codigo ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -70,8 +68,8 @@ export const FormCreate = ({actualizarCrearColeccion}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !coleccion.nombre}
-                                        helperText={!initialComponent && !coleccion.nombre ? 'Campo obligatorio.' : ''}
+                                        error={!inicialComponente && !coleccion.nombre}
+                                        helperText={!inicialComponente && !coleccion.nombre ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -82,8 +80,8 @@ export const FormCreate = ({actualizarCrearColeccion}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !coleccion.fecha_creacion}
-                                        helperText={!initialComponent && !coleccion.fecha_creacion ? 'Campo obligatorio.' : ''}
+                                        error={!inicialComponente && !coleccion.fecha_creacion}
+                                        helperText={!inicialComponente && !coleccion.fecha_creacion ? 'Campo obligatorio.' : ''}
                                     />
                                 </div>
                             </div>
@@ -91,12 +89,12 @@ export const FormCreate = ({actualizarCrearColeccion}) => {
                         <div className="flex justify-end">
                             <div className="mt-6">
                                 <button
-                                    onClick={handleClickCancel}
+                                    onClick={cancelar}
                                     className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
                             </div>
                             <div className="mt-6 ml-4">
                                 <button
-                                onClick={handleClickSave}
+                                onClick={guardar}
                                 className="py-3 w-40 text-xl text-white bg-sky-600 rounded-2xl">Guardar</button>
                             </div>
                         </div>
