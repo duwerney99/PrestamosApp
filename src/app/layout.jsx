@@ -7,7 +7,7 @@ export default function RootLayout ({ children }) {
             <head>
                 <head>
                     <link rel="shortcut icon" href="/public/vuce.png"/> 
-                    <title>VUCE</title>
+                    <title>VUCE INVENTARIO</title>
                 </head>
             </head>
             <body>

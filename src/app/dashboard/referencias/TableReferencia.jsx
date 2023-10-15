@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 export const colorIcon = '#0284c7';
 
-export const TableColeccion = ({mostrarCrearColeccion, editColeccionTable}) => {
-    const coleccionReducer = useSelector((state) => state.coleccionReducer)
+export const TableReferencia = ({mostrarCrearReferencia, editarReferenciaTable}) => {
+    const referenciaReducer = useSelector((state) => state.referenciaReducer)
 
     const handleClick = (item) => {
-        editColeccionTable(true, item);
+        editarReferenciaTable(true, item);
     };
 
     return (
@@ -32,6 +32,11 @@ export const TableColeccion = ({mostrarCrearColeccion, editColeccionTable}) => {
                                     <th
                                         scope='col'
                                         className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Colección
+                                    </th>
+                                    <th
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                         Fecha creación
                                     </th>
                                     <th
@@ -42,7 +47,7 @@ export const TableColeccion = ({mostrarCrearColeccion, editColeccionTable}) => {
                                 </tr>
                             </thead>
                             <tbody className='bg-white'>
-                                {coleccionReducer.colecciones.map((item) => (
+                                {referenciaReducer.referencias.map((item) => (
                                     <tr key={item?.codigo}>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.codigo}
@@ -51,10 +56,13 @@ export const TableColeccion = ({mostrarCrearColeccion, editColeccionTable}) => {
                                             {item?.nombre}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
+                                            {item?.coleccion}
+                                        </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
                                             {item?.fecha_creacion}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            <IconButton disabled={mostrarCrearColeccion} onClick={() => handleClick(item)} aria-label="Editar">
+                                            <IconButton disabled={mostrarCrearReferencia} onClick={() => handleClick(item)} aria-label="Editar">
                                                 <PencilSquareIcon color={colorIcon} width={20} height={20}/>
                                             </IconButton> 
                                         </td>

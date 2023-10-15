@@ -40,7 +40,7 @@ export default function Page () {
         setEditarColeccion(value);
     }
 
-    const editProductTable = (value, item) => {
+    const editColeccionTable = (value, item) => {
         setColeccion(item);
         setEditarColeccion(value);
     }
@@ -71,7 +71,7 @@ export default function Page () {
                                     
                                 </div>
                             </div>
-                            <TableColeccion mostrarCrearColeccion={mostrarCrearColeccion} editProductTable={editProductTable}/>
+                            <TableColeccion mostrarCrearColeccion={mostrarCrearColeccion} editColeccionTable={editColeccionTable}/>
                         </div>
                 </div>
             </div>
