@@ -52,7 +52,7 @@ export const FormLogin = () => {
           <div className="text-center mt-6">
             <button onClick={handleClick}
             disabled={!user.email || !user.password || errorEmail || errorPass || auth.loading}
-            className="py-3 w-64 text-xl text-white bg-blue-400 rounded-2xl">Iniciar Sesión</button>
+            className="py-3 w-64 text-xl text-white bg-green-400 rounded-2xl">Iniciar Sesión</button>
           </div>
           <div className="text-center mt-6 w-100">
             {auth.errorMessage && (

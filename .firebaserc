@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "versatil-inventario-dev",
-    "prod": "versatil-inventario"
+    "default": "prestamos-app-dev",
+    "prod": "prestamos-app"
   },
   "targets": {},
   "etags": {}

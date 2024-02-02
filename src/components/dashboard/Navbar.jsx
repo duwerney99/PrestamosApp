@@ -48,7 +48,7 @@ export default function Navbar () {
                         </button>
                         <Link href='/dashboard' className='flex ml-2 md:mr-24'>
                             <Image 
-                                src="/vuce.png"
+                                src="/prestamo.png"
                                 width={300}
                                 height={300}
                                 className="mr-4 w-10 md:w-14 rounded-full mx-auto"
@@ -56,7 +56,7 @@ export default function Navbar () {
                                 priority={true}
                             />
                             <span className='self-center text-xl font-semibold sm:text-xl whitespace-nowrap text-neutral-700 dark:text-white'>
-                                Vuce
+                                Prestamos
                             </span>
                         </Link>
                     </div>

@@ -1,50 +1,40 @@
 'use client'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { saveProduct } from '@redux/reducers/productReducer';
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 
-export const FormCreate = ({updateShowCreateProduct}) => {
+export const FormCreate = ({actualizarMostrarCrearCliente}) => {
 
-    const [product, setProduct] = useState({ codigo: null, nombre: null, descripcion: null, costo: null, valorVenta: null, totalProductos: null })
-    const [existProduct, setExistProduct] = useState(false)
+    const [cliente, setCliente] = useState({ codigo: null, nombre: null, apellido: null, cedula: null, telefono: null, correoElectronico: null })
     const [initialComponent, setInitialComponent] = useState(true)
-    const dispatch = useDispatch();
-    const productReducer = useSelector((state) => state.productReducer)
 
     const options = [
-        { value: 'option1', label: 'CC Viva Envigado' },
-        { value: 'option2', label: 'CC Los Molinos' },
-        { value: 'option3', label: 'Bodega' }
+        { value: 'option1', label: 'Itagui' },
+        { value: 'option2', label: 'Envigado' },
+        { value: 'option3', label: 'Sabaneta' }
       ];
 
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleClickCancel = () => {
-        updateShowCreateProduct(false);
+        actualizarMostrarCrearCliente(false);
     };
 
     const handleClickSave = () => {
         setInitialComponent(false)
-        if (productReducer.productos.some(productExist => productExist.codigo === product.codigo)) return setExistProduct(true)
-        const producValues = Object.values(product)
+        const producValues = Object.values(cliente)
         const hasNull =  producValues.some((value) => value === null || value === '')
         if (hasNull) {
 
             return
         }
-        updateShowCreateProduct(false);
-        dispatch(saveProduct(product));
-        setExistProduct(false)
-        
+        actualizarMostrarCrearCliente(false);
     }
 
     const onChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        if (name === 'codigo') setExistProduct(false)
-        setProduct({
-            ...product,
+        setCliente({
+            ...cliente,
             [name]: value,
         })
     }
@@ -54,7 +44,7 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                     <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
                         <div className='mb-4 flex items-center justify-center'>
                             <div className="space-y-4">
-                                <h3 className='text-xl font-bold text-gray-900 mb-2'>Creación de producto</h3>
+                                <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Cliente</h3>
                                 <div className="flex">
                                     <TextField
                                         onChange={onChange}
@@ -65,8 +55,6 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && (existProduct || !product.codigo)}
-                                        helperText={!initialComponent && existProduct ? 'El código ya existe.' : !initialComponent && !product.codigo ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -77,58 +65,58 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.nombre}
-                                        helperText={!initialComponent && !product.nombre ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.nombre}
+                                        helperText={!initialComponent && !cliente.nombre ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
                                         type="text"
-                                        name="descripcion"
-                                        label="Descripción"
+                                        name="apellido"
+                                        label="Apellido"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.descripcion}
-                                        helperText={!initialComponent && !product.descripcion ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.apellido}
+                                        helperText={!initialComponent && !cliente.apellido ? 'Campo obligatorio.' : ''}
                                     />
                                 </div>
                                 <div className="flex">
                                     <TextField
                                         onChange={onChange}
                                         type="number"
-                                        name="costo"
-                                        label="Costo"
+                                        name="cedula"
+                                        label="Cedula"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.costo}
-                                        helperText={!initialComponent && !product.costo ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.cedula}
+                                        helperText={!initialComponent && !cliente.cedula ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
                                         type="number"
-                                        name="valorVenta"
-                                        label="Valor Venta"
+                                        name="telefono"
+                                        label="Telefono"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.valorVenta}
-                                        helperText={!initialComponent && !product.valorVenta ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.telefono}
+                                        helperText={!initialComponent && !cliente.telefono ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
-                                        type="number"
-                                        name="totalProductos"
-                                        label="Cantidad"
+                                        type="text"
+                                        name="correoElectronico"
+                                        label="Correo Electronico"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !product.totalProductos}
-                                        helperText={!initialComponent && !product.totalProductos ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.correoElectronico}
+                                        helperText={!initialComponent && !cliente.correoElectronico ? 'Campo obligatorio.' : ''}
                                     />
                                 </div>
                                 <div className="flex">
@@ -163,7 +151,7 @@ export const FormCreate = ({updateShowCreateProduct}) => {
                             <div className="mt-6 ml-4">
                                 <button
                                 onClick={handleClickSave}
-                                className="py-3 w-40 text-xl text-white bg-sky-600 rounded-2xl">Guardar</button>
+                                className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
                             </div>
                         </div>
                     </div>

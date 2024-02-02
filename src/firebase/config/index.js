@@ -1,13 +1,13 @@
 import { initializeApp, getApps } from 'firebase/app'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBrqGWoLI4U90EiV3EvHPuYzyD1-4eCEPE",
-  authDomain: "inventario-vuce.firebaseapp.com",
-  projectId: "inventario-vuce",
-  storageBucket: "inventario-vuce.appspot.com",
-  messagingSenderId: "1005992870476",
-  appId: "1:1005992870476:web:b7b2dfcf14b53c46d62ae9",
-  measurementId: "G-QXQFYGETSR"
+  apiKey: "AIzaSyCQ4iYmaf0WSIC-iWzxg0RQonDSZCbpXqk",
+  authDomain: "prestamos-e49fc.firebaseapp.com",
+  projectId: "prestamos-e49fc",
+  storageBucket: "prestamos-e49fc.appspot.com",
+  messagingSenderId: "637966109100",
+  appId: "1:637966109100:web:19c90101657b6b2d145209",
+  measurementId: "G-FFK7GSVGH7"
 };
 
 export default function firebase () {

@@ -1,14 +1,11 @@
 import { IconButton } from '@mui/material';
 import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
-import { useSelector } from 'react-redux';
 
-export const colorIcon = '#0284c7';
+export const colorIcon = '#84cc16';
 
-export const TableReferencia = ({mostrarCrearReferencia, editarReferenciaTable}) => {
-    const referenciaReducer = useSelector((state) => state.referenciaReducer)
+export const TableClient = ({mostrarCrearCliente, data}) => {
 
     const handleClick = (item) => {
-        editarReferenciaTable(true, item);
     };
 
     return (
@@ -32,12 +29,17 @@ export const TableReferencia = ({mostrarCrearReferencia, editarReferenciaTable})
                                     <th
                                         scope='col'
                                         className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                        Colección
+                                        Apellido
                                     </th>
                                     <th
                                         scope='col'
                                         className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                        Fecha creación
+                                        Cedula
+                                    </th>
+                                    <th
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Telefono
                                     </th>
                                     <th
                                         scope='col'
@@ -47,7 +49,7 @@ export const TableReferencia = ({mostrarCrearReferencia, editarReferenciaTable})
                                 </tr>
                             </thead>
                             <tbody className='bg-white'>
-                                {referenciaReducer.referencias.map((item) => (
+                                {data.map((item) => (
                                     <tr key={item?.codigo}>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.codigo}
@@ -55,14 +57,17 @@ export const TableReferencia = ({mostrarCrearReferencia, editarReferenciaTable})
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
                                             {item?.nombre}
                                         </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
-                                            {item?.coleccion}
+                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
+                                            {item?.apellido} 
                                         </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
-                                            {item?.fecha_creacion}
+                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
+                                            {item?.cedula} 
+                                        </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
+                                            {item?.telefono} 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            <IconButton disabled={mostrarCrearReferencia} onClick={() => handleClick(item)} aria-label="Editar">
+                                            <IconButton disabled={mostrarCrearCliente} onClick={() => handleClick(item)} aria-label="Editar">
                                                 <PencilSquareIcon color={colorIcon} width={20} height={20}/>
                                             </IconButton> 
                                         </td>
