@@ -4,14 +4,15 @@ import { useState } from 'react'
 
 export const FormCreate = ({actualizarMostrarCrearCliente}) => {
 
-    const [cliente, setCliente] = useState({ codigo: null, nombre: null, apellido: null, cedula: null, telefono: null, correoElectronico: null })
-    const [initialComponent, setInitialComponent] = useState(true)
+    const [cliente, setCliente] = useState({ codigo: null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
+        telefono_referencia: null, direccion_referencia: null });
+    const [initialComponent, setInitialComponent] = useState(true);
 
     const options = [
         { value: 'option1', label: 'Activo' },
         { value: 'option2', label: 'Inactivo' },
         { value: 'option3', label: 'Pendiente' }
-      ];
+    ];
 
     const [selectedValue, setSelectedValue] = useState('');
 
@@ -21,12 +22,12 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
 
     const handleClickSave = () => {
         setInitialComponent(false)
-        const producValues = Object.values(cliente)
-        const hasNull =  producValues.some((value) => value === null || value === '')
+        const clienteValue = Object.values(cliente)
+        const hasNull =  clienteValue.some((value) => value === null || value === '')
         if (hasNull) {
-
             return
         }
+        console.log(cliente);
         actualizarMostrarCrearCliente(false);
     }
 
@@ -77,8 +78,8 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
                                         size="small"                                                                            
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
-                                        error={!initialComponent && !cliente.apellido}
-                                        helperText={!initialComponent && !cliente.apellido ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.direccion}
+                                        helperText={!initialComponent && !cliente.direccion ? 'Campo obligatorio.' : ''}
                                     />
                                 </div>
                                 <div className="flex">
@@ -91,47 +92,47 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
                                         size="small"
                                         style={{ marginRight: '2rem' }}
                                         fullWidth
-                                        error={!initialComponent && !cliente.cedula}
-                                        helperText={!initialComponent && !cliente.cedula ? 'Campo obligatorio.' : ''}
-                                    />
-                                    <TextField
-                                        onChange={onChange}
-                                        type="text"
-                                        name="nombreRef"
-                                        label="Nombre Referencia"
-                                        variant="outlined"
-                                        size="small"
-                                        style={{ marginRight: '2rem' }}
-                                        fullWidth
                                         error={!initialComponent && !cliente.telefono}
                                         helperText={!initialComponent && !cliente.telefono ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
+                                        type="text"
+                                        name="nombre_referencia"
+                                        label="Nombre Referencia"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '2rem' }}
+                                        fullWidth
+                                        error={!initialComponent && !cliente.nombre_referencia}
+                                        helperText={!initialComponent && !cliente.nombre_referencia ? 'Campo obligatorio.' : ''}
+                                    />
+                                    <TextField
+                                        onChange={onChange}
                                         type="number"
-                                        name="telefonoRef"
+                                        name="telefono_referencia"
                                         label="Telefono Referencia"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '2rem' }}
                                         fullWidth
-                                        error={!initialComponent && !cliente.correoElectronico}
-                                        helperText={!initialComponent && !cliente.correoElectronico ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.telefono_referencia}
+                                        helperText={!initialComponent && !cliente.telefono_referencia ? 'Campo obligatorio.' : ''}
                                     />
+                                </div>
+                                <div className="flex">
                                     <TextField
                                         onChange={onChange}
                                         type="text"
-                                        name="direccionRef"
+                                        name="direccion_referencia"
                                         label="Direccion  Referencia"
                                         variant="outlined"
                                         size="small"
                                         style={{ marginRight: '2rem' }}
                                         fullWidth
-                                        error={!initialComponent && !cliente.correoElectronico}
-                                        helperText={!initialComponent && !cliente.correoElectronico ? 'Campo obligatorio.' : ''}
+                                        error={!initialComponent && !cliente.direccion_referencia}
+                                        helperText={!initialComponent && !cliente.direccion_referencia ? 'Campo obligatorio.' : ''}
                                     />
-                                </div>
-                                <div className="flex">
                                     <FormControl fullWidth>
                                         <InputLabel>Estado</InputLabel>
                                         <Select
