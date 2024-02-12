@@ -1,38 +1,22 @@
 'use client'
 
+import { CLIENTES } from "@firebase/services/references"
 import { FormCreate } from "./FormCreate"
 import { TableClient } from "./TableClient"
-import { useState } from 'react'
-
-const data = [
-    {
-        codigo: "0001",
-        nombre: "Santiago",
-        apellido: "Hernandez",
-        cedula: "1024455445",
-        telefono: 3012347145,
-        correoElectronico: 'sabntiago@gmail.com'
-    },
-    {
-        codigo: "0002",
-        nombre: "Santiago",
-        apellido: "Hernandez",
-        cedula: "1024455445",
-        telefono: 3012347145,
-        correoElectronico: 'sabntiago@gmail.com'
-    },
-    {
-        codigo: "0003",
-        nombre: "Santiago",
-        apellido: "Hernandez",
-        cedula: "1024455445",
-        telefono: 3012347145,
-        correoElectronico: 'sabntiago@gmail.com'
-    }
-]
+import { useEffect, useState } from 'react'
+import { consultarClientes } from "@firebase/services/clientes"
 
 export default function Page () {
-    const [mostrarCrearCliente, setMostrarCrearCliente] = useState(true);
+    const [mostrarCrearCliente, setMostrarCrearCliente] = useState(false);
+    const [dataCliente, setDataCliente] = useState([]);
+
+    useEffect(() => {
+        async function fetchCliente() {
+            const response = await consultarClientes(CLIENTES);
+            if (response.data) setDataCliente(response.data);
+        }
+        fetchCliente();
+    }, []);
 
     const actualizarMostrarCrearCliente = (value) => {
         setMostrarCrearCliente(value);
@@ -61,7 +45,7 @@ export default function Page () {
                                     
                                 </div>
                             </div>
-                            <TableClient mostrarCrearCliente={mostrarCrearCliente} data={data}/>
+                            { dataCliente && dataCliente.length > 0 && <TableClient mostrarCrearCliente={mostrarCrearCliente} data={dataCliente}/>}
                         </div>
                 </div>
             </div>

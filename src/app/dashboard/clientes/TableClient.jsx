@@ -54,7 +54,7 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.codigo}
                                         </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-500'>
+                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
                                             {item?.nombre}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
