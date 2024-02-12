@@ -8,9 +8,9 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
     const [initialComponent, setInitialComponent] = useState(true)
 
     const options = [
-        { value: 'option1', label: 'Itagui' },
-        { value: 'option2', label: 'Envigado' },
-        { value: 'option3', label: 'Sabaneta' }
+        { value: 'option1', label: 'Activo' },
+        { value: 'option2', label: 'Inactivo' },
+        { value: 'option3', label: 'Pendiente' }
       ];
 
     const [selectedValue, setSelectedValue] = useState('');
@@ -43,7 +43,7 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
             <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
                     <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
                         <div className='mb-4 flex items-center justify-center'>
-                            <div className="space-y-4">
+                            <div className="space-y-9">
                                 <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Cliente</h3>
                                 <div className="flex">
                                     <TextField
@@ -71,10 +71,10 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
                                     <TextField
                                         onChange={onChange}
                                         type="text"
-                                        name="apellido"
-                                        label="Apellido"
+                                        name="direccion"
+                                        label="Direccion"
                                         variant="outlined"
-                                        size="small"
+                                        size="small"                                                                            
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
                                         error={!initialComponent && !cliente.apellido}
@@ -85,35 +85,47 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
                                     <TextField
                                         onChange={onChange}
                                         type="number"
-                                        name="cedula"
-                                        label="Cedula"
+                                        name="telefono"
+                                        label="Telefono"
                                         variant="outlined"
                                         size="small"
-                                        style={{ marginRight: '1rem' }}
+                                        style={{ marginRight: '2rem' }}
                                         fullWidth
                                         error={!initialComponent && !cliente.cedula}
                                         helperText={!initialComponent && !cliente.cedula ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
-                                        type="number"
-                                        name="telefono"
-                                        label="Telefono"
+                                        type="text"
+                                        name="nombreRef"
+                                        label="Nombre Referencia"
                                         variant="outlined"
                                         size="small"
-                                        style={{ marginRight: '1rem' }}
+                                        style={{ marginRight: '2rem' }}
                                         fullWidth
                                         error={!initialComponent && !cliente.telefono}
                                         helperText={!initialComponent && !cliente.telefono ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
-                                        type="text"
-                                        name="correoElectronico"
-                                        label="Correo Electronico"
+                                        type="number"
+                                        name="telefonoRef"
+                                        label="Telefono Referencia"
                                         variant="outlined"
                                         size="small"
-                                        style={{ marginRight: '1rem' }}
+                                        style={{ marginRight: '2rem' }}
+                                        fullWidth
+                                        error={!initialComponent && !cliente.correoElectronico}
+                                        helperText={!initialComponent && !cliente.correoElectronico ? 'Campo obligatorio.' : ''}
+                                    />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="text"
+                                        name="direccionRef"
+                                        label="Direccion  Referencia"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '2rem' }}
                                         fullWidth
                                         error={!initialComponent && !cliente.correoElectronico}
                                         helperText={!initialComponent && !cliente.correoElectronico ? 'Campo obligatorio.' : ''}
@@ -121,17 +133,17 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
                                 </div>
                                 <div className="flex">
                                     <FormControl fullWidth>
-                                        <InputLabel>Ubicación</InputLabel>
+                                        <InputLabel>Estado</InputLabel>
                                         <Select
                                             value={selectedValue}
-                                            label="Ubicación"
+                                            label="Estado"
                                             variant="outlined"
                                             size="small"
                                             style={{ marginRight: '1rem' }}
                                             onChange={(e) => setSelectedValue(e.target.value)}
                                             error={!initialComponent && !selectedValue}
                                         >
-                                            <MenuItem value="">Ubicación</MenuItem>
+                                            <MenuItem value="">Activo</MenuItem>
                                             {options.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                 {option.label}
