@@ -57,54 +57,11 @@ const data = [
 export default function Page () {
     const [mostrarCrearPrestamo, setMostrarCrearPrestamo] = useState(true);
 
-    const [prestamo, setPrestamo] = useState({
-        codigo: '',
-        nombreCliente: '',
-        saldoActual: '',
-        saldo: '',
-        valorAbono: '',
-        abono: '',
-        diasPago: '',
-        Intereses: '',
-        fechaPrestamo: '',
-        plazos: '',
-        cuotas: '',
-        estado: ''
-    });
 
     const actualizarMostrarCrearPrestamo = (value) => {
         setMostrarCrearPrestamo(value);
     }
 
-    const onChange = (e) => {
-        const { name, value } = e.target;
-        setPrestamo(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const guardarPrestamo = () => {
-        // Verificar que firebase esté inicializado
-        if (!firebase.apps.length) {
-            const firebaseConfig = {
-                // Tu configuración de Firebase
-            };
-            firebase.initializeApp(firebaseConfig);
-        }
-    
-        // Acceder a Firestore
-        const db = firebase.firestore();
-    
-        // Realizar operaciones en Firestore
-        db.collection('prestamos').add(prestamo)
-            .then(() => {
-                console.log('Prestamo guardado en Firestore');
-            })
-            .catch(error => {
-                console.error('Error al guardar el préstamo:', error);
-            });
-    };
 
 
     return (
@@ -126,7 +83,6 @@ export default function Page () {
                                     </button>
                                     
                                 </div>
-                                <Button onClick={guardarPrestamo}>Guardar Prestamo</Button>
                             </div>
                             <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={data}/>
                         </div>

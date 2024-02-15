@@ -1,65 +1,13 @@
-'use client'
-import { useState } from 'react';
-import firebase from "@firebase/app"
-import 'firebase/firestore'
+import {useState} from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
 
 
-export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
-
-    const [prestamo, setPrestamo] = useState({
-        codigo: '',
-    });
-
-    const [selectedValue, setSelectedValue] = useState('');
-
-    const handleClickCancel = () => {
-        actualizarMostrarCrearCliente(false);
-    };
-
-
-    const statesClients = [
-        { value: 'option1', label: 'Activo' },
-        { value: 'option2', label: 'Inactivo' },
-        { value: 'option3', label: 'Pendiente' }
-    ]
-
-
-    const dayPay = [
-        { value: 'option1', label: 'Todos los dias' },
-        { value: 'option2', label: '15nal' },
-        { value: 'option3', label: 'Mensual' },
-        { value: 'option3', label: 'Semanal' }
-    ]
-
-    const intereses = [
-        { value: 'option1', label: '20%' },
-        { value: 'option2', label: '15%' },
-        { value: 'option3', label: '10%' },
-        { value: 'option3', label: '5%' }
-    ]
-
-    const statePrestamo = [
-        { value: 'option1', label: 'Por conceder' },
-        { value: 'option2', label: 'Concedido' },
-        { value: 'option3', label: 'Rechazado' }
-    ]
-
-
-    const onChange = (e) => {
-        const name = e.target.name
-        const value = e.target.value
-        setPrestamo({
-            ...prestamo,
-            [name]: value,
-        })
-    }
-
+export const FormLiquidacion = () => {
     return (
         <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
             <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
                 <div className='mb-4 flex items-center justify-center'>
-                    <div className="space-y-4">
+                    <div    lassName="space-y-4">
                     <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Prestamo</h3>
                     <div className='flex'>
                     <TextField
