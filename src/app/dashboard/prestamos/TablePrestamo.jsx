@@ -1,10 +1,18 @@
 import { IconButton } from '@mui/material';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
 
 
-export const colorIcon = '#84cc16';
 
 export const TablePrestamo = ({mostrarCrearPrestamo, data}) => { 
+
+
+    const actualizarMostrarCrearPrestamo = (value) => {
+        setMostrarCrearPrestamo(value);
+    }
+
+
     return (
         <div className='w-full flex flex-col mt-8' >
             <div className='w-full overflow-x-auto rounded-lg'>

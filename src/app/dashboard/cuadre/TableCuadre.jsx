@@ -2,11 +2,10 @@ import { IconButton } from '@mui/material';
 import { useState } from 'react'
 
 
-export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
-
-
-    const actualizarMostrarLiquidacion = (value) => {
-        setMostrarLiquidacion(value);
+export const TableCuadre = ({ mostrarCuadre, data}) => {
+    
+    const actualizarMostrarCuadre = (value) => {
+        setMostrarCuadre(value);
     }
 
 
@@ -21,47 +20,37 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Código Ruta   
+                                Liquidacion   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Ruta   
+                                Fecha Liquidacion   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Fecha Liquidacion
+                                Codigo Cobrador
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Codigo Cliente   
+                                Base liquidacion   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Cliente   
+                                Fecha Desde   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Valor Abono   
+                                Fecha Hasta   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Saldo Actual   
-                                </th>
-                                <th
-                                scope='col'
-                                className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Fecha Prestamo   
-                                </th>
-                                <th
-                                scope='col'
-                                className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Fecha Vencimiento   
+                                Dias Liquidados   
                                 </th>
                             </tr>
                         </thead>
@@ -69,34 +58,25 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                             {data.map((item) => (
                                 <tr key={item?.codigo}>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.codigoRuta}
-                                    </td>
-                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.ruta}
+                                        {item?.liquidacion}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.fechaLiquidacion}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.codigoCliente}
+                                        {item?.codigoCobrador}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.cliente}
+                                        {item?.baseLiquidacion}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.valorAbono}
+                                        {item?.fechaDesde}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.saldoActual}
+                                        {item?.fechaHasta}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.fechaPrestamo}
-                                    </td>
-                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.fechaVencimiento}
-                                    </td>
-                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.cuotas}
+                                        {item?.diasLiquidados}
                                     </td>
                                 </tr>
                             ))}
@@ -107,5 +87,4 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
         </div>
     </div>
     )
-
 }

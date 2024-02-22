@@ -1,9 +1,11 @@
 'use client'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react'
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 
 export const FormCreate = ({actualizarMostrarCrearCliente}) => {
-
+    
     const [cliente, setCliente] = useState({ codigo: null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
         telefono_referencia: null, direccion_referencia: null });
     const [initialComponent, setInitialComponent] = useState(true);
@@ -20,15 +22,24 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
         actualizarMostrarCrearCliente(false);
     };
 
-    const handleClickSave = () => {
+    const handleClickSave = async () => {
         setInitialComponent(false)
         const clienteValue = Object.values(cliente)
         const hasNull =  clienteValue.some((value) => value === null || value === '')
         if (hasNull) {
             return
         }
-        console.log(cliente);
-        actualizarMostrarCrearCliente(false);
+
+        const db = firebase.firestore();
+        try {
+            // Guarda los datos en Firestore
+            await db.collection('prestamos').add(cliente);
+            console.log('Datos guardados exitosamente en Firestore');
+        } catch (error) {
+            console.error('Error al guardar los datos en Firestore:', error);
+        }
+    
+        actualizarMostrarPrestamo(false);
     }
 
     const onChange = (e) => {

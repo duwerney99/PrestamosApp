@@ -2,6 +2,7 @@
 
 import { FormLiquidacion } from "./FormLiquidacion"
 import { TableLiquidacion } from "./TableLiquidacion"
+import { Button } from '@mui/material'
 import { useState } from 'react'
 
 
@@ -9,15 +10,47 @@ import { useState } from 'react'
 export default function  Page () {
     const [mostrarLiquidacion, setMostrarLiquidacion] = useState(true);
     
+    const data = [
+        {
+            codigoRuta: "0001",
+            ruta: "Santiago",
+            fechaLiquidacion: "200000",
+            codigoCliente: 10000,
+            valorAbono: 2500,
+            cliente: 2000,
+            saldoActual: "En mora",
+            fechaPrestamo: "3012347145",
+            fechaVencimiento: 'sabntiago@gmail.com',
+        },
+        {
+            codigoRuta: "0001",
+            ruta: "Santiago",
+            fechaLiquidacion: "200000",
+            codigoCliente: 10000,
+            cliente: 2000,
+            valorAbono: "Semanal",
+            saldoActual: "En mora",
+            fechaPrestamo: "3012347145",
+            fechaVencimiento: 'sabntiago@gmail.com',
+
+        },
+        {
+            codigoRuta: "0001",
+            ruta: "Santiago",
+            fechaLiquidacion: "200000",
+            codigoCliente: 10000,
+            cliente: 2000,
+            valorAbono: "Semanal",
+            saldoActual: "En mora",
+            fechaPrestamo: "3012347145",
+            fechaVencimiento: 'sabntiago@gmail.com',
+        }]
     
-    const actualizarMostrarLiquidacion = (value) => {
-        setMostrarLiquidacion(value);
-    } 
 
     return (
         <div>
             <div className='pt-6 px-4 justify-center items-center'>
-                { mostrarCrearPrestamo && <FormLiquidacion actualizarMostrarLiquidacion={actualizarMostrarLiquidacion}/>}
+                { mostrarLiquidacion && <FormLiquidacion actualizarMostrarLiquidacion={mostrarLiquidacion}/>}
             </div>
             <div className='pt-6 px-4'>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4'>

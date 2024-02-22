@@ -1,21 +1,42 @@
 'use client'
 import { useState } from 'react';
-import firebase from "@firebase/app"
-import 'firebase/firestore'
 import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
 
 
 export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
 
-    const [prestamo, setPrestamo] = useState({
-        codigo: '',
+    const [prestamo, setPrestamo] = useState({ 
+        codigo: null,
+        nombreCliente: null,
+        saldoActual: null,
+        valorAbono: null,
+        fechaPrestamo: null,
+        intereses: null,
+        plazos: null,
+        cuotas: null,
+        diasPago: null,
+        estadoCliente: null,
+        estadoPrestamo: null
+
     });
+    const [initialComponent, setInitialComponent] = useState(true);
 
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleClickCancel = () => {
-        actualizarMostrarCrearCliente(false);
+        actualizarMostrarPrestamo(false);
     };
+
+    const handleClickSave = () => {
+        setInitialComponent(false)
+        const prestamoValue = Object.values(prestamo)
+        const hasNull = prestamoValue.some((value) => value === null || value === '')
+        if (hasNull) {
+            return
+        }
+        console.log(prestamo);
+        actualizarMostrarPrestamo(false);
+    }
 
 
     const statesClients = [
@@ -81,26 +102,32 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                         size="small"
                         style={{ marginRight: '1rem' }}
                         fullWidth
+                        error={!initialComponent && !prestamo.nombreCliente}
+                        helperText={!initialComponent && !prestamo.nombreCliente ? 'Campo obligatorio.': ''}
                     />
                     <TextField
                         onChange={onChange}
                         type="number"
-                        name="saldo"
+                        name="saldoActual"
                         label="Saldo Actual"
                         variant="outlined"
                         size="small"
                         style={{ marginRight: '1rem' }}
                         fullWidth
+                        error={!initialComponent && !prestamo.saldoActual}
+                        helperText={!initialComponent && !prestamo.saldoActual ? 'Campo obligatorio.': ''}
                     />
                     <TextField
                         onChange={onChange}
                         type="number"
-                        name="abono"
+                        name="valorAbono"
                         label="Valor Abono"
                         variant="outlined"
                         size="small"
                         style={{ marginRight: '1rem' }}
                         fullWidth
+                        error={!initialComponent && !prestamo.valorAbono}
+                        helperText={!initialComponent && !prestamo.valorAbono ? 'Campo obligatorio.': ''}
                     />
                     </div>
 
@@ -113,19 +140,24 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                             size="medium"
                             style={{ marginRight: '2rem' }}
                             fullWidth
+                            error={!initialComponent && !prestamo.fechaPrestamo}
+                            helperText={!initialComponent && !prestamo.fechaPrestamo ? 'Campo obligatorio.': ''}
                         />
                          <FormControl fullWidth>
                             <InputLabel>Intereses</InputLabel>
                             <Select 
                                 value={selectedValue}
                                 label="Estado"
+                                name="intereses"
                                 variant="outlined"
                                 size="small"
                                 style={{ marginRight: '1rem' }}
                                 onChange={(e) => setSelectedValue(e.target.value)}
+                                error={!initialComponent && !prestamo.intereses}
+                                helperText={!initialComponent && !prestamo.intereses ? 'Campo obligatorio.': ''}
                             >
-                                {intereses.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
+                                {intereses.map((option, intereses) => (
+                                    <MenuItem key={intereses} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}
@@ -142,6 +174,8 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                             size="small"
                             style={{ marginRight: '1rem' }}
                             fullWidth
+                            error={!initialComponent && !prestamo.plazos}
+                            helperText={!initialComponent && !prestamo.plazos ? 'Campo obligatorio.': ''}
                         />
                         <TextField
                             onChange={onChange}
@@ -152,6 +186,8 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                             size="small"
                             style={{ marginRight: '2rem' }}
                             fullWidth
+                            error={!initialComponent && !prestamo.cuotas}
+                            helperText={!initialComponent && !prestamo.cuotas ? 'Campo obligatorio.': ''}
                         />
 
                         <FormControl fullWidth>
@@ -159,14 +195,16 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                             <Select 
                                 value={selectedValue}
                                 label="Estado"
-                                name='estado'
+                                name='diasPago'
                                 variant="outlined"
                                 size="small"
                                 style={{ marginRight: '1rem' }}
                                 onChange={(e) => setSelectedValue(e.target.value)}
+                                error={!initialComponent && !prestamo.diasPago}
+                                helperText={!initialComponent && !prestamo.diasPago ? 'Campo obligatorio.': ''}
                             >
-                                {dayPay.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
+                                {dayPay.map((option, diasPago) => (
+                                    <MenuItem key={diasPago} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}
@@ -181,13 +219,16 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                             <Select 
                                 value={selectedValue}
                                 label="Estado"
+                                name='estadoCliente'
                                 variant="outlined"
                                 size="small"
                                 style={{ marginRight: '1rem' }}
                                 onChange={(e) => setSelectedValue(e.target.value)}
+                                error={!initialComponent && !prestamo.estadoCliente}
+                                helperText={!initialComponent && !prestamo.estadoCliente ? 'Campo obligatorio.': ''}
                             >
-                                {statesClients.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
+                                {statesClients.map((option, estadoCliente) => (
+                                    <MenuItem key={estadoCliente} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}
@@ -201,11 +242,14 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                                 label="Estado"
                                 variant="outlined"
                                 size="small"
+                                name='estadoPrestamo'
                                 style={{ marginRight: '1rem' }}
                                 onChange={(e) => setSelectedValue(e.target.value)}
+                                error={!initialComponent && !prestamo.estadoPrestamo}
+                                helperText={!initialComponent && !prestamo.estadoPrestamo ? 'Campo obligatorio.': ''}
                             >
-                                {statePrestamo.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
+                                {statePrestamo.map((option, estadoPrestamo) => (
+                                    <MenuItem key={estadoPrestamo} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}
@@ -214,6 +258,18 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
                     </div>
                     </div>
                 </div>
+                <div className="flex justify-end">
+                    <div className="mt-6">
+                        <button
+                        onClick={handleClickCancel}
+                        className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
+                        </div>
+                        <div className="mt-6 ml-4">
+                            <button
+                            onClick={handleClickSave}
+                            className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
+                            </div>
+                        </div>
             </div>
         </div>
     )
