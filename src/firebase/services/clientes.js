@@ -1,11 +1,10 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 export const consultarClientes = async (reference) => {
     const result = { statusResponse: false, data: null, error: null };
     try {
         const collectionRef = collection(getFirestore(), reference);
         const data = await getDocs(collectionRef);
-
         if (!data || data.empty) {
             result.error = `No hay datos disponibles en la colección ${reference}.`;
             return result;
@@ -28,3 +27,18 @@ export const consultarClientes = async (reference) => {
     }
     return result;
 };
+
+export async function agregarCliente(reference, id, info) {
+    const db = getFirestore();
+    try {
+      const docRef = doc(db, reference, id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        await setDoc(docRef, { ...info }, { merge: true });
+      } else {
+        await setDoc(docRef, { ...info });
+      }
+    } catch (e) {
+      console.error("Error agregando el documento: ", e);
+    }
+}

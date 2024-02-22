@@ -1,8 +1,9 @@
 'use client'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useState } from 'react'
-import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { agregarCliente } from '@firebase/services/clientes';
+import { CLIENTES } from '@firebase/services/references';
 
 export const FormCreate = ({actualizarMostrarCrearCliente}) => {
     
@@ -29,17 +30,9 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
         if (hasNull) {
             return
         }
-
-        const db = firebase.firestore();
-        try {
-            // Guarda los datos en Firestore
-            await db.collection('prestamos').add(cliente);
-            console.log('Datos guardados exitosamente en Firestore');
-        } catch (error) {
-            console.error('Error al guardar los datos en Firestore:', error);
-        }
-    
-        actualizarMostrarPrestamo(false);
+        const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente });
+        console.log('respuesta', respuesta);
+        actualizarMostrarCrearCliente(false);
     }
 
     const onChange = (e) => {
