@@ -25,7 +25,8 @@ export default function Page () {
     return (
         <div>
             <div className='pt-6 px-4 justify-center items-center'>
-                { mostrarCrearCliente && <FormCreate actualizarMostrarCrearCliente={actualizarMostrarCrearCliente}/>}
+                { mostrarCrearCliente && <FormCreate dataCliente={dataCliente} setDataCliente={setDataCliente} actualizarMostrarCrearCliente={actualizarMostrarCrearCliente}/>}
+            
             </div>
             <div className='pt-6 px-4'>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4'>

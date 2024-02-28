@@ -58,13 +58,13 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                             {item?.nombre}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
-                                            {item?.apellido} 
-                                        </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
-                                            {item?.cedula} 
+                                            {item?.direccion} 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
                                             {item?.telefono} 
+                                        </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
+                                            {item?.nombreReferencia} 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             <IconButton disabled={mostrarCrearCliente} onClick={() => handleClick(item)} aria-label="Editar">

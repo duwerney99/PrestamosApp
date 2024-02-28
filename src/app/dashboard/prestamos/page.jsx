@@ -55,7 +55,7 @@ const data = [
 
 
 export default function Page () {
-    const [mostrarCrearPrestamo, setMostrarCrearPrestamo] = useState(true);
+    const [mostrarCrearPrestamo, setMostrarCrearPrestamo] = useState(false);
 
 
     const actualizarMostrarCrearPrestamo = (value) => {
@@ -77,8 +77,11 @@ export default function Page () {
                                     <h3 className='text-xl font-bold text-gray-900 mb-2'>Prestamos</h3>
                                 </div>
                                 <div className='flex-shrink-0'>
-                                    <button  
-                                        className={`text-lg font-medium 'text-green-400 hover:bg-gray-100' rounded-lg p-2`}>
+                                    <button disabled={mostrarCrearPrestamo} 
+                                        onClick={() => setMostrarCrearPrestamo(true)}
+                                        className={`text-lg font-medium ${
+                                            mostrarCrearPrestamo ? 'text-gray-500' : 'text-green-400 hover:bg-gray-100'
+                                        } rounded-lg p-2`}>
                                         Crear Prestamo
                                     </button>
                                     

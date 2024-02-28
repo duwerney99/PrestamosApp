@@ -5,7 +5,7 @@ import 'firebase/firestore';
 import { agregarCliente } from '@firebase/services/clientes';
 import { CLIENTES } from '@firebase/services/references';
 
-export const FormCreate = ({actualizarMostrarCrearCliente}) => {
+export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearCliente}) => {
     
     const [cliente, setCliente] = useState({ codigo: null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
         telefono_referencia: null, direccion_referencia: null });
@@ -32,6 +32,7 @@ export const FormCreate = ({actualizarMostrarCrearCliente}) => {
         }
         const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente });
         console.log('respuesta', respuesta);
+        setDataCliente([...dataCliente, cliente]);
         actualizarMostrarCrearCliente(false);
     }
 

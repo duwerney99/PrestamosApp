@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
 
 
-export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
+export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
 
     const [prestamo, setPrestamo] = useState({ 
         codigo: null,
@@ -24,7 +24,7 @@ export const FormPrestamo = ( { actualizarMostrarPrestamo}) => {
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleClickCancel = () => {
-        actualizarMostrarPrestamo(false);
+        actualizarMostrarCrearPrestamo(false);
     };
 
     const handleClickSave = () => {

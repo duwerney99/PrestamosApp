@@ -41,4 +41,6 @@ export async function agregarCliente(reference, id, info) {
     } catch (e) {
       console.error("Error agregando el documento: ", e);
     }
+
+    
 }
