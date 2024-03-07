@@ -15,7 +15,7 @@ export default function Page () {
             const response = await consultarClientes(CLIENTES);
             if (response.data) setDataCliente(response.data);
         }
-        fetchCliente();
+        fetchCliente(); 
     }, []);
 
     const actualizarMostrarCrearCliente = (value) => {

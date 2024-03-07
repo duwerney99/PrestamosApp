@@ -6,11 +6,7 @@ import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
 
 
 export const TablePrestamo = ({mostrarCrearPrestamo, data}) => { 
-
-
-    const actualizarMostrarCrearPrestamo = (value) => {
-        setMostrarCrearPrestamo(value);
-    }
+    
 
 
     return (
@@ -51,11 +47,7 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                     className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                     Dias pago   
                                     </th>
-                                    <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Estado   
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody className='bg-white'>
@@ -74,14 +66,12 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                             {item?.fechaPrestamo}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.Intereses}
+                                            {item?.intereses}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.diasPago}
                                         </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.estado}
-                                        </td>
+                                        
                                     </tr>
                                 ))}
                             </tbody>

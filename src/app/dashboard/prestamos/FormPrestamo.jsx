@@ -1,9 +1,12 @@
 'use client'
 import { useState } from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
+import 'firebase/firestore';
+import { agregarPrestamo } from '@firebase/services/clientes';
+import { PRESTAMOS } from '@firebase/services/references';
 
 
-export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
+export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrarCrearPrestamo}) => {
 
     const [prestamo, setPrestamo] = useState({ 
         codigo: null,
@@ -21,21 +24,26 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
     });
     const [initialComponent, setInitialComponent] = useState(true);
 
-    const [selectedValue, setSelectedValue] = useState('');
+    // const [selectedValueIntereses, setSelectedValueIntereses] = useState('');
+    // const [selectedValueDiasPago, setSelectedValueDiasPago] = useState('');
+    // const [selectedValueEstadoCliente, setSelectedValueEstadoCliente] = useState('');
+    // const [selectedValueEstadoPrestamo, setSelectedValueEstadoPrestamo] = useState('');
 
     const handleClickCancel = () => {
         actualizarMostrarCrearPrestamo(false);
     };
 
-    const handleClickSave = () => {
+    const handleClickSave = async () => {
         setInitialComponent(false)
         const prestamoValue = Object.values(prestamo)
         const hasNull = prestamoValue.some((value) => value === null || value === '')
         if (hasNull) {
             return
         }
-        console.log(prestamo);
-        actualizarMostrarPrestamo(false);
+        const prestamoRes = await agregarPrestamo(PRESTAMOS, prestamo.codigo, {...prestamo})
+        console.log("Prestamo ", prestamoRes);
+        setDataPrestamo([...dataPrestamo, prestamo]);
+        actualizarMostrarCrearPrestamo(false);
     }
 
 
@@ -50,14 +58,14 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
         { value: 'option1', label: 'Todos los dias' },
         { value: 'option2', label: '15nal' },
         { value: 'option3', label: 'Mensual' },
-        { value: 'option3', label: 'Semanal' }
+        { value: 'option4', label: 'Semanal' }
     ]
 
     const intereses = [
         { value: 'option1', label: '20%' },
         { value: 'option2', label: '15%' },
         { value: 'option3', label: '10%' },
-        { value: 'option3', label: '5%' }
+        { value: 'option4', label: '5%' }
     ]
 
     const statePrestamo = [
@@ -146,19 +154,20 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                          <FormControl fullWidth>
                             <InputLabel>Intereses</InputLabel>
                             <Select 
-                                value={selectedValue}
-                                label="Estado"
+                                value={prestamo.intereses}
+                                label="Intereses"
                                 name="intereses"
                                 variant="outlined"
                                 size="small"
+                                type="text"
                                 style={{ marginRight: '1rem' }}
-                                onChange={(e) => setSelectedValue(e.target.value)}
+                                onChange={onChange}
                                 error={!initialComponent && !prestamo.intereses}
                                 helperText={!initialComponent && !prestamo.intereses ? 'Campo obligatorio.': ''}
                             >
-                                {intereses.map((option, intereses) => (
-                                    <MenuItem key={intereses} value={option.value}>
-                                    {option.label}
+                                {intereses.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -176,7 +185,7 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                             fullWidth
                             error={!initialComponent && !prestamo.plazos}
                             helperText={!initialComponent && !prestamo.plazos ? 'Campo obligatorio.': ''}
-                        />
+                        />          
                         <TextField
                             onChange={onChange}
                             type="text"
@@ -193,19 +202,19 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                         <FormControl fullWidth>
                             <InputLabel>Dias de Pago</InputLabel>
                             <Select 
-                                value={selectedValue}
-                                label="Estado"
+                                value={prestamo.diasPago}
+                                label="Dias Pago"
                                 name='diasPago'
                                 variant="outlined"
                                 size="small"
                                 style={{ marginRight: '1rem' }}
-                                onChange={(e) => setSelectedValue(e.target.value)}
+                                onChange={onChange}
                                 error={!initialComponent && !prestamo.diasPago}
                                 helperText={!initialComponent && !prestamo.diasPago ? 'Campo obligatorio.': ''}
                             >
-                                {dayPay.map((option, diasPago) => (
-                                    <MenuItem key={diasPago} value={option.value}>
-                                    {option.label}
+                                {dayPay.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -215,21 +224,21 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                     <div className='flex'>
 
                         <FormControl fullWidth>
-                            <InputLabel>Estado</InputLabel>
+                            <InputLabel>Estado Cliente</InputLabel>
                             <Select 
-                                value={selectedValue}
-                                label="Estado"
+                                value={prestamo.estadoCliente}
+                                label="Estado Cliente"
                                 name='estadoCliente'
                                 variant="outlined"
                                 size="small"
                                 style={{ marginRight: '1rem' }}
-                                onChange={(e) => setSelectedValue(e.target.value)}
+                                onChange={onChange}
                                 error={!initialComponent && !prestamo.estadoCliente}
                                 helperText={!initialComponent && !prestamo.estadoCliente ? 'Campo obligatorio.': ''}
                             >
-                                {statesClients.map((option, estadoCliente) => (
-                                    <MenuItem key={estadoCliente} value={option.value}>
-                                    {option.label}
+                                {statesClients.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -238,19 +247,19 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                         <FormControl fullWidth>
                             <InputLabel>Estado Prestamo</InputLabel>
                             <Select 
-                                value={selectedValue}
-                                label="Estado"
+                                value={prestamo.estadoPrestamo}
+                                label="Estado Prestamos"
                                 variant="outlined"
                                 size="small"
                                 name='estadoPrestamo'
                                 style={{ marginRight: '1rem' }}
-                                onChange={(e) => setSelectedValue(e.target.value)}
+                                onChange={onChange}
                                 error={!initialComponent && !prestamo.estadoPrestamo}
                                 helperText={!initialComponent && !prestamo.estadoPrestamo ? 'Campo obligatorio.': ''}
                             >
-                                {statePrestamo.map((option, estadoPrestamo) => (
-                                    <MenuItem key={estadoPrestamo} value={option.value}>
-                                    {option.label}
+                                {statePrestamo.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -263,13 +272,13 @@ export const FormPrestamo = ( { actualizarMostrarCrearPrestamo}) => {
                         <button
                         onClick={handleClickCancel}
                         className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
-                        </div>
-                        <div className="mt-6 ml-4">
-                            <button
+                    </div>
+                    <div className="mt-6 ml-4">
+                        <button
                             onClick={handleClickSave}
                             className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
-                            </div>
-                        </div>
+                    </div>
+            </div>
             </div>
         </div>
     )

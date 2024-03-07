@@ -1,10 +1,10 @@
 'use client'
+import { PRESTAMOS } from "@firebase/services/references"
 import { FormPrestamo } from "./FormPrestamo"
 import { TablePrestamo } from "./TablePrestamo"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@mui/material'
-import firebase from "@firebase/app"
-import 'firebase/firestore'
+import { consultarPrestamos } from "@firebase/services/clientes"
 
 
 
@@ -56,7 +56,15 @@ const data = [
 
 export default function Page () {
     const [mostrarCrearPrestamo, setMostrarCrearPrestamo] = useState(false);
+    const [dataPrestamo, setDataPrestamo] = useState([]);
 
+    useEffect(() => {
+        async function fetchPrestamo() {
+            const response = await consultarPrestamos(PRESTAMOS);
+            if (response.data) setDataPrestamo(response.data);
+        }
+        fetchPrestamo();
+    }, []);
 
     const actualizarMostrarCrearPrestamo = (value) => {
         setMostrarCrearPrestamo(value);
@@ -67,7 +75,7 @@ export default function Page () {
     return (
         <div>
             <div className='pt-6 px-4 justify-center items-center'>
-                { mostrarCrearPrestamo && <FormPrestamo actualizarMostrarCrearPrestamo={actualizarMostrarCrearPrestamo}/>}
+                { mostrarCrearPrestamo && <FormPrestamo dataPrestamo={dataPrestamo} setDataPrestamo={setDataPrestamo} actualizarMostrarCrearPrestamo={actualizarMostrarCrearPrestamo}/>}
             </div>
             <div className='pt-6 px-4'>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4'>
@@ -87,7 +95,7 @@ export default function Page () {
                                     
                                 </div>
                             </div>
-                            <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={data}/>
+                            { dataPrestamo && dataPrestamo.length > 0 && <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={dataPrestamo}/>}
                         </div>
                 </div>
             </div>

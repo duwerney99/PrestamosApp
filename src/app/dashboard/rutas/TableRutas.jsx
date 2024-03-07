@@ -3,11 +3,8 @@ import { useState } from 'react'
 
 
 
-export const TableRutas = ({ mostrarRutas, data}) => {
-
-    const actualizarMostrarRutas = (value) => {
-        setMostrarRutas(value);
-    }
+export const TableRutas = ({ mostrarCrearRuta, data}) => {
+                                                               
 
 
     return (
