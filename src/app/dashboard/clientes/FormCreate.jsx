@@ -4,11 +4,11 @@ import { useState } from 'react'
 import 'firebase/firestore';
 import { agregarCliente } from '@firebase/services/clientes';
 import { CLIENTES } from '@firebase/services/references';
-
+import { Cliente } from '@pages/model/clientes/model';
 export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearCliente}) => {
     
-    const [cliente, setCliente] = useState({ codigo: null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
-        telefono_referencia: null, direccion_referencia: null });
+    const [cliente, setCliente] = useState({ codigo: null, cedula:null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
+        nombre_ruta: null, telefono_referencia: null, direccion_referencia: null });
     const [initialComponent, setInitialComponent] = useState(true);
 
     const options = [
@@ -29,6 +29,11 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
         const hasNull =  clienteValue.some((value) => value === null || value === '')
         if (hasNull) {
             return
+        }
+        const { valid, missingFields } = Cliente.validateCliente(cliente);
+        if (!valid) {
+            console.error('Faltan campos obligatorios:', missingFields);
+            return;
         }
         const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente });
         console.log('respuesta', respuesta);
@@ -61,6 +66,18 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
                                         size="small"
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
+                                    />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="text"
+                                        name="cedula"
+                                        label="Cedula"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '1rem' }}
+                                        fullWidth
+                                        error={!initialComponent && !cliente.cedula}
+                                        helperText={!initialComponent && !cliente.cedula ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -111,6 +128,18 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
                                         fullWidth
                                         error={!initialComponent && !cliente.nombre_referencia}
                                         helperText={!initialComponent && !cliente.nombre_referencia ? 'Campo obligatorio.' : ''}
+                                    />
+                                    <TextField
+                                        onChange={onChange}
+                                        type="text"
+                                        name="nombre_ruta"
+                                        label="Nombre Ruta"
+                                        variant="outlined"
+                                        size="small"
+                                        style={{ marginRight: '2rem' }}
+                                        fullWidth
+                                        error={!initialComponent && !cliente.nombre_ruta}
+                                        helperText={!initialComponent && !cliente.nombre_ruta ? 'Campo obligatorio.' : ''}
                                     />
                                     <TextField
                                         onChange={onChange}

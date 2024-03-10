@@ -81,6 +81,8 @@ export const consultarPrestamos = async (reference) => {
   return result;
 };
 
+
+
 export async function agregarPrestamo(reference, id, info) {
   const db = getFirestore();
   try {

@@ -29,11 +29,6 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                     <th
                                         scope='col'
                                         className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                        Apellido
-                                    </th>
-                                    <th
-                                        scope='col'
-                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                         Cedula
                                     </th>
                                     <th
@@ -58,13 +53,10 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                             {item?.nombre}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
-                                            {item?.direccion} 
+                                            {item?.cedula} 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
                                             {item?.telefono} 
-                                        </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-semibold text-gray-900'>
-                                            {item?.nombreReferencia} 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             <IconButton disabled={mostrarCrearCliente} onClick={() => handleClick(item)} aria-label="Editar">

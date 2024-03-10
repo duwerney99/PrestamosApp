@@ -26,6 +26,7 @@ export const FormRutas = ( {dataRutas, setDataRutas, actualizarMostrarCrearRutra
         }
         const respuesta = await agregarRutas(RUTAS, ruta.codigoRuta, { ...ruta });
         console.log('respuesta', respuesta);
+        setDataRutas([...dataRutas, ruta]);
         actualizarMostrarCrearRutra(false);
     }
 

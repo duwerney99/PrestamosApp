@@ -48,30 +48,30 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
 
 
     const statesClients = [
-        { value: 'option1', label: 'Activo' },
-        { value: 'option2', label: 'Inactivo' },
-        { value: 'option3', label: 'Pendiente' }
+        { label: 'option1', value: 'Activo' },
+        { label: 'option2', value: 'Inactivo' },
+        { label: 'option3', value: 'Pendiente' }
     ]
 
 
     const dayPay = [
-        { value: 'option1', label: 'Todos los dias' },
-        { value: 'option2', label: '15nal' },
-        { value: 'option3', label: 'Mensual' },
-        { value: 'option4', label: 'Semanal' }
+        { label: 'option1', value: 'Todos los dias' },
+        { label: 'option2', value: '15nal' },
+        { label: 'option3', value: 'Mensual' },
+        { label: 'option4', value: 'Semanal' }
     ]
 
     const intereses = [
-        { value: 'option1', label: '20%' },
-        { value: 'option2', label: '15%' },
-        { value: 'option3', label: '10%' },
-        { value: 'option4', label: '5%' }
+        { label: 'option1', value: '20%' },
+        { label: 'option2', value: '15%' },
+        { label: 'option3', value: '10%' },
+        { label: 'option4', value: '5%' }
     ]
 
     const statePrestamo = [
-        { value: 'option1', label: 'Por conceder' },
-        { value: 'option2', label: 'Concedido' },
-        { value: 'option3', label: 'Rechazado' }
+        { label: 'option1', value: 'Por conceder' },
+        { label: 'option2', value: 'Concedido' },
+        { label: 'option3', value: 'Rechazado' }
     ]
 
 
