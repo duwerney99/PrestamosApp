@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
 import 'firebase/firestore';
-import { agregarRutas } from '@firebase/services/clientes';
+import { agregarRutas } from '@firebase/services/rutas';
 import { RUTAS } from '@firebase/services/references';
 
 
@@ -33,10 +33,10 @@ export const FormRutas = ( {dataRutas, setDataRutas, actualizarMostrarCrearRutra
     const onChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        setDataRutas({
-            ...ruta,
-            [value]: name,
-        })
+        setRuta((prevRuta) => ({
+            ...prevRuta,
+            [name]: value,
+        }));
     }
 
     return (

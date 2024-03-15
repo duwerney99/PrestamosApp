@@ -1,20 +1,19 @@
 export class Cliente {
-    constructor(codigo, cedula, nombre, direccion, telefono, nombreReferencia, nombreRuta, 
-        telefonoReferencia, direccionReferencia, estado) {
-        this.codigo = codigo;
+    constructor(cedula, nombre, direccion, telefono, nombreReferencia, codigoRuta, 
+        telefonoReferencia, direccionReferencia) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
         this.nombreReferencia = nombreReferencia;
-        this.nombreRuta = nombreRuta;
+        this.codigoRuta = codigoRuta;
         this.telefonoReferencia = telefonoReferencia;
         this.direccionReferencia = direccionReferencia;
         // this.estado = estado;
     }
 
     static validateCliente(cliente) {
-        const requiredFields  = ['codigo', 'cedula', 'nombre', 'direccion', 'telefono', 'nombre_referencia', 'nombre_ruta', 'telefono_referencia', 'direccion_referencia'];
+        const requiredFields  = ['cedula', 'nombre', 'direccion', 'telefono', 'nombre_referencia', 'codigoRuta', 'telefono_referencia', 'direccion_referencia'];
         const missingFields = requiredFields.filter(field => !cliente[field]);
         return {
             valid: missingFields.length === 0,
@@ -24,14 +23,14 @@ export class Cliente {
 
     static fromFirestore(doc) {
         const data = doc.data();
-        return new Prestamo(
+        return new Cliente(
             doc.id,
             data.cedula,
             data.nombre,
             data.direccion,
             data.telefono,
             data.nombreReferencia,
-            data.nombreRuta,
+            data.codigoRuta,
             data.telefonoReferencia,
             data.direccionReferencia,
             // data.estado,

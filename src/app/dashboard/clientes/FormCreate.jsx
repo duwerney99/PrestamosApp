@@ -1,15 +1,43 @@
 'use client'
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import 'firebase/firestore';
-import { agregarCliente } from '@firebase/services/clientes';
-import { CLIENTES } from '@firebase/services/references';
+import { agregarCliente, obtenerSiguienteCodigoYActualizar } from '@firebase/services/clientes';
+import { CLIENTES, RUTAS } from '@firebase/services/references';
 import { Cliente } from '@pages/model/clientes/model';
+
+import { consultarRutas } from '@firebase/services/rutas';
+
+
+
+
 export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearCliente}) => {
     
     const [cliente, setCliente] = useState({ codigo: null, cedula:null, nombre: null, direccion: null, telefono: null, nombre_referencia: null,
-        nombre_ruta: null, telefono_referencia: null, direccion_referencia: null });
+        codigoRuta: null, telefono_referencia: null, direccion_referencia: null });
     const [initialComponent, setInitialComponent] = useState(true);
+
+
+    // CONSULTAR RUTAS
+    const [rutas, setRutas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedRuta, setSelectedRuta] = useState('');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await consultarRutas(RUTAS); // 'clientes' es el nombre de la colección en Firestore
+            if (result.statusResponse) {
+                setRutas(result.data);
+                console.log("Rutas ", result.data);
+            } else {
+                console.error(result.error);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
+
+
 
     const options = [
         { value: 'option1', label: 'Activo' },
@@ -25,20 +53,28 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
 
     const handleClickSave = async () => {
         setInitialComponent(false)
-        const clienteValue = Object.values(cliente)
-        const hasNull =  clienteValue.some((value) => value === null || value === '')
-        if (hasNull) {
-            return
+        const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
+        console.log("Código obtenido:", nuevoCodigo);
+        try {
+            console.log("CLiente ", cliente)
+            const { valid, missingFields } = Cliente.validateCliente(cliente);
+            if (!valid) {
+                console.error('Faltan campos obligatorios:', missingFields);
+                return;
+            }
+            const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente }, nuevoCodigo);
+            console.log('respuesta', respuesta);
+            if (respuesta.success) {
+                setDataCliente([...dataCliente, cliente]);
+                actualizarMostrarCrearCliente(false);
+            } else {
+                console.error("Error al agregar el cliente: ", respuesta.error);
+            }
+        }catch (error) {
+            console.error("Error al agregar el cliente: ", error);
+            // Manejar el error aquí
         }
-        const { valid, missingFields } = Cliente.validateCliente(cliente);
-        if (!valid) {
-            console.error('Faltan campos obligatorios:', missingFields);
-            return;
-        }
-        const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente });
-        console.log('respuesta', respuesta);
-        setDataCliente([...dataCliente, cliente]);
-        actualizarMostrarCrearCliente(false);
+        
     }
 
     const onChange = (e) => {
@@ -46,6 +82,7 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
         const value = e.target.value
         setCliente({
             ...cliente,
+            codigoRuta: selectedRuta,   
             [name]: value,
         })
     }
@@ -64,8 +101,10 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
                                         label="Código"
                                         variant="outlined"
                                         size="small"
+                                        value={cliente.codigo || 'Generando...'}
                                         style={{ marginRight: '1rem' }}
                                         fullWidth
+                                        disabled
                                     />
                                     <TextField
                                         onChange={onChange}
@@ -129,18 +168,25 @@ export const FormCreate = ({dataCliente, setDataCliente, actualizarMostrarCrearC
                                         error={!initialComponent && !cliente.nombre_referencia}
                                         helperText={!initialComponent && !cliente.nombre_referencia ? 'Campo obligatorio.' : ''}
                                     />
-                                    <TextField
-                                        onChange={onChange}
-                                        type="text"
-                                        name="nombre_ruta"
-                                        label="Nombre Ruta"
-                                        variant="outlined"
-                                        size="small"
-                                        style={{ marginRight: '2rem' }}
-                                        fullWidth
-                                        error={!initialComponent && !cliente.nombre_ruta}
-                                        helperText={!initialComponent && !cliente.nombre_ruta ? 'Campo obligatorio.' : ''}
-                                    />
+                                    
+                                    <FormControl fullWidth>
+                                        <InputLabel>Seleccione ruta</InputLabel>
+                                        <Select
+                                            value={selectedRuta}
+                                            name="codigoRuta"
+                                            variant="outlined"
+                                            size="small"
+                                            fullWidth
+                                            onChange={(e) => setSelectedRuta(e.target.value)}
+                                        >
+                                            {rutas.map((ruta) => (
+                                                <MenuItem key={ruta.id} value={ruta.ruta}>
+                                                    {ruta.ruta} {/* Asegúrate de usar el nombre correcto del campo */}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
                                     <TextField
                                         onChange={onChange}
                                         type="number"

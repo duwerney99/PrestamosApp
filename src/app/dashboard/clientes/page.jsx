@@ -12,7 +12,7 @@ export default function Page () {
 
     useEffect(() => {
         async function fetchCliente() {
-            const response = await consultarClientes(CLIENTES);
+            const response = await consultarClientes(CLIENTES, null);
             if (response.data) setDataCliente(response.data);
         }
         fetchCliente(); 

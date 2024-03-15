@@ -4,53 +4,7 @@ import { FormPrestamo } from "./FormPrestamo"
 import { TablePrestamo } from "./TablePrestamo"
 import { useEffect, useState } from 'react'
 import { Button } from '@mui/material'
-import { consultarPrestamos } from "@firebase/services/clientes"
-
-
-
-const data = [
-    {
-        codigo: "0001",
-        nombreCliente: "Santiago",
-        saldoActual: "200000",
-        saldo: 10000,
-        valorAbono: 2500,
-        abono: 2000,
-        diasPago: "Semanal",
-        Intereses: "En mora",
-        fechaPrestamo: "3012347145",
-        plazos: 'sabntiago@gmail.com',
-        cuotas: '5',
-        estado: "Inactivo"
-    },
-    {
-        codigo: "0002",
-        nombreCliente: "Santiago",
-        saldo: 5000,
-        valorAbono: "2500",
-        saldoActual: "400000",
-        abono: 3000,
-        diasPago: "15nal",
-        Intereses: "5000",
-        fechaPrestamo: "3012347145",
-        plazos: 'sabntiago@gmail.com',
-        cuotas: '5',
-        estado: "Inactivo"
-    },
-    {
-        codigo: "0003",
-        nombreCliente: "Santiago",
-        saldo: 15000,
-        valorAbono: 2500,
-        saldoActual: "800000",
-        abono: 10000,
-        diasPago: "Mensual",
-        Intereses: "40000",
-        fechaPrestamo: "3012347145",
-        plazos: 'sabntiago@gmail.com',
-        cuotas: '5',
-        estado: "Inactivo"
-    }]
+import { consultarPrestamos } from "@firebase/services/prestamos"
 
 
 

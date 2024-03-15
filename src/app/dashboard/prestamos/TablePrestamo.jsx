@@ -25,6 +25,11 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                     <th
                                     scope='col'
                                     className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    Nombre Cliente   
+                                    </th>
+                                    <th
+                                    scope='col'
+                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                     Saldo actual   
                                     </th>
                                     <th
@@ -36,6 +41,11 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                     scope='col'
                                     className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                     Fecha prestamo   
+                                    </th>
+                                    <th
+                                    scope='col'
+                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                    Fecha Vencimiento   
                                     </th>
                                     <th
                                     scope='col'
@@ -57,6 +67,9 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                             {item?.codigo}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                            {item?.nombre}
+                                        </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.saldoActual}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
@@ -64,6 +77,9 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.fechaPrestamo}
+                                        </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                            {item?.vencimientoPrestamo}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.intereses}

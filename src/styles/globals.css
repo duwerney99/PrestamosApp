@@ -21,6 +21,11 @@
   margin: 0;
 }
 
+.dark {
+  background-color: #313131;
+  color: #ffffff;
+}
+
 html,
 body {
   font-family: var(--font-family);

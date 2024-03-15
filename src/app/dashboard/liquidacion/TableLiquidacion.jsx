@@ -21,7 +21,7 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Código Ruta   
+                                Código Liquidacion   
                                 </th>
                                 <th
                                 scope='col'
@@ -37,6 +37,11 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                 Codigo Cliente   
+                                </th>
+                                <th
+                                scope='col'
+                                className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                Codigo Ruta   
                                 </th>
                                 <th
                                 scope='col'
@@ -69,7 +74,7 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                             {data.map((item) => (
                                 <tr key={item?.codigo}>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.codigoRuta}
+                                        {item?.codigo}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.ruta}
@@ -81,7 +86,7 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                                         {item?.codigoCliente}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.cliente}
+                                        {item?.codigoRuta}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.valorAbono}
@@ -94,9 +99,6 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.fechaVencimiento}
-                                    </td>
-                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.cuotas}
                                     </td>
                                 </tr>
                             ))}

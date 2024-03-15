@@ -3,9 +3,8 @@
 import { RUTAS } from "@firebase/services/references"
 import { FormRutas } from "./FormRutas"
 import { TableRutas } from "./TableRutas"
-import { Button } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { consultarRutas } from "@firebase/services/clientes"
+import { consultarRutas } from "@firebase/services/rutas"
 
 
 export default function Page () {
@@ -26,14 +25,6 @@ export default function Page () {
         setMostrarCrearRutas(value);
     }
 
-    const data = [
-        {
-            codigoRuta: "01",
-            ruta: "Santa Fe",
-            cobradorRuta: "Leydi",
-            
-        },
-    ]
 
     return (
         <div>

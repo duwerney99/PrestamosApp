@@ -7,6 +7,7 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
 
     const handleClick = (item) => {
     };
+    console.log("Data TableClient ", data)
 
     return (
         <div className='w-full flex flex-col mt-8'>
