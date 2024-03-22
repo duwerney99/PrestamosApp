@@ -50,10 +50,20 @@ const statePrestamo = [
 
  const obtenerFecha = () => {
     const fechaActual = new Date();
-    const formattedFechaActual = fechaActual.toISOString().split('T')[0];
-    return formattedFechaActual;
-};
+    console.log("timesTamp22", fechaActual)
+    const year = fechaActual.getFullYear();
+    let month = fechaActual.getMonth() + 1;
+    let day = fechaActual.getDate();
 
+    // Asegurarse de que el mes y el día tengan dos dígitos
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+
+    const fechaFormateada = `${year}-${month}-${day}`;
+
+    console.log("timesTamp", fechaFormateada)
+    return fechaFormateada;
+};
 
 export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrarCrearPrestamo}) => {
 
@@ -130,7 +140,6 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     const handleClickSave = async () => {
         setInitialComponent(false)
         console.log("cliente ", cliente)
-        console.log("cliente ", cliente[0].codigo)
         try {
             
             const prestamoRes = await agregarPrestamo(PRESTAMOS, cliente.codigo, {

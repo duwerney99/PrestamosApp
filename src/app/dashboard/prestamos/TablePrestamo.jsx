@@ -1,12 +1,27 @@
+import {useState, useEffect} from 'react';
 import { IconButton } from '@mui/material';
 import firebase from 'firebase/app';
+
+import { ModalEdit } from "./ModalEdit"
 import 'firebase/firestore';
+
 import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
 
+export const colorIcon = '#84cc16';
 
 
 export const TablePrestamo = ({mostrarCrearPrestamo, data}) => { 
     
+
+    
+
+    const [modalAbierto, setModalAbierto] = useState(false);
+
+    const handleClick = (item) => {
+
+
+        setModalAbierto(true);
+    };
 
 
     return (
@@ -87,8 +102,17 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.diasPago}
                                         </td>
+                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                            <IconButton disabled={mostrarCrearPrestamo} onClick={() => handleClick(item)} aria-label="Editar">
+                                            <PencilSquareIcon color={colorIcon} width={20} height={20}/>
+                                            </IconButton> 
+                                        </td>
+                                        {modalAbierto && (
+                                            <ModalEdit onClose={() => setModalAbierto(false)} data={data} />
+                                        )}
                                         
                                     </tr>
+                                    
                                 ))}
                             </tbody>
                         </table>
