@@ -1,10 +1,9 @@
-import { IconButton } from '@mui/material';
 import { useState } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
+export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => {
 
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
     console.log("fecha selecionada ", fechaSeleccionada)
@@ -16,6 +15,7 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data }) => {
 
     const handleFechaSeleccionadaChange = (date) => {
         setFechaSeleccionada(date);
+        cambiarFecha(date);
     };
     console.log("data ", data)
     const dataFiltrada = data.filter(item => {

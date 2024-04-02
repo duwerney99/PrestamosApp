@@ -12,6 +12,7 @@ import { LIQUIDACION } from "@firebase/services/references"
 export default function  Page () {
     const [mostrarLiquidacion, setMostrarLiquidacion] = useState(true);
     const [dataLiquidacion, setDataLiquidacion] = useState([]);
+    const [dataAMostrar, setDataAMostrar] = useState([]);
 
     useEffect(() => {
         async function fetchLiquidacion() {
@@ -54,7 +55,15 @@ export default function  Page () {
         fetchLiquidacion();
     }, []);
 
-
+    const cambiarFecha = (fecha) => {
+        setDataAMostrar([]);
+        const fechaConvertida = new Date(fecha);
+        const dataValidada = dataLiquidacion.filter(item => {
+            const fechaLiquidacion = new Date(item.fechaLiquidacion);
+            return fechaLiquidacion.toISOString().slice(0, 10) === fechaConvertida.toISOString().slice(0, 10);
+        });
+        setDataAMostrar(dataValidada);
+    }
 
 
     const actualizarMostrarLiquidacion = (value) => {
@@ -87,7 +96,7 @@ export default function  Page () {
                                     
                                 </div>
                             </div>
-                            { dataLiquidacion && dataLiquidacion.length > 0 && <TableLiquidacion mostrarLiquidacion={mostrarLiquidacion} data={dataLiquidacion}/>}
+                            { dataLiquidacion && dataLiquidacion.length > 0 && <TableLiquidacion mostrarLiquidacion={mostrarLiquidacion} data={dataAMostrar} cambiarFecha={cambiarFecha}/>}
                         </div>
                 </div>
             </div>    
