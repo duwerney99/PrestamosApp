@@ -51,9 +51,11 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
         console.log('respuesta', liquidacion);
         setInitialComponent(false)
         const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
-       
-        const saldoActualMenos = isNaN(prestamo.valorAPagar - abonoValue) ? '' : (prestamo.valorAPagar - abonoValue).toFixed(3);
-        console.log('Saldo A quedar', saldoActualMenos);
+        console.log('prestamo.valorAPagar', prestamo.valorAPagar);
+        console.log('saldoActual', prestamo.saldoActual);
+        console.log('abonoValue', abonoValue);
+        const saldoActualMenos = isNaN(prestamo.saldoActual) || isNaN(abonoValue) ? '' : (prestamo.saldoActual - abonoValue).toFixed(3);
+        console.log('saldoActualMenos', saldoActualMenos);
         const saldoObtener = await obtenerSaldoActual(saldoActualMenos, cliente.codigo);
         console.log("LiquidacionRef ", saldoObtener)
         

@@ -57,6 +57,7 @@ export default function  Page () {
 
     const cambiarFecha = (fecha) => {
         setDataAMostrar([]);
+        console.log("Fecha que llega", fecha)
         const fechaConvertida = new Date(fecha);
         const dataValidada = dataLiquidacion.filter(item => {
             const fechaLiquidacion = new Date(item.fechaLiquidacion);
