@@ -1,9 +1,9 @@
 'use client'
 
-import {useState, useEffect} from 'react';
-import { TextField, FormControl, InputLabel, Select, MenuItem   } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import 'firebase/firestore';
-import { agregarLiquidacion, obtenerSiguienteCodigoYActualizar, obtenerSaldoActual, updateSaldo } from '@firebase/services/liquidacion';
+import { agregarLiquidacion, obtenerSiguienteCodigoYActualizar, obtenerSaldoActual, updateSaldo, updateClientById } from '@firebase/services/liquidacion';
 import { LIQUIDACION, CLIENTES, PRESTAMOS } from '@firebase/services/references';
 
 import { consultarClientesID } from '@firebase/services/clientes';
@@ -11,14 +11,14 @@ import { consultarPrestamosID } from '@firebase/services/prestamos';
 import { Timestamp } from 'firebase/firestore';
 
 
-export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualizarMostrarLiquidacion}) => {
+export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualizarMostrarLiquidacion }) => {
 
 
-    const [liquidacion, setLiquidacion] = useState({ 
+    const [liquidacion, setLiquidacion] = useState({
         codigoRuta: '',
         codigoCliente: null,
-        fechaLiquidacion: '', 
-        valorAbono: '', 
+        fechaLiquidacion: '',
+        valorAbono: '',
         valorAPagar: '',
         nombreCliente: '',
         saldoObtener: ''
@@ -34,63 +34,79 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
         valorAbono: '',
         valorAPagar: '',
         saldoActual: ''
-    }); 
+    });
 
     const [abonoValue, setAbonoValue] = useState(prestamo.valorAbono);
     const [codigo, setCodigo] = useState('');
     const [disabled, setDisabled] = useState(true)
 
     const [initialComponent, setInitialComponent] = useState(true);
-    
+
     const handleClickCancel = () => {
         actualizarMostrarLiquidacion(false);
     };
 
 
-    const handleClickSave = async () => { 
-        console.log('respuesta', liquidacion);
+    const handleClickSave = async () => {
+
         setInitialComponent(false)
-        const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
-        console.log('prestamo.valorAPagar', prestamo.valorAPagar);
-        console.log('saldoActual', prestamo.saldoActual);
-        console.log('abonoValue', abonoValue);
+        const clienteExistente = dataLiquidacion.find(item => item.codigoCliente === cliente.codigo);
+        console.log('clienteExistente', clienteExistente);
+
+        // Calculamos el valor con el que va a quedar
         const saldoActualMenos = isNaN(prestamo.saldoActual) || isNaN(abonoValue) ? '' : (prestamo.saldoActual - abonoValue).toFixed(3);
-        console.log('saldoActualMenos', saldoActualMenos);
         const saldoObtener = await obtenerSaldoActual(saldoActualMenos, cliente.codigo);
-        console.log("LiquidacionRef ", saldoObtener)
-        
+
         setLiquidacion(prevLiquidacion => ({
             ...prevLiquidacion,
             saldoObtener: saldoObtener
         }));
-        
-        try {
-            
-            const respuesta = await agregarLiquidacion(LIQUIDACION, liquidacion.codigoRuta, { 
-                ...liquidacion,
-                valorAbono: prestamo.valorAbono,
-                codigoCliente: cliente.codigo,
-                codigoRuta: cliente.nombreRuta,
-                valorAPagar: prestamo.valorAPagar,
-                nombreCliente: cliente.nombre,
-                saldoObtener: saldoObtener
-            }, nuevoCodigo);
-            console.log('respuesta', respuesta);
-            if (respuesta.success) {
-                
-                setDataLiquidacion([...dataLiquidacion, liquidacion]);
-                actualizarMostrarLiquidacion(false);
 
-                const updatePrestamos = await updateSaldo(cliente.codigo, saldoObtener);
+
+
+        try {
+            if (clienteExistente) {
+                const updatedDataLiquidacion = dataLiquidacion.map(item => {
+                    if (item.codigoCliente === cliente.codigo) {
+                        return { ...item, saldoObtener: saldoObtener };
+                    }
+                    return item;
+                });
+                console.log("updateData ", updatedDataLiquidacion)
+                setDataLiquidacion(updatedDataLiquidacion);
+                await updateClientById(cliente.codigo, saldoObtener);
+                await updateSaldo(cliente.codigo, saldoObtener);
             } else {
-                console.error("Error al agregar el cliente: ", respuesta.error);
+                const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
+                const respuesta = await agregarLiquidacion(LIQUIDACION, liquidacion.codigoRuta, {
+                    ...liquidacion,
+                    valorAbono: prestamo.valorAbono,
+                    codigoCliente: cliente.codigo,
+                    codigoRuta: cliente.nombreRuta,
+                    valorAPagar: prestamo.valorAPagar,
+                    nombreCliente: cliente.nombre,
+                    saldoObtener: saldoObtener
+                }, nuevoCodigo);
+
+                if (respuesta.success) {
+                    setDataLiquidacion([...dataLiquidacion, liquidacion]);
+                    actualizarMostrarLiquidacion(false);
+                    await updateSaldo(cliente.codigo, saldoObtener);
+                } else {
+                    console.error("Error al agregar el cliente: ", respuesta.error);
+                }
             }
-        }catch (error) {
-            console.error("Error al agregar el cliente: ", error);
-            // Manejar el error aquí
+
+            // Realiza acciones adicionales después de guardar, como cerrar el popup o mostrar una alerta
+            // Por ejemplo:
+            alert("¡Guardado exitoso!");
+        } catch (error) {
+            console.error("Error al procesar la liquidación: ", error);
         }
+
+
     }
-    
+
 
     // OBTENER CLIENTES
     const handleCodigoChange = async (e) => {
@@ -144,7 +160,7 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                         ...prestamo,
                         valorAbono: prestamo[0].valorAbono,
                         valorAPagar: prestamo[0].valorAPagar,
-                        saldoActual: prestamo[0].saldoActual                                
+                        saldoActual: prestamo[0].saldoActual
                     });
                     setDisabled(false); // Activar campos
                 } else {
@@ -190,13 +206,13 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
         console.log("timesTamp", fechaFormateada)
         return fechaFormateada;
     };
-    
+
 
     const onChange = (e) => {
         const name = e.target.name
         const value = e.target.value
 
-        if (name === 'fechaLiquidacion'){
+        if (name === 'fechaLiquidacion') {
             const fechaActual = new Date();
             const fechaFormateada = obtenerFechaFormateada(fechaActual);
             console.log("fechaFormateada ", fechaFormateada)
@@ -206,13 +222,13 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                 fechaLiquidacion: fechaFormateada
             }));
         } else {
-            setLiquidacion(prevLiquidacion ({
+            setLiquidacion(prevLiquidacion({
                 ...prevLiquidacion,
                 [name]: value,
             }));
         }
     }
-    
+
 
     const obtenerFechaFormateada = (fecha) => {
         const year = fecha.getFullYear();
@@ -229,129 +245,129 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
 
 
     return (
-            <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
-                <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
-                    <div className='mb-4 flex items-center justify-center'>
-                        <div className="space-y-8" >
-                            <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Liquidacion</h3>
-                            <div className='flex '>
-                                <TextField
-                                    onChange={onChange}
-                                    type="text"
-                                    name="codigoLiquidacion"
-                                    label="Código Liquidacion"
-                                    variant="outlined"
-                                    size="medium"
-                                    style={{ marginRight: '1rem' }}
-                                    value={liquidacion.codigo || 'Generando...'}
-                                    fullWidth
-                                    disabled
-                                />
-                                <TextField
-                                    onChange={handleCodigoChange}
-                                    type="number"
-                                    name="codigoCliente"
-                                    label="Código Cliente"
-                                    variant="outlined"
-                                    size="medium"
-                                    style={{ marginRight: '1rem' }}
-                                    fullWidth
-                                />
-                                <TextField
-                                    type="text"
-                                    name="ruta"
-                                    label="Ruta"
-                                    variant="outlined"
-                                    size="medium"
-                                    value={cliente.nombreRuta}
-                                    style={{ marginRight: '1rem' }}
-                                    fullWidth
-                                    disabled={!disabled}
-                                />
-                                <TextField
-                                    type="text"
-                                    name="nombreCliente"
-                                    label="Nombre Cliente"
-                                    variant="outlined"
-                                    size="medium"
-                                    value={cliente.nombre}
-                                    style={{ marginRight: '1rem' }}
-                                    fullWidth
-                                    
-                                />
-                                
-                                
-                                </div>
-                                <div style={{ position: 'relative',  marginBottom: '1rem'}}>
-                                <InputLabel htmlFor="fechaLiquidacion" style={{ position: 'absolute', top: '-1.5rem', backgroundColor: 'white', padding: '0 0.5rem' }}>Fecha Liquidacion</InputLabel>
-                                <TextField
-                                    onChange={onChange}
-                                    type="date"
-                                    name="fechaLiquidacion"
-                                    value={liquidacion.fechaLiquidacion}
-                                    variant="outlined"
-                                    size="medium"
-                                    style={{ marginRight: '1rem' }}
-                                    fullWidth
-                                    error={!initialComponent && !liquidacion.fechaLiquidacion}
-                                    helperText={!initialComponent && !liquidacion.fechaLiquidacion ? 'Campo obligatorio.' : ''}
-                                />
-                                </div>
-                            
-                                <div className='flex mgb-1rem'>
-                                    
-                                    <TextField
-                                        onChange={(e) => {
-                                            handleCodigoChangePrestamos(e);  
-                                            setAbonoValue(e.target.value); 
-                                        }}
-                                        value={abonoValue}
-                                        type="number"
-                                        name="valorAbono"
-                                        label="Valor Abono"
-                                        variant="outlined"
-                                        size="medium"
-                                        style={{ marginRight: '1rem' }}
-                                        fullWidth
-                                        
-                                    />
-                                    <TextField
-                                        value={prestamo.valorAPagar}
-                                        type="text"
-                                        name="saldoActual"
-                                        label="Saldo Deber"
-                                        variant="outlined"
-                                        size="medium"
-                                        style={{ marginRight: '1rem' }}
-                                        fullWidth
-                                    />
+        <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
+            <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
+                <div className='mb-4 flex items-center justify-center'>
+                    <div className="space-y-8" >
+                        <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Liquidacion</h3>
+                        <div className='flex '>
+                            <TextField
+                                onChange={onChange}
+                                type="text"
+                                name="codigoLiquidacion"
+                                label="Código Liquidacion"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem' }}
+                                value={liquidacion.codigo || 'Generando...'}
+                                fullWidth
+                                disabled
+                            />
+                            <TextField
+                                onChange={handleCodigoChange}
+                                type="number"
+                                name="codigoCliente"
+                                label="Código Cliente"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+                            />
+                            <TextField
+                                type="text"
+                                name="ruta"
+                                label="Ruta"
+                                variant="outlined"
+                                size="medium"
+                                value={cliente.nombreRuta}
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+                                disabled={!disabled}
+                            />
+                            <TextField
+                                type="text"
+                                name="nombreCliente"
+                                label="Nombre Cliente"
+                                variant="outlined"
+                                size="medium"
+                                value={cliente.nombre}
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+
+                            />
+
+
+                        </div>
+                        <div style={{ position: 'relative', marginBottom: '1rem' }}>
+                            <InputLabel htmlFor="fechaLiquidacion" style={{ position: 'absolute', top: '-1.5rem', backgroundColor: 'white', padding: '0 0.5rem' }}>Fecha Liquidacion</InputLabel>
+                            <TextField
+                                onChange={onChange}
+                                type="date"
+                                name="fechaLiquidacion"
+                                value={liquidacion.fechaLiquidacion}
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+                                error={!initialComponent && !liquidacion.fechaLiquidacion}
+                                helperText={!initialComponent && !liquidacion.fechaLiquidacion ? 'Campo obligatorio.' : ''}
+                            />
+                        </div>
+
+                        <div className='flex mgb-1rem'>
+
+                            <TextField
+                                onChange={(e) => {
+                                    handleCodigoChangePrestamos(e);
+                                    setAbonoValue(e.target.value);
+                                }}
+                                value={abonoValue}
+                                type="number"
+                                name="valorAbono"
+                                label="Valor Abono"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+
+                            />
+                            <TextField
+                                value={prestamo.valorAPagar}
+                                type="text"
+                                name="saldoActual"
+                                label="Saldo Deber"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem' }}
+                                fullWidth
+                            />
                         </div>
                     </div>
                 </div>
-                    <div className="flex justify-end">
-                        <div className="mt-6">
-                            <button
-                                onClick={handleClickCancel}
-                                className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
-                        </div>
-                        <div className="mt-6 ml-4">
-                            <button
+                <div className="flex justify-end">
+                    <div className="mt-6">
+                        <button
+                            onClick={handleClickCancel}
+                            className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
+                    </div>
+                    <div className="mt-6 ml-4">
+                        <button
                             onClick={handleClickSave}
                             className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
-                        </div>
                     </div>
                 </div>
-                <div className='w-1/2 ml-auto grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-end items-center'>
-                    <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
-                        <div className='mb-4 flex items-center justify-center'>
-                            <div className="space-y-8">
-                                <h3 className='text-xl font-bold text-green-400 mb-2'>Informacion Cliente</h3>
-                                <p>Abono: {prestamo.valorAbono}</p>
-                                <p>saldo Actual: {prestamo.saldoActual}</p>
-                            </div>
+            </div>
+            <div className='w-1/2 ml-auto grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-end items-center'>
+                <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
+                    <div className='mb-4 flex items-center justify-center'>
+                        <div className="space-y-8">
+                            <h3 className='text-xl font-bold text-green-400 mb-2'>Informacion Cliente</h3>
+                            <p>Abono: {prestamo.valorAbono}</p>
+                            <p>saldo Actual: {prestamo.saldoActual}</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     )
 }

@@ -4,7 +4,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => {
-
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
     console.log("fecha selecionada ", fechaSeleccionada)
 

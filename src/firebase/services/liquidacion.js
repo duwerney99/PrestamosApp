@@ -65,6 +65,34 @@ export async function obtenerSiguienteCodigoYActualizar() {
     }
 }
 
+export async function updateClientById(codigo, saldoActual) {
+  const db = getFirestore();
+
+
+  const clientQuery = query(
+    collection(db, 'prestamos'),
+    where('codigo', '==', codigo)
+  );
+
+  
+  try {
+    const clientDocsSnapshot = await getDocs(clientQuery);
+
+    if (!clientDocsSnapshot.empty) {
+      const clientDoc = clientDocsSnapshot.docs[0];
+      console.log("Cliente update ", clientDoc)
+      await updateDoc(clientDoc.ref, {
+        saldoObtener: saldoActual
+      });
+    }
+
+  } catch (error) {
+    console.error('Error al actualizar el saldo:', error);
+    throw error;
+  }
+
+}
+
 // Actualizar saldo en collection prestamo
 export async function updateSaldo(codigo, nuevoSaldo) {
   const db = getFirestore();
