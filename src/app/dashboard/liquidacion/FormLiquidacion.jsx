@@ -245,125 +245,128 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
 
 
     return (
-        <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
-            <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
-                <div className='mb-4 flex items-center justify-center'>
-                    <div className="space-y-8" >
-                        <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Liquidacion</h3>
-                        <div className='flex '>
-                            <TextField
-                                onChange={onChange}
-                                type="text"
-                                name="codigoLiquidacion"
-                                label="Código Liquidacion"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' }}
-                                value={liquidacion.codigo || 'Generando...'}
-                                fullWidth
-                                disabled
-                            />
-                            <TextField
-                                onChange={handleCodigoChange}
-                                type="number"
-                                name="codigoCliente"
-                                label="Código Cliente"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
-                            />
-                            <TextField
-                                type="text"
-                                name="ruta"
-                                label="Ruta"
-                                variant="outlined"
-                                size="medium"
-                                value={cliente.nombreRuta}
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
-                                disabled={!disabled}
-                            />
-                            <TextField
-                                type="text"
-                                name="nombreCliente"
-                                label="Nombre Cliente"
-                                variant="outlined"
-                                size="medium"
-                                value={cliente.nombre}
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
+        <div className='w-full flex justify-between'>
 
-                            />
-
-
-                        </div>
-                        <div style={{ position: 'relative', marginBottom: '1rem' }}>
-                            <InputLabel htmlFor="fechaLiquidacion" style={{ position: 'absolute', top: '-1.5rem', backgroundColor: 'white', padding: '0 0.5rem' }}>Fecha Liquidacion</InputLabel>
-                            <TextField
-                                onChange={onChange}
-                                type="date"
-                                name="fechaLiquidacion"
-                                value={liquidacion.fechaLiquidacion}
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
-                                error={!initialComponent && !liquidacion.fechaLiquidacion}
-                                helperText={!initialComponent && !liquidacion.fechaLiquidacion ? 'Campo obligatorio.' : ''}
-                            />
-                        </div>
-
-                        <div className='flex mgb-1rem'>
-
-                            <TextField
-                                onChange={(e) => {
-                                    handleCodigoChangePrestamos(e);
-                                    setAbonoValue(e.target.value);
-                                }}
-                                value={abonoValue}
-                                type="number"
-                                name="valorAbono"
-                                label="Valor Abono"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
-
-                            />
-                            <TextField
-                                value={prestamo.valorAPagar}
-                                type="text"
-                                name="saldoActual"
-                                label="Saldo Deber"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' }}
-                                fullWidth
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-end">
-                    <div className="mt-6">
-                        <button
-                            onClick={handleClickCancel}
-                            className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
-                    </div>
-                    <div className="mt-6 ml-4">
-                        <button
-                            onClick={handleClickSave}
-                            className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
-                    </div>
-                </div>
-            </div>
-            <div className='w-1/2 ml-auto grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-end items-center'>
+            <div className='w-1/2 mr-4'>
                 <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
                     <div className='mb-4 flex items-center justify-center'>
-                        <div className="space-y-8">
-                            <h3 className='text-xl font-bold text-green-400 mb-2'>Informacion Cliente</h3>
-                            <p>Abono: {prestamo.valorAbono}</p>
-                            <p>saldo Actual: {prestamo.saldoActual}</p>
+                        <div className="space-y-8" >
+                            <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Liquidacion</h3>
+                            <div className='flex '>
+                                <TextField
+                                    onChange={onChange}
+                                    type="text"
+                                    name="codigoLiquidacion"
+                                    label="Código Liquidacion"
+                                    variant="outlined"
+                                    size="medium"
+                                    style={{ marginRight: '1rem' }}
+                                    value={liquidacion.codigo || 'Generando...'}
+                                    fullWidth
+                                    disabled
+                                />
+                                <TextField
+                                    onChange={handleCodigoChange}
+                                    type="number"
+                                    name="codigoCliente"
+                                    label="Código Cliente"
+                                    variant="outlined"
+                                    size="medium"
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+                                />
+                                <TextField
+                                    type="text"
+                                    name="ruta"
+                                    label="Ruta"
+                                    variant="outlined"
+                                    size="medium"
+                                    value={cliente.nombreRuta}
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+                                    disabled={!disabled}
+                                />
+                                <TextField
+                                    type="text"
+                                    name="nombreCliente"
+                                    label="Nombre Cliente"
+                                    variant="outlined"
+                                    size="medium"
+                                    value={cliente.nombre}
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+
+                                />
+
+
+                            </div>
+                            <div style={{ position: 'relative', marginBottom: '1rem' }}>
+                                <InputLabel htmlFor="fechaLiquidacion" style={{ position: 'absolute', top: '-1.5rem', backgroundColor: 'white', padding: '0 0.5rem' }}>Fecha Liquidacion</InputLabel>
+                                <TextField
+                                    onChange={onChange}
+                                    type="date"
+                                    name="fechaLiquidacion"
+                                    value={liquidacion.fechaLiquidacion}
+                                    variant="outlined"
+                                    size="medium"
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+                                    error={!initialComponent && !liquidacion.fechaLiquidacion}
+                                    helperText={!initialComponent && !liquidacion.fechaLiquidacion ? 'Campo obligatorio.' : ''}
+                                />
+                            </div>
+
+                            <div className='flex mgb-1rem'>
+
+                                <TextField
+                                    onChange={(e) => {
+                                        handleCodigoChangePrestamos(e);
+                                        setAbonoValue(e.target.value);
+                                    }}
+                                    value={abonoValue}
+                                    type="number"
+                                    name="valorAbono"
+                                    label="Valor Abono"
+                                    variant="outlined"
+                                    size="medium"
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+
+                                />
+                                <TextField
+                                    value={prestamo.valorAPagar}
+                                    type="text"
+                                    name="saldoActual"
+                                    label="Saldo Deber"
+                                    variant="outlined"
+                                    size="medium"
+                                    style={{ marginRight: '1rem' }}
+                                    fullWidth
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex justify-end">
+                        <div className="mt-6">
+                            <button
+                                onClick={handleClickCancel}
+                                className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
+                        </div>
+                        <div className="mt-6 ml-4">
+                            <button
+                                onClick={handleClickSave}
+                                className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-1/2 ml-auto'>
+                    <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 w-1/2' style={{ marginLeft: '120%', marginTop: '-150px', width: '90%' }}>
+                        <div className='mb-4 flex items-center justify-center'>
+                            <div className="space-y-8">
+                                <h3 className='text-xl font-bold text-green-400 mb-2'>Informacion Cliente</h3>
+                                <p>Abono: {prestamo.valorAbono}</p>
+                                <p>saldo Actual: {prestamo.saldoActual}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

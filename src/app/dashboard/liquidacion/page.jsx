@@ -30,7 +30,7 @@ export default function  Page () {
     
                 // Filtrar los documentos para obtener solo los de la fecha actual
                 const liquidacionesHoy = response.data.filter(liquidacion => {
-                    console.log("data", response.data);
+                    console.log("liquidacionesHoydata", response.data);
                     const fechaLiquidacion = liquidacion.codigo.replace(/-/g, '').substring(2);
                     
                     console.log("fechaLiquidacion", fechaLiquidacion);
@@ -58,6 +58,7 @@ export default function  Page () {
     const cambiarFecha = (fecha) => {
         setDataAMostrar([]);
         console.log("Fecha que llega", fecha)
+        
         const fechaConvertida = new Date(fecha);
         const dataValidada = dataLiquidacion.filter(item => {
             const fechaLiquidacion = new Date(item.fechaLiquidacion);

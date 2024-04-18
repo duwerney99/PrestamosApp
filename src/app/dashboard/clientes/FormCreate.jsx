@@ -21,15 +21,17 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
     const [initialComponent, setInitialComponent] = useState(true);
 
 
-    // CONSULTAR RUTAS
+    // CONSULTAR clientes
     const [rutas, setRutas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedRuta, setSelectedRuta] = useState('');
 
+
     useEffect(() => {
         const fetchData = async () => {
-            const result = await consultarRutas(RUTAS); // 'clientes' es el nombre de la colección en Firestore
+            const result = await consultarRutas(RUTAS); 
             if (result.statusResponse) {
+                const ruta = result.data[0]
                 setRutas(result.data);
                 console.log("Rutas ", result.data);
             } else {
@@ -54,12 +56,17 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
         actualizarMostrarCrearCliente(false);
     };
 
+
+
     const handleClickSave = async () => {
         setInitialComponent(false)
         const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
         console.log("Código obtenido:", nuevoCodigo);
         try {
             console.log("CLiente ", cliente)
+            console.log("Rutas ", selectedRuta)
+            console.log("Cliente ", cliente)
+            console.log("rutas ", rutas)
             const { valid, missingFields } = Cliente.validateCliente(cliente);
             if (!valid) {
                 console.error('Faltan campos obligatorios:', missingFields);
@@ -80,12 +87,16 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
 
     }
 
+
     const onChange = (e) => {
         const name = e.target.name
+        console.log("name", name)
         const value = e.target.value
+        console.log("value", value)
         setCliente({
             ...cliente,
             codigoRuta: selectedRuta,
+            
             [name]: value,
         })
     }
@@ -207,7 +218,7 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
                                     size="small"
                                     style={{ weight: '2%' }}
                                     fullWidth
-                                    onChange={(e) => setSelectedRuta(e.target.value)}
+                                    onChange={onChange}
                                 >
                                     {rutas.map((ruta) => (
                                         <MenuItem key={ruta.id} value={ruta.ruta}>

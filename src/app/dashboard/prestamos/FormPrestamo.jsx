@@ -50,7 +50,7 @@ const statePrestamo = [
 
  const obtenerFecha = () => {
     const fechaActual = new Date();
-    console.log("timesTamp22", fechaActual)
+    // console.log("timesTamp22", fechaActual)
     const year = fechaActual.getFullYear();
     let month = fechaActual.getMonth() + 1;
     let day = fechaActual.getDate();
@@ -61,40 +61,11 @@ const statePrestamo = [
 
     const fechaFormateada = `${year}-${month}-${day}`;
 
-    console.log("timesTamp", fechaFormateada)
+    // console.log("timesTamp", fechaFormateada)
     return fechaFormateada;
 };
 
 export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrarCrearPrestamo}) => {
-
-    const [prestamo, setPrestamo] = useState({ 
-        codigo: null,
-        nombreCliente: '',
-        nombreRuta: '',
-        saldoActual: '',
-        valorAbono: '',
-        fechaPrestamo: obtenerFecha(),
-        vencimientoPrestamo: null,
-        intereses: '',
-        plazos: '',
-        cuotas: '',
-        diasPago: ''
-
-    });
-    const [cliente, setCliente] = useState({
-        codigo: '',
-        nombre: '',
-        nombreRuta: ''
-    });
-
-    const [codigo, setCodigo] = useState('');
-    const [disabled, setDisabled] = useState(true)
-
-
-    const [initialComponent, setInitialComponent] = useState(true);
-    const [selectedInteres, setSelectedInteres] = useState('');
-    const [selectedPlazos, setselectedPlazos] = useState('');
-    const [selecteddiasPago, setSelecteddiasPago] = useState('');
 
 
     const handleClickCancel = () => {
@@ -294,6 +265,34 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
         }
         return `${year}-${month}-${day}`;
     };
+
+    const [prestamo, setPrestamo] = useState({ 
+        codigo: null,
+        nombreCliente: '',
+        nombreRuta: '',
+        saldoActual: '',
+        valorAbono: '',
+        fechaPrestamo: obtenerFecha(),
+        vencimientoPrestamo: null,
+        intereses: '',
+        plazos: '',
+        cuotas: '',
+        diasPago: ''
+
+    });
+    const [cliente, setCliente] = useState({
+        codigo: '',
+        nombre: '',
+        nombreRuta: ''
+    });
+
+    const [codigo, setCodigo] = useState('');
+    const [disabled, setDisabled] = useState(true)
+
+    const [initialComponent, setInitialComponent] = useState(true);
+    const [selectedInteres, setSelectedInteres] = useState('');
+    const [selectedPlazos, setselectedPlazos] = useState('');
+    const [selecteddiasPago, setSelecteddiasPago] = useState('');
 
     return (
         <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>

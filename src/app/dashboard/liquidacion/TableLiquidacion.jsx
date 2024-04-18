@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => {
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
-    console.log("fecha selecionada ", fechaSeleccionada)
+    console.log("data", data)
 
 
     const actualizarMostrarLiquidacion = (value) => {
@@ -13,16 +13,12 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
     }
 
     const handleFechaSeleccionadaChange = (date) => {
+        const fechaFormateada = new Date(date);
+        fechaFormateada.setHours(fechaFormateada.getHours() - 5);
+        console.log(fechaFormateada);
         setFechaSeleccionada(date);
         cambiarFecha(date);
     };
-    console.log("data ", data)
-    const dataFiltrada = data.filter(item => {
-        
-        const fechaLiquidacion = new Date(item.fechaLiquidacion);
-        return fechaLiquidacion.toISOString().slice(0, 10) === fechaSeleccionada.toISOString().slice(0, 10);
-    });
-
 
     return (
         <div className='w-full flex flex-col mt-8' >
