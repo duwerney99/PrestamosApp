@@ -27,81 +27,96 @@ export const FormCuadre = () => {
                 <div className='mb-4 flex items-center justify-center'>
                     <div className="space-y-8">
                         <h3 className='text-xl font-bold text-green-400 mb-2'>Crear Cuadre</h3>
-                        <div className='flex flex-wrap'>
+                        <div className='flex'>
                             <TextField
                                 onChange={onChange}
                                 type="number"
-                                name="liquidacion"
-                                label="Liquidacion #"
+                                name="codigoRuta"
+                                label="Codigo Ruta"
                                 variant="outlined"
                                 size="medium"
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
                                 fullWidth
                             />
-                            <TextField
-                                onChange={onChange}
-                                type="number"
-                                name="codigoCobrador"
-                                label="Codigo Cobrador"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem' , marginBottom: '1rem'}}
-                                fullWidth
-                            />
-                            <TextField
-                                onChange={onChange}
-                                type="number"
-                                name="baseLiquidacion"
-                                label="Base Liquidacion"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
-                                fullWidth
-                            />
-                            <div className='flex flex-wrap items-center'>
-                                <div style={{ marginRight: '2rem', marginBottom: '1rem' }}>
-                                    <InputLabel htmlFor="fechaLiquidacion" className="date-label">Fecha Liquidacion</InputLabel>
-                                    <TextField
-                                        onChange={onChange}
-                                        type="date"
-                                        name="fechaLiquidacion"
-                                        variant="filled"
-                                        size="medium"
-                                        fullWidth
-                                    />
-                                </div>
-                                <div style={{ marginRight: '2rem', marginBottom: '1rem' }}>
-                                    <InputLabel htmlFor="fechaDesde" className="date-label">Fecha Desde</InputLabel>
-                                    <TextField
-                                        onChange={onChange}
-                                        type="date"
-                                        name="fechaDesde"
-                                        variant="filled"
-                                        size="medium"
-                                        fullWidth
-                                    />
-                                </div>
-                                <div style={{ marginRight: '2rem', marginBottom: '1rem' }}>
-                                    <InputLabel htmlFor="fechaHasta" className="date-label">Fecha Hasta</InputLabel>
-                                    <TextField
-                                        onChange={onChange}
-                                        type="date"
-                                        name="fechaHasta"
-                                        variant="filled"
-                                        size="medium"
-                                        fullWidth
-                                    />
-                                </div>
+
+                            <div style={{ marginRight: '1rem', marginBottom: '1rem' }}>
+                                <InputLabel htmlFor="fechaLiquidacion" className="date-label">Fecha Liquidacion</InputLabel>
+                                <TextField
+                                    onChange={onChange}
+                                    type="date"
+                                    name="fechaLiquidacion"
+                                    variant="filled"
+                                    size="medium"
+                                    fullWidth
+                                />
                             </div>
+
                             <TextField
                                 onChange={onChange}
                                 type="number"
-                                name="diasLiquidados"
-                                label="Dias Liquidados"
+                                name="nombreRuta"
+                                label="Nombre Ruta"
                                 variant="outlined"
-                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
                                 size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
                                 fullWidth
+                            />
+
+
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="baseAnterior"
+                                label="Base Anterior"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="totalCobrado"
+                                label="Total Cobrado"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="prestamos"
+                                label="Prestamos"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="gastos"
+                                label="Gastos"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="totalBase"
+                                label="Total Base"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
                             />
                         </div>
                     </div>
