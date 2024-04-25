@@ -33,65 +33,7 @@ export async function obtenerSiguienteCodigoYActualizar() {
 }
 
 
-  export async function obtenerSaldoActual(saldoActualMenos, clientID) {
-    const db = getFirestore();
-    const pagosDocRef = doc(db, 'ValoresAbonos', 'pagos');
-    try {
-        const pagosDocSnapshot = await getDoc(pagosDocRef);
-        let valorActual;
-        const date = new Date();
-
-        if (!pagosDocSnapshot.exists()) {
-            // Si el documento 'pagos' no existe, créalo y establece el saldo inicial como 0
-            await setDoc(pagosDocRef, { valor: 0, date: Timestamp.now(), clientID: clientID });
-            console.log("Se ha creado el documento 'pagos' en la colección 'ValoresAbonos'.");
-            valorActual = 0; // Establecer el saldo inicial como 0
-        } else {
-            // Obtener el valor actual de la colección 'ValoresAbonos/pagos'
-            valorActual = pagosDocSnapshot.data().valor;
-            console.log("valo actual else ", valorActual)
-        }
-
-        console.log("ValorActual:", valorActual);
-
-        // Actualizar el valor actual con el nuevo saldo
-        const nuevoValor = saldoActualMenos;
-
-        await setDoc(pagosDocRef, { valor: nuevoValor, date: Timestamp.now(), clientID: clientID}, { merge: true });
-        return nuevoValor
-    } catch (error) {
-        console.error("Error al obtener el saldo actual o al crear la colección 'pagos': ", error);
-        throw error;
-    }
-}
-
-export async function updateClientById(codigo, saldoActual) {
-  const db = getFirestore();
-
-
-  const clientQuery = query(
-    collection(db, 'prestamos'),
-    where('codigo', '==', codigo)
-  );
-
   
-  try {
-    const clientDocsSnapshot = await getDocs(clientQuery);
-
-    if (!clientDocsSnapshot.empty) {
-      const clientDoc = clientDocsSnapshot.docs[0];
-      console.log("Cliente update ", clientDoc)
-      await updateDoc(clientDoc.ref, {
-        saldoObtener: saldoActual
-      });
-    }
-
-  } catch (error) {
-    console.error('Error al actualizar el saldo:', error);
-    throw error;
-  }
-
-}
 
 // Actualizar saldo en collection prestamo
 export async function updateSaldo(codigo, nuevoSaldo) {
@@ -113,7 +55,7 @@ export async function updateSaldo(codigo, nuevoSaldo) {
       const prestamoDocRef = prestamosDocsSnapshot.docs[0].ref;
 
       // Actualizar el saldo actual en el documento del préstamo
-      await updateDoc(prestamoDocRef, { saldoActual: nuevoSaldo });
+      await updateDoc(prestamoDocRef, { valorAPagar: nuevoSaldo });
 
       console.log('Saldo actualizado con éxito para el préstamo con código:', codigo);
     } else {
@@ -125,6 +67,36 @@ export async function updateSaldo(codigo, nuevoSaldo) {
   }
 }
 
+
+export async function updateLiquidacion(codigo, nuevoSaldo, fecha) {
+  const db = getFirestore();
+  
+  const liquidacionQuery = query(
+    collection(db, 'liquidacion'),
+    where('codigoCliente', '==', codigo)
+  );
+
+  try {
+    // Obtener los documentos que coinciden con la consulta
+    const liquidacionDocsSnapshot = await getDocs(liquidacionQuery);
+    
+    // Verificar si se encontró algún documento
+    if (!liquidacionDocsSnapshot.empty) {
+      // Obtener la referencia al primer documento encontrado (asumiendo que solo hay uno con ese código)
+      const liquidacionDocRef = liquidacionDocsSnapshot.docs[0].ref;
+      console.log("Documentos ", liquidacionDocsSnapshot.docs[0].ref)
+      // Actualizar el saldo actual en el documento del préstamo
+      await updateDoc(liquidacionDocRef, { saldoObtener: nuevoSaldo, fechaLiquidacion: fecha });
+
+      console.log('Saldo actualizado con éxito para el préstamo con código:', codigo);
+    } else {
+      console.error('No se encontró ningún préstamo con el código especificado:', codigo);
+    }
+  } catch (error) {
+    console.error('Error al actualizar el saldo:', error);
+    throw error;
+  }
+}
 
 export const consultarLiquidacion = async (reference) => {
     const result = { statusResponse: false, data: null, error: null };
@@ -168,6 +140,56 @@ export async function agregarLiquidacion(reference, id, info, fechaFormateada) {
   }
 
   
+}
+
+
+
+export async function savePayTrazabilidad(clientID, saldoActualMenos, date) {
+  const db = getFirestore();
+  const pagosDocRef = doc(db, 'trazaLiqui', clientID);
+  try {
+      const pagosDocSnapshot = await getDoc(pagosDocRef);
+      let pagosData = [];
+
+      if (pagosDocSnapshot.exists()) {
+          // Obtener los datos de los abonos existentes
+          pagosData = pagosDocSnapshot.data().pagos || [];
+          console.log("Datos de los abonos existentes:", pagosData);
+      }
+
+      // Agregar el nuevo abono al historial
+      const nuevoAbono = { valor: saldoActualMenos, date: date };
+      pagosData.push(nuevoAbono);
+
+      // Guardar o actualizar el documento con los datos actualizados
+      await setDoc(pagosDocRef, { pagos: pagosData }, { merge: true });
+
+      console.log("Se ha agregado un nuevo abono para el cliente con ID", clientID);
+      return pagosData; // Retornar el abono agregado para referencia
+  } catch (error) {
+      console.error("Error al guardar el abono para el cliente con ID", clientID, ":", error);
+      throw error;
+  }
+}
+
+
+export async function consultarPagosExistenes(clientID) {
+  const db = getFirestore();
+  const pagosDocRef = doc(db, 'trazaLiqui', clientID);
+  try {
+      const pagosDocSnapshot = await getDoc(pagosDocRef);
+      if (pagosDocSnapshot.exists()) {
+          const pagosData = pagosDocSnapshot.data().pagos || [];
+          console.log("Datos de los abonos existentes para el cliente con ID", clientID, ":", pagosData);
+          return pagosData;
+      } else {
+          console.log("No existen datos de abonos para el cliente con ID", clientID);
+          return [];
+      }
+  } catch (error) {
+      console.error("Error al consultar los abonos para el cliente con ID", clientID, ":", error);
+      throw error;
+  }
 }
 
 

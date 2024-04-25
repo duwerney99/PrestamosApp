@@ -45,7 +45,7 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                     <th
                                     scope='col'
                                     className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Saldo actual   
+                                    Valor a Pagar   
                                     </th>
                                     <th
                                     scope='col'
@@ -85,7 +85,7 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                             {item?.nombre}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.saldoActual}
+                                            {item?.valorAPagar}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.valorAbono}

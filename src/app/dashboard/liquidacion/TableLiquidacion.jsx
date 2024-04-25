@@ -1,11 +1,32 @@
 import { useState } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 
 
 export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => {
+
+
+    const liquidReducers = useSelector((state) => state.liquidReduce.liquidReduce);
+
+    var codigoCliente = '';
+
+    const clienteIndex = data.map((item) => {
+        codigoCliente = item.codigoCliente;
+
+        return codigoCliente
+    });
+
+    console.log("clienteIndex", clienteIndex)
+
+    console.log("liquid", liquidReducers)
+    const existingClientIndex = liquidReducers.findIndex(liquidItem => liquidItem.codigoCliente === codigoCliente);
+    console.log("existingClientIndex", existingClientIndex);
+
+    
+
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
-    console.log("data", data)
+   
 
 
     const actualizarMostrarLiquidacion = (value) => {
@@ -78,12 +99,12 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
                             </thead>
                             <tbody className='bg-white'>
                                 {data.map((item) => (
-                                    <tr key={item?.codigo}>
+                                    <tr key={item.codigo}>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.codigo}
+                                            {item.codigo}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.fechaLiquidacion}
+                                            {item.fechaLiquidacion}
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.codigoCliente}

@@ -80,7 +80,7 @@ export const ModalEdit = ({ onClose, data}) => {
             const nuevosDatos = {
                 nombre: cliente.nombre,
                 nombreRuta: cliente.nombreRuta,
-                saldoActual: prestamo.saldoActual
+                valorAPagar: prestamo.saldoActual
                 // Agrega aquí los demás campos que quieras actualizar
             };
             

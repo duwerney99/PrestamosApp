@@ -147,12 +147,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     };
 
 
-    useEffect(() => {
-        setPrestamo(prevPrestamo => ({
-            ...prevPrestamo,
-            fechaPrestamo: obtenerFecha(),
-        }));
-    }, [selectedInteres, selectedPlazos, selecteddiasPago]);
+    
     
     const onChange = (e) => {
         const name = e.target.name
@@ -293,6 +288,13 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     const [selectedInteres, setSelectedInteres] = useState('');
     const [selectedPlazos, setselectedPlazos] = useState('');
     const [selecteddiasPago, setSelecteddiasPago] = useState('');
+
+    useEffect(() => {
+        setPrestamo(prevPrestamo => ({
+            ...prevPrestamo,
+            fechaPrestamo: obtenerFecha(),
+        }));
+    }, [selectedInteres, selectedPlazos, selecteddiasPago]);
 
     return (
         <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>

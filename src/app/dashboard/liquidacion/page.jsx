@@ -10,7 +10,7 @@ import { LIQUIDACION } from "@firebase/services/references"
 
 
 export default function  Page () {
-    const [mostrarLiquidacion, setMostrarLiquidacion] = useState(true);
+    const [mostrarLiquidacion, setMostrarLiquidacion] = useState(false);
     const [dataLiquidacion, setDataLiquidacion] = useState([]);
     const [dataAMostrar, setDataAMostrar] = useState([]);
 
@@ -18,20 +18,12 @@ export default function  Page () {
         async function fetchLiquidacion() {
             const response = await consultarLiquidacion(LIQUIDACION);
             if (response.data) {
-                // Obtener la fecha actual en formato yymmAA
-                const fechaActual = new Date();
-                const año = fechaActual.getFullYear().toString();
-                const añoCompleto = año.substring(0, 2) + año.substring(2);
-                const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
-                const dia = fechaActual.getDate().toString().padStart(2, '0');
-                const fechaActualFormateada = añoCompleto + mes + dia;
-
-                console.log("Fecha actual en formato yymmAA:", fechaActualFormateada);
+                
     
                 // Filtrar los documentos para obtener solo los de la fecha actual
                 const liquidacionesHoy = response.data.filter(liquidacion => {
                     console.log("liquidacionesHoydata", response.data);
-                    const fechaLiquidacion = liquidacion.codigo.replace(/-/g, '').substring(2);
+                    const fechaLiquidacion = liquidacion.codigo.replace(/-/g, '');
                     
                     console.log("fechaLiquidacion", fechaLiquidacion);
 
@@ -39,15 +31,8 @@ export default function  Page () {
                 });
 
                 console.log("liquidacionesHoy", liquidacionesHoy);
-                // Ordenar los documentos filtrados por código (fecha)
-                liquidacionesHoy.sort((a, b) => {
-                    const valorA = a.fechaLiquidacion.replace(/-/g, '').substring(2);
-                    console.log("valorA", valorA);
-                    const valorB = b.fechaLiquidacion.replace(/-/g, '').substring(2);
-                    console.log("valorB", valorB);
-                    return valorA.localeCompare(valorB);
-                });
-    
+
+                
                 setDataLiquidacion(liquidacionesHoy);
             }
         }
@@ -58,21 +43,60 @@ export default function  Page () {
     const cambiarFecha = (fecha) => {
         setDataAMostrar([]);
         console.log("Fecha que llega", fecha)
-        
         const fechaConvertida = new Date(fecha);
+
+        const year1 = fechaConvertida.getFullYear();
+        const month1 = String(fechaConvertida.getMonth() + 1).padStart(2, '0');
+        const dia1 = String(fechaConvertida.getDate()).padStart(2, '0');
+        const fechaFormateada1 = `${year1}-${month1}-${dia1}`
+        console.log("fechaLiqui2 ", fechaFormateada1)
+
+   
+        
+        console.log("fechaConvertida", fechaConvertida)
         const dataValidada = dataLiquidacion.filter(item => {
-            const fechaLiquidacion = new Date(item.fechaLiquidacion);
-            return fechaLiquidacion.toISOString().slice(0, 10) === fechaConvertida.toISOString().slice(0, 10);
+            // const fechaLiquidacion = new Date(item.fechaLiquidacion);
+            const year = fechaConvertida.getFullYear();
+            const month = String(fechaConvertida.getMonth() + 1).padStart(2, '0');
+            const dia = String(fechaConvertida.getDate()).padStart(2, '0');
+            const fechaFormateada = `${year}${month}${dia}`
+            console.log("fechaLiqui2 ", fechaFormateada)
+
+
+            // console.log("item ", item.fechaLiquidacion)
+            // if (item.fechaLiquidacion == `${year}-${month}-${dia}`) {
+            //     console.log("llego aqui ")
+            //     itemData = item;
+            //     return itemData;
+            // }
+            return fechaFormateada;
         });
-        setDataAMostrar(dataValidada);
+        console.log("datavalidada", dataValidada)
+
+        const viewClients = dataValidada.filter(item => {
+            console.log("item1 ", item)
+            console.log("item1 ", item.fechaLiquidacion)
+            console.log("fechaFormateada1 ", fechaFormateada1)
+            if (item.fechaLiquidacion == fechaFormateada1)
+            {
+                console.log("item ", item.fechaLiquidacion)
+                const view = item
+                return view;
+            }
+            else {
+                return dataValidada;
+            }
+        })
+
+
+        console.log("viewCL", viewClients)
+        setDataAMostrar(viewClients);
     }
 
 
     const actualizarMostrarLiquidacion = (value) => {
         setMostrarLiquidacion(value);
     }
-    
-    
     
 
     return (

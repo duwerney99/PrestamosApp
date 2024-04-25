@@ -3,15 +3,20 @@
 import { useState, useEffect } from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import 'firebase/firestore';
-import { agregarLiquidacion, obtenerSiguienteCodigoYActualizar, obtenerSaldoActual, updateSaldo, updateClientById } from '@firebase/services/liquidacion';
+import { agregarLiquidacion, obtenerSiguienteCodigoYActualizar, savePayTrazabilidad, updateSaldo, updateLiquidacion, consultarPagosExistenes } from '@firebase/services/liquidacion';
 import { LIQUIDACION, CLIENTES, PRESTAMOS } from '@firebase/services/references';
 
 import { consultarClientesID } from '@firebase/services/clientes';
 import { consultarPrestamosID } from '@firebase/services/prestamos';
 import { Timestamp } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { saveLiqui } from '@redux/reducers/liquidReduce';
 
 
 export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualizarMostrarLiquidacion }) => {
+
+
+    const dispacth = useDispatch();
 
 
     const [liquidacion, setLiquidacion] = useState({
@@ -40,6 +45,8 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
     const [codigo, setCodigo] = useState('');
     const [disabled, setDisabled] = useState(true)
 
+    const [listaPagos, setListaPagos] = useState([]);
+
     const [initialComponent, setInitialComponent] = useState(true);
 
     const handleClickCancel = () => {
@@ -49,34 +56,52 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
 
     const handleClickSave = async () => {
 
+        const fechaConvertida = new Date();
+        const year = fechaConvertida.getFullYear();
+        const month = String(fechaConvertida.getMonth() + 1).padStart(2, '0');
+        const dia = String(fechaConvertida.getDate()).padStart(2, '0');
+        const fechaFormateada = `${year}-${month}-${dia}`
+
         setInitialComponent(false)
         const clienteExistente = dataLiquidacion.find(item => item.codigoCliente === cliente.codigo);
         console.log('clienteExistente', clienteExistente);
 
         // Calculamos el valor con el que va a quedar
-        const saldoActualMenos = isNaN(prestamo.saldoActual) || isNaN(abonoValue) ? '' : (prestamo.saldoActual - abonoValue).toFixed(3);
-        const saldoObtener = await obtenerSaldoActual(saldoActualMenos, cliente.codigo);
+        const saldoActualMenos = isNaN(prestamo.valorAPagar) || isNaN(abonoValue) ? '' : (prestamo.valorAPagar - abonoValue).toFixed(3);
+        console.log("saldoActualmenos ", saldoActualMenos)
+
+
+        const savePay = await savePayTrazabilidad(cliente.codigo, abonoValue, fechaFormateada);
+        console.log("savePay ", savePay)
 
         setLiquidacion(prevLiquidacion => ({
             ...prevLiquidacion,
-            saldoObtener: saldoObtener
+            saldoObtener: saldoActualMenos
         }));
 
-
+        console.log('dataLiquidacion', dataLiquidacion);
+        console.log('cliente', cliente);
 
         try {
             if (clienteExistente) {
+                console.log("Entro if ")
                 const updatedDataLiquidacion = dataLiquidacion.map(item => {
                     if (item.codigoCliente === cliente.codigo) {
-                        return { ...item, saldoObtener: saldoObtener };
+                        return { ...item, saldoObtener: saldoActualMenos };
                     }
                     return item;
                 });
+
                 console.log("updateData ", updatedDataLiquidacion)
                 setDataLiquidacion(updatedDataLiquidacion);
-                await updateClientById(cliente.codigo, saldoObtener);
-                await updateSaldo(cliente.codigo, saldoObtener);
+                dispacth(saveLiqui({ ...updatedDataLiquidacion }))
+                await updateSaldo(cliente.codigo, saldoActualMenos);
+                await updateLiquidacion(cliente.codigo, saldoActualMenos, fechaFormateada);
+                actualizarMostrarLiquidacion(false);
+
+
             } else {
+                console.log("Entro else ")
                 const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
                 const respuesta = await agregarLiquidacion(LIQUIDACION, liquidacion.codigoRuta, {
                     ...liquidacion,
@@ -85,13 +110,13 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                     codigoRuta: cliente.nombreRuta,
                     valorAPagar: prestamo.valorAPagar,
                     nombreCliente: cliente.nombre,
-                    saldoObtener: saldoObtener
+                    saldoObtener: saldoActualMenos
                 }, nuevoCodigo);
 
                 if (respuesta.success) {
                     setDataLiquidacion([...dataLiquidacion, liquidacion]);
                     actualizarMostrarLiquidacion(false);
-                    await updateSaldo(cliente.codigo, saldoObtener);
+                    await updateSaldo(cliente.codigo, saldoActualMenos);
                 } else {
                     console.error("Error al agregar el cliente: ", respuesta.error);
                 }
@@ -149,6 +174,7 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
     // PRESTAMOS
     const handleCodigoChangePrestamos = async (e) => {
         const codigoPrestamo = cliente.codigo
+        const nuevosPagos = [];
         setCodigo(codigo);
         if (codigo.trim() !== '') {
             try {
@@ -169,6 +195,22 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                         nombre: '', // Reiniciar nombre del cliente si no se encuentra el código
                     });
                 }
+                
+                
+                
+                const findTraza = await consultarPagosExistenes(cliente.codigo)
+                console.log("findTraza ", typeof findTraza)
+                for (const key in findTraza) {
+                    if (Object.hasOwnProperty.call(findTraza, key)) {
+                        const pago = findTraza[key];
+                        console.log("Fecha del pago:", pago.date);
+                        console.log("Valor del pago:", pago.valor);
+
+                        // Agregar el pago a la lista
+                        nuevosPagos.push(pago);
+                    }
+                }
+
             } catch (error) {
                 console.error("Error al consultar el cliente:", error);
             }
@@ -180,6 +222,8 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
             });
             setDisabled(true); // Mantener campos desactivados si el código está vacío
         }
+        setListaPagos(nuevosPagos)
+        console.log("listaPagos ", listaPagos)
     };
 
     useEffect(() => {
@@ -188,6 +232,10 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
             fechaLiquidacion: obtenerFecha(),
         }));
     }, []);
+
+    useEffect(() => {
+        console.log("listaPagos actualizada:", listaPagos);
+    }, [listaPagos]);
 
 
     const obtenerFecha = () => {
@@ -240,6 +288,7 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
         if (day < 10) {
             day = '0' + day; // Agrega cero delante si es necesario
         }
+        console.log("fecha que se obtiene a la hora de crear ", `${year}-${month}-${day}`)
         return `${year}-${month}-${day}`;
     };
 
@@ -365,7 +414,17 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                             <div className="space-y-8">
                                 <h3 className='text-xl font-bold text-green-400 mb-2'>Informacion Cliente</h3>
                                 <p>Abono: {prestamo.valorAbono}</p>
-                                <p>saldo Actual: {prestamo.saldoActual}</p>
+                                <p>saldo Actual: {prestamo.valorAPagar}</p>
+                                <p>Abonos:</p>
+                                <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8'>
+                                {listaPagos.map((pago, index) => (
+                                    <div key={index}>
+                                        <p>Fecha: {pago.date}</p>
+                                        <p>Valor: {pago.valor}</p>
+                                    </div>
+                                ))}
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
