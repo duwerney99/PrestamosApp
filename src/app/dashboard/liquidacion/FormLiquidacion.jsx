@@ -72,7 +72,6 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
 
 
         const savePay = await savePayTrazabilidad(cliente.codigo, abonoValue, fechaFormateada);
-        console.log("savePay ", savePay)
 
         setLiquidacion(prevLiquidacion => ({
             ...prevLiquidacion,
@@ -95,17 +94,27 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
                 console.log("updateData ", updatedDataLiquidacion)
                 setDataLiquidacion(updatedDataLiquidacion);
                 dispacth(saveLiqui({ ...updatedDataLiquidacion }))
+                
                 await updateSaldo(cliente.codigo, saldoActualMenos);
-                await updateLiquidacion(cliente.codigo, saldoActualMenos, fechaFormateada);
+                // await updateLiquidacion(cliente.codigo, saldoActualMenos, fechaFormateada, abonoValue);
                 actualizarMostrarLiquidacion(false);
-
+                const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
+                await agregarLiquidacion(LIQUIDACION, liquidacion.codigoRuta, {
+                    ...liquidacion,
+                    valorAbono: abonoValue,
+                    codigoCliente: cliente.codigo,
+                    codigoRuta: cliente.nombreRuta,
+                    valorAPagar: prestamo.valorAPagar,
+                    nombreCliente: cliente.nombre,
+                    saldoObtener: saldoActualMenos
+                }, nuevoCodigo);
 
             } else {
                 console.log("Entro else ")
                 const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
                 const respuesta = await agregarLiquidacion(LIQUIDACION, liquidacion.codigoRuta, {
                     ...liquidacion,
-                    valorAbono: prestamo.valorAbono,
+                    valorAbono: abonoValue,
                     codigoCliente: cliente.codigo,
                     codigoRuta: cliente.nombreRuta,
                     valorAPagar: prestamo.valorAPagar,

@@ -49,48 +49,28 @@ export default function  Page () {
         const month1 = String(fechaConvertida.getMonth() + 1).padStart(2, '0');
         const dia1 = String(fechaConvertida.getDate()).padStart(2, '0');
         const fechaFormateada1 = `${year1}-${month1}-${dia1}`
-        console.log("fechaLiqui2 ", fechaFormateada1)
 
-   
-        
-        console.log("fechaConvertida", fechaConvertida)
-        const dataValidada = dataLiquidacion.filter(item => {
-            // const fechaLiquidacion = new Date(item.fechaLiquidacion);
-            const year = fechaConvertida.getFullYear();
-            const month = String(fechaConvertida.getMonth() + 1).padStart(2, '0');
-            const dia = String(fechaConvertida.getDate()).padStart(2, '0');
-            const fechaFormateada = `${year}${month}${dia}`
-            console.log("fechaLiqui2 ", fechaFormateada)
+        const listaLiquidacion = [];
 
+        dataLiquidacion.forEach((data) => {
+            const fechaLiquiDacion = new Date(data.fechaLiquidacion);
+                        
+            fechaLiquiDacion.setHours(fechaLiquiDacion.getHours() +  5);
+            console.log("fechaLiquiDacion", fechaLiquiDacion)
+            const anoLiquidacion = fechaLiquiDacion.getFullYear();
+            const mesLiquidacion = String(fechaLiquiDacion.getMonth() + 1).padStart(2, '0');
+            const diaLiquidacion = String(fechaLiquiDacion.getDate()).padStart(2, '0');
+            const fechaFormateadaLiquidacion = `${anoLiquidacion}-${mesLiquidacion}-${diaLiquidacion}`
 
-            // console.log("item ", item.fechaLiquidacion)
-            // if (item.fechaLiquidacion == `${year}-${month}-${dia}`) {
-            //     console.log("llego aqui ")
-            //     itemData = item;
-            //     return itemData;
-            // }
-            return fechaFormateada;
-        });
-        console.log("datavalidada", dataValidada)
-
-        const viewClients = dataValidada.filter(item => {
-            console.log("item1 ", item)
-            console.log("item1 ", item.fechaLiquidacion)
-            console.log("fechaFormateada1 ", fechaFormateada1)
-            if (item.fechaLiquidacion == fechaFormateada1)
-            {
-                console.log("item ", item.fechaLiquidacion)
-                const view = item
-                return view;
-            }
-            else {
-                return dataValidada;
+            console.log("fechaFormateadaLiquidacion ", fechaFormateadaLiquidacion)
+            console.log("fechaFormateada1", fechaFormateada1)
+            
+            if (fechaFormateadaLiquidacion === fechaFormateada1) {
+                listaLiquidacion.push(data)
             }
         })
-
-
-        console.log("viewCL", viewClients)
-        setDataAMostrar(viewClients);
+        
+        setDataAMostrar(listaLiquidacion);
     }
 
 

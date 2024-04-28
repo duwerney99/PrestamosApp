@@ -6,22 +6,23 @@ import { useSelector } from 'react-redux';
 
 export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => {
 
+    console.log("Data ", data)
 
     const liquidReducers = useSelector((state) => state.liquidReduce.liquidReduce);
 
-    var codigoCliente = '';
+    // var codigoCliente = '';
 
-    const clienteIndex = data.map((item) => {
-        codigoCliente = item.codigoCliente;
+    // const clienteIndex = data.map((item) => {
+    //     codigoCliente = item.codigoCliente;
 
-        return codigoCliente
-    });
+    //     return codigoCliente
+    // });
 
-    console.log("clienteIndex", clienteIndex)
+    // console.log("clienteIndex", clienteIndex)
 
-    console.log("liquid", liquidReducers)
-    const existingClientIndex = liquidReducers.findIndex(liquidItem => liquidItem.codigoCliente === codigoCliente);
-    console.log("existingClientIndex", existingClientIndex);
+    // console.log("liquid", liquidReducers)
+    // const existingClientIndex = liquidReducers.findIndex(liquidItem => liquidItem.codigoCliente === codigoCliente);
+    // console.log("existingClientIndex", existingClientIndex);
 
     
 
@@ -35,8 +36,7 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
 
     const handleFechaSeleccionadaChange = (date) => {
         const fechaFormateada = new Date(date);
-        fechaFormateada.setHours(fechaFormateada.getHours() - 5);
-        console.log(fechaFormateada);
+        fechaFormateada.setHours(fechaFormateada.getHours());
         setFechaSeleccionada(date);
         cambiarFecha(date);
     };
@@ -120,12 +120,6 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
                                         </td>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.saldoObtener}
-                                        </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.fechaPrestamo}
-                                        </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                            {item?.fechaVencimiento}
                                         </td>
                                     </tr>
                                 ))}

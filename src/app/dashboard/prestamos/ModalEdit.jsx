@@ -171,6 +171,32 @@ export const ModalEdit = ({ onClose, data}) => {
                         
                     />
                 </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                    <TextField
+                        onChange={handleChange}
+                        value={cliente.nombre || ''}
+                        type="text"
+                        name="fechaNueva"
+                        label="Fecha Editar"
+                        variant="outlined"
+                        size="small"
+                        style={{ marginRight: '1rem' }}
+                        fullWidth
+                        
+                    />
+                    <TextField
+                        onChange={handleChange}
+                        // value={}
+                        type="number"
+                        name="porcentaje"
+                        label="Porcentaje"
+                        variant="outlined"
+                        size="small"
+                        style={{ marginRight: '1rem' }}
+                        fullWidth
+                        
+                    />
+                </div>
                 
                 <div className="flex justify-center">
                     <div className="mt-6">

@@ -68,7 +68,7 @@ export async function updateSaldo(codigo, nuevoSaldo) {
 }
 
 
-export async function updateLiquidacion(codigo, nuevoSaldo, fecha) {
+export async function updateLiquidacion(codigo, nuevoSaldo, fecha, abono) {
   const db = getFirestore();
   
   const liquidacionQuery = query(
@@ -86,7 +86,7 @@ export async function updateLiquidacion(codigo, nuevoSaldo, fecha) {
       const liquidacionDocRef = liquidacionDocsSnapshot.docs[0].ref;
       console.log("Documentos ", liquidacionDocsSnapshot.docs[0].ref)
       // Actualizar el saldo actual en el documento del préstamo
-      await updateDoc(liquidacionDocRef, { saldoObtener: nuevoSaldo, fechaLiquidacion: fecha });
+      await updateDoc(liquidacionDocRef, { saldoObtener: nuevoSaldo, fechaLiquidacion: fecha, valorAbono: abono });
 
       console.log('Saldo actualizado con éxito para el préstamo con código:', codigo);
     } else {

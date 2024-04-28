@@ -108,7 +108,7 @@ export const FormCuadre = () => {
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
                             />
                         </div>
-                        <div className='flex'>
+                        <div className='flex mb-1'>
                             <TextField
                                 onChange={onChange}
                                 type="number"

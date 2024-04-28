@@ -182,8 +182,8 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
 
         if (name === 'saldoActual' || name === 'intereses') {
             const saldoActual = parseFloat(name === 'saldoActual' ? value : prestamo.saldoActual || 0);
+            console.log("saldoActual ", saldoActual)
             const interes = parseFloat(name === 'intereses' ? value : selectedInteres || 0) / 100;
-        
             const valorAPagar = saldoActual + saldoActual * interes;
 
             console.log("Prestamo total ", valorAPagar)
