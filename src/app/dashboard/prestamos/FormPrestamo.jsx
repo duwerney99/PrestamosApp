@@ -265,7 +265,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
         codigo: null,
         nombreCliente: '',
         nombreRuta: '',
-        saldoActual: '',
+        saldoActual: 0,
         valorAbono: '',
         fechaPrestamo: obtenerFecha(),
         vencimientoPrestamo: null,

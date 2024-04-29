@@ -37,6 +37,7 @@ export default function Page () {
                             <div className='mb-4 flex items-center justify-between'>
                                 <div>
                                     <h3 className='text-xl font-bold text-gray-900 mb-2'>Prestamos</h3>
+                                    <h2>{dataPrestamo.map((data) => parseFloat(data.valorAPagar)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}</h2>
                                 </div>
                                 <div className='flex-shrink-0'>
                                     <button disabled={mostrarCrearPrestamo} 
