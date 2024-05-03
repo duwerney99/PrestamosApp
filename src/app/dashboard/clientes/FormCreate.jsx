@@ -160,7 +160,7 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
                                 label="Telefono"
                                 variant="outlined"
                                 size="small"
-                                style={{ marginRight: '2rem' }}
+                                style={{ marginRight: '1rem' }}
                                 fullWidth
                                 error={!initialComponent && !cliente.telefono}
                                 helperText={!initialComponent && !cliente.telefono ? 'Campo obligatorio.' : ''}
@@ -172,7 +172,7 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
                                 label="Nombre Referencia"
                                 variant="outlined"
                                 size="small"
-                                style={{ marginRight: '2rem' }}
+                                style={{ marginRight: '1rem' }}
                                 fullWidth
                                 error={!initialComponent && !cliente.nombre_referencia}
                                 helperText={!initialComponent && !cliente.nombre_referencia ? 'Campo obligatorio.' : ''}
@@ -184,7 +184,7 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
                                 label="Direccion  Referencia"
                                 variant="outlined"
                                 size="small"
-                                style={{ marginRight: '2rem' }}
+                                style={{ marginRight: '1rem' }}
                                 fullWidth
                                 error={!initialComponent && !cliente.direccion_referencia}
                                 helperText={!initialComponent && !cliente.direccion_referencia ? 'Campo obligatorio.' : ''}
