@@ -63,17 +63,12 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
         const nuevoCodigo = await obtenerSiguienteCodigoYActualizar();
         console.log("Código obtenido:", nuevoCodigo);
         try {
-            console.log("CLiente ", cliente)
-            console.log("Rutas ", selectedRuta)
-            console.log("Cliente ", cliente)
-            console.log("rutas ", rutas)
             const { valid, missingFields } = Cliente.validateCliente(cliente);
             if (!valid) {
                 console.error('Faltan campos obligatorios:', missingFields);
                 return;
             }
             const respuesta = await agregarCliente(CLIENTES, cliente.codigo, { ...cliente }, nuevoCodigo);
-            console.log('respuesta', respuesta);
             if (respuesta.success) {
                 setDataCliente([...dataCliente, cliente]);
                 actualizarMostrarCrearCliente(false);

@@ -190,7 +190,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
             setPrestamo(prevPrestamo => ({
                 ...prevPrestamo,
                 [name]: value,
-                valorAPagar: isNaN(valorAPagar) ? '' : valorAPagar.toFixed(3)
+                valorAPagar: valorAPagar
             }));
         } else if (name === 'cuotas') {
             const cuotas = parseFloat(value);
@@ -379,8 +379,8 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
                         </FormControl>
                         <TextField
                             onChange={onChange}
-                            value={prestamo.valorAPagar}
-                            type="number"
+                            value=  {prestamo.valorAPagar === 0 || prestamo.valorAPagar === undefined ? prestamo.valorAPagar : prestamo.valorAPagar.toLocaleString("es-ES")}
+                            type="text"
                             name="codigo"
                             variant="outlined"
                             size="small"
