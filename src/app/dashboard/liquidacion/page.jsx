@@ -8,18 +8,6 @@ import { useEffect, useState } from 'react'
 import { LIQUIDACION } from "@firebase/services/references"
 
 
-function formatearFecha(fecha) {
-    const fechaFormateada = new Date(fecha);
-
-    const year = fechaFormateada.getFullYear();
-    const month = String(fechaFormateada.getMonth() + 1).padStart(2, '0');
-    const day = String(fechaFormateada.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-}
-
-
-
 
 export default function Page() {
     const [mostrarLiquidacion, setMostrarLiquidacion] = useState(false);
@@ -37,8 +25,12 @@ export default function Page() {
                     console.log("liquidacionesHoydata", response.data);
                     const fechaLiquidacion = liquidacion.codigo.replace(/-/g, '');
 
+
                     return fechaLiquidacion === fechaLiquidacion;
                 });
+
+                console.log("liquidacionesHoy", liquidacionesHoy);
+
 
                 setDataLiquidacion(liquidacionesHoy);
             }
@@ -49,14 +41,6 @@ export default function Page() {
 
     const cambiarFecha = (fecha) => {
         setDataAMostrar([]);
-
-        const fechaFormateada = formatearFecha(fecha);
-
-        // const listaLiquidacion = dataLiquidacion.filter(data => {
-        //     const fechaData = formatearFecha(data.fechaLiquidacion);
-        //     return fechaData === fechaFormateada;
-        // });
-
         console.log("Fecha que llega", fecha)
         const fechaConvertida = new Date(fecha);
 
@@ -105,18 +89,9 @@ export default function Page() {
                         <div className='mb-4 flex items-center justify-between'>
                             <div>
                                 <h3 className='text-xl font-bold text-gray-900 mb-2'>Liquidacion</h3>
-                                {/* {dataAMostrar.length > 0 && (
-                                    <h2>
-                                        {dataLiquidacion
-                                            // Filtrar los elementos que tienen la misma fecha que deseas mostrar
-                                            .filter(data => data.fechaLiquidacion === fechaFormateada)
-                                            // Mapear los valores de valorAbono y convertirlos a números
-                                            .map(data => parseFloat(data.valorAbono))
-                                            // Reducir el array de valores a una suma total
-                                            .reduce((total, valorAbono) => total + valorAbono, 0)
-                                        }
-                                    </h2>
-                                )} */}
+                                {dataAMostrar.length > 0 && (
+                                    <h2>{dataLiquidacion.map((data) => parseFloat(data.valorAbono)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}</h2>
+                                )}
                             </div>
                             <div className='flex-shrink-0'>
                                 <button disabled={mostrarLiquidacion}
