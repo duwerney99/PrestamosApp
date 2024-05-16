@@ -20,8 +20,10 @@ export default function Page() {
         async function fetchPrestamo() {
             const response = await consultarPrestamos(PRESTAMOS);
             if (response.data) {
-                setDataPrestamo(response.data);
-                setDataPrestamoStatic(response.data);
+                console.log("dataaaa ", response.data)
+                const sortedClientes = response.data.sort((a, b) => a.codigo - b.codigo);
+                setDataPrestamo(sortedClientes);
+                setDataPrestamoStatic(sortedClientes);
             }
             
             const resultRuta = await consultarRutas(RUTAS); 
@@ -35,9 +37,6 @@ export default function Page() {
     }, []);
 
 
-    const handleRutaPrestamo = (value) => {
-        dataPrestamo
-    }
 
     const onChange = (e) => {
         const value = e.target.value

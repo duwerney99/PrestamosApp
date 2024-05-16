@@ -8,8 +8,20 @@ import { useEffect, useState } from 'react'
 import { LIQUIDACION } from "@firebase/services/references"
 
 
+function formatearFecha(fecha) {
+    const fechaFormateada = new Date(fecha);
 
-export default function  Page () {
+    const year = fechaFormateada.getFullYear();
+    const month = String(fechaFormateada.getMonth() + 1).padStart(2, '0');
+    const day = String(fechaFormateada.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+
+
+
+export default function Page() {
     const [mostrarLiquidacion, setMostrarLiquidacion] = useState(false);
     const [dataLiquidacion, setDataLiquidacion] = useState([]);
     const [dataAMostrar, setDataAMostrar] = useState([]);
@@ -18,30 +30,33 @@ export default function  Page () {
         async function fetchLiquidacion() {
             const response = await consultarLiquidacion(LIQUIDACION);
             if (response.data) {
-                
-    
+
+
                 // Filtrar los documentos para obtener solo los de la fecha actual
                 const liquidacionesHoy = response.data.filter(liquidacion => {
                     console.log("liquidacionesHoydata", response.data);
                     const fechaLiquidacion = liquidacion.codigo.replace(/-/g, '');
-                    
-                    console.log("fechaLiquidacion", fechaLiquidacion);
 
                     return fechaLiquidacion === fechaLiquidacion;
                 });
 
-                console.log("liquidacionesHoy", liquidacionesHoy);
-
-                
                 setDataLiquidacion(liquidacionesHoy);
             }
         }
-    
+
         fetchLiquidacion();
     }, []);
 
     const cambiarFecha = (fecha) => {
         setDataAMostrar([]);
+
+        const fechaFormateada = formatearFecha(fecha);
+
+        // const listaLiquidacion = dataLiquidacion.filter(data => {
+        //     const fechaData = formatearFecha(data.fechaLiquidacion);
+        //     return fechaData === fechaFormateada;
+        // });
+
         console.log("Fecha que llega", fecha)
         const fechaConvertida = new Date(fecha);
 
@@ -54,8 +69,8 @@ export default function  Page () {
 
         dataLiquidacion.forEach((data) => {
             const fechaLiquiDacion = new Date(data.fechaLiquidacion);
-                        
-            fechaLiquiDacion.setHours(fechaLiquiDacion.getHours() +  5);
+
+            fechaLiquiDacion.setHours(fechaLiquiDacion.getHours() + 5);
             console.log("fechaLiquiDacion", fechaLiquiDacion)
             const anoLiquidacion = fechaLiquiDacion.getFullYear();
             const mesLiquidacion = String(fechaLiquiDacion.getMonth() + 1).padStart(2, '0');
@@ -64,12 +79,12 @@ export default function  Page () {
 
             console.log("fechaFormateadaLiquidacion ", fechaFormateadaLiquidacion)
             console.log("fechaFormateada1", fechaFormateada1)
-            
+
             if (fechaFormateadaLiquidacion === fechaFormateada1) {
                 listaLiquidacion.push(data)
             }
         })
-        
+
         setDataAMostrar(listaLiquidacion);
     }
 
@@ -77,35 +92,46 @@ export default function  Page () {
     const actualizarMostrarLiquidacion = (value) => {
         setMostrarLiquidacion(value);
     }
-    
+
 
     return (
         <div>
             <div className='pt-6 px-4 justify-center items-center'>
-                { mostrarLiquidacion && <FormLiquidacion dataLiquidacion={dataLiquidacion} setDataLiquidacion={setDataLiquidacion} actualizarMostrarLiquidacion={actualizarMostrarLiquidacion}/>}
+                {mostrarLiquidacion && <FormLiquidacion dataLiquidacion={dataLiquidacion} setDataLiquidacion={setDataLiquidacion} actualizarMostrarLiquidacion={actualizarMostrarLiquidacion} />}
             </div>
             <div className='pt-6 px-4'>
                 <div className='w-full grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4'>
-                <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 '>
-                            <div className='mb-4 flex items-center justify-between'>
-                                <div>
-                                    <h3 className='text-xl font-bold text-gray-900 mb-2'>Liquidacion</h3>
-                                </div>
-                                <div className='flex-shrink-0'>
-                                    <button disabled={mostrarLiquidacion}
-                                        onClick={() => setMostrarLiquidacion(true)}
-                                        className={`text-lg font-medium ${
-                                            mostrarLiquidacion ? 'text-gray-500' : 'text-green-400 hover:bg-gray-100'
-                                        } rounded-lg p-2`}>
-                                        Crear Liquidacion
-                                    </button>
-                                    
-                                </div>
+                    <div className='bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 '>
+                        <div className='mb-4 flex items-center justify-between'>
+                            <div>
+                                <h3 className='text-xl font-bold text-gray-900 mb-2'>Liquidacion</h3>
+                                {/* {dataAMostrar.length > 0 && (
+                                    <h2>
+                                        {dataLiquidacion
+                                            // Filtrar los elementos que tienen la misma fecha que deseas mostrar
+                                            .filter(data => data.fechaLiquidacion === fechaFormateada)
+                                            // Mapear los valores de valorAbono y convertirlos a números
+                                            .map(data => parseFloat(data.valorAbono))
+                                            // Reducir el array de valores a una suma total
+                                            .reduce((total, valorAbono) => total + valorAbono, 0)
+                                        }
+                                    </h2>
+                                )} */}
                             </div>
-                            { dataLiquidacion && dataLiquidacion.length > 0 && <TableLiquidacion mostrarLiquidacion={mostrarLiquidacion} data={dataAMostrar} cambiarFecha={cambiarFecha}/>}
+                            <div className='flex-shrink-0'>
+                                <button disabled={mostrarLiquidacion}
+                                    onClick={() => setMostrarLiquidacion(true)}
+                                    className={`text-lg font-medium ${mostrarLiquidacion ? 'text-gray-500' : 'text-green-400 hover:bg-gray-100'
+                                        } rounded-lg p-2`}>
+                                    Crear Liquidacion
+                                </button>
+
+                            </div>
                         </div>
+                        {dataLiquidacion && dataLiquidacion.length > 0 && <TableLiquidacion mostrarLiquidacion={mostrarLiquidacion} data={dataAMostrar} cambiarFecha={cambiarFecha} />}
+                    </div>
                 </div>
-            </div>    
+            </div>
         </div>
     )
 }

@@ -111,6 +111,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     const handleClickSave = async () => {
         setInitialComponent(false)
         console.log("cliente ", cliente)
+        
         try {
             
             const prestamoRes = await agregarPrestamo(PRESTAMOS, cliente.codigo, {
@@ -182,11 +183,11 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
 
         if (name === 'saldoActual' || name === 'intereses') {
             const saldoActual = parseFloat(name === 'saldoActual' ? value : prestamo.saldoActual || 0);
-            console.log("saldoActual ", saldoActual)
+   
             const interes = parseFloat(name === 'intereses' ? value : selectedInteres || 0) / 100;
             const valorAPagar = saldoActual + saldoActual * interes;
+            
 
-            console.log("Prestamo total ", valorAPagar)
             setPrestamo(prevPrestamo => ({
                 ...prevPrestamo,
                 [name]: value,
@@ -194,7 +195,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
             }));
         } else if (name === 'cuotas') {
             const cuotas = parseFloat(value);
-            console.log("cuotas1 ", cuotas)
+
             setPrestamo(prevPrestamo => ({
                 ...prevPrestamo,
                 [name]: value,
@@ -204,32 +205,25 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
         } else if (name === 'plazos'){
             const plazoSeleccionado = value;
             const plazoEnDiasSeleccionado = plazoEnDias[plazoSeleccionado]
-            console.log("Plazos Dias", plazoEnDiasSeleccionado)
-            console.log("pre.cuo", prestamo.cuotas)
-            console.log("prestamo ", prestamo)
             if (prestamo.valorAPagar !== null && prestamo.cuotas !== null) {
                 const valorAPagar = prestamo.valorAPagar;
                 const cuotas = parseFloat(prestamo.cuotas);
-                console.log("cuotas2 ", cuotas);
-                console.log("valor a Pagar ", valorAPagar);
-                console.log("Cuota plazo ", (cuotas / plazoEnDiasSeleccionado));
-        
+                
+                
+
                 const valorAbono = valorAPagar / cuotas;
-                console.log("Prestamo total ", valorAbono);
+                
                 setPrestamo(prevPrestamo => ({
                     ...prevPrestamo,
                     [name]: value,
-                    valorAbono: isNaN(valorAbono) ? '' : valorAbono.toFixed(3)
+                    valorAbono: valorAbono.toLocaleString("es-ES")
                 }));
 
                 const fechaVenci = new Date();
                 const diasPlazo = plazoEnDiasSeleccionado;
-                console.log("Dias Plazo ", diasPlazo)
                 const diasTotales = prestamo.cuotas * diasPlazo;
                 fechaVenci.setDate(fechaVenci.getDate() + diasTotales);
-                console.log("Fecha actual ", obtenerFechaFormateada(fechaVenci))
                 const fechaFormateada = obtenerFechaFormateada(fechaVenci);
-                console.log("fechaFormateada ", fechaFormateada)
                 setPrestamo(prevPrestamo => ({
                     ...prevPrestamo,
                     [name]: value,

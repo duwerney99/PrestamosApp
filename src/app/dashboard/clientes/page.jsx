@@ -13,7 +13,10 @@ export default function Page () {
     useEffect(() => {
         async function fetchCliente() {
             const response = await consultarClientes(CLIENTES, null);
-            if (response.data) setDataCliente(response.data);
+            if (response.data) {
+                const sortedClientes = response.data.sort((a, b) => a.codigo - b.codigo);
+                setDataCliente(sortedClientes);
+            }
         }
         fetchCliente(); 
     }, []);

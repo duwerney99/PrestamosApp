@@ -67,7 +67,7 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
         console.log('clienteExistente', clienteExistente);
 
         // Calculamos el valor con el que va a quedar
-        const saldoActualMenos = isNaN(prestamo.valorAPagar) || isNaN(abonoValue) ? '' : (prestamo.valorAPagar - abonoValue).toFixed(3);
+        const saldoActualMenos = isNaN(prestamo.valorAPagar) || isNaN(abonoValue) ? '' : (prestamo.valorAPagar - abonoValue);
         console.log("saldoActualmenos ", saldoActualMenos)
 
 
@@ -392,7 +392,7 @@ export const FormLiquidacion = ({ dataLiquidacion, setDataLiquidacion, actualiza
 
                                 />
                                 <TextField
-                                    value={prestamo.valorAPagar}
+                                    value={prestamo.valorAPagar === 0 || prestamo.valorAPagar === undefined ? prestamo.valorAPagar : prestamo.valorAPagar.toLocaleString("es-ES")}
                                     type="text"
                                     name="saldoActual"
                                     label="Saldo Deber"
