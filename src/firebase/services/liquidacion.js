@@ -127,6 +127,38 @@ export const consultarLiquidacion = async (reference) => {
 };
 
 
+export const filtrarLiquidacion = async (reference, fecha, ruta) => {
+  const result = { statusResponse: false, data: null, error: null };
+  try {
+      const db = getFirestore();
+      const collectionRef = collection(db, reference);
+      const q = query(
+          collectionRef,
+          where("fechaLiquidacion", "==", fecha),
+          where("codigoRuta", "==", ruta)
+      );
+      const data = await getDocs(q);
+
+      if (data.empty) {
+        alert(`No hay datos disponibles en la colección ${reference} para los parámetros proporcionados.`);
+          result.error = `No hay datos disponibles en la colección ${reference} para los parámetros proporcionados.`;
+          return result;
+      }
+      const arrayData = data.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+      }));
+
+      result.statusResponse = true;
+      result.data = arrayData;
+  } catch (error) {
+      console.error("Error en getCollections:", error);
+      result.error = `Error al obtener datos de la colección ${reference}: ${error.message}`;
+  }
+  return result;
+};
+
+
 
 export async function agregarLiquidacion(reference, id, info, fechaFormateada) {
   const db = getFirestore();

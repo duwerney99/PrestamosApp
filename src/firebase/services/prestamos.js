@@ -62,7 +62,7 @@ export async function obtenerSiguienteCodigoYActualizar() {
 
 
 
-  export const consultarPrestamos = async (reference) => {
+  export const  consultarPrestamos = async (reference) => {
       const result = { statusResponse: false, data: null, error: null};
       try {
         const collectionRef = collection(getFirestore(), reference);
@@ -86,6 +86,38 @@ export async function obtenerSiguienteCodigoYActualizar() {
       } catch (error) {
         console.error("Error en getCollections:", error);
         result.error = `Error al obtener datos de la colección ${reference}: ${error.message}`;
+      }
+      return result;
+    };
+
+
+    export const filtrarPrestamo = async (reference, fecha, ruta) => {
+      const result = { statusResponse: false, data: null, error: null };
+      try {
+          const db = getFirestore();
+          const collectionRef = collection(db, reference);
+          const q = query(
+              collectionRef,
+              where("fechaPrestamo", "==", fecha),
+              where("nombreRuta", "==", ruta)
+          );
+          const data = await getDocs(q);
+    
+          if (data.empty) {
+            alert(`No hay datos disponibles en la colección ${reference} para los parámetros proporcionados.`);
+              result.error = `No hay datos disponibles en la colección ${reference} para los parámetros proporcionados.`;
+              return result;
+          }
+          const arrayData = data.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+          }));
+    
+          result.statusResponse = true;
+          result.data = arrayData;
+      } catch (error) {
+          console.error("Error en getCollections:", error);
+          result.error = `Error al obtener datos de la colección ${reference}: ${error.message}`;
       }
       return result;
     };

@@ -9,19 +9,9 @@ import { useState } from 'react'
 
 export default function page () {
     const [mostrarCuadre, setMostrarCuadre] = useState(true);
-    const data = [
-        {
-            liquidacion: 1,
-            fechaLiquidacion: "21/02/2024",
-            codigoCobrador: 10000,
-            baseLiquidacion: 2500,
-            fechaDesde: "21/02/2024",
-            fechaHasta: "21/02/2024",
-            diasLiquidados: 1
-        },
-    ]
+    const [dataAMostrar, setDataAMostrar] = useState([]);
 
-
+    
 
     return (
         <div>
@@ -34,6 +24,15 @@ export default function page () {
                             <div className='mb-4 flex items-center justify-between'>
                                 <div>
                                     <h3 className='text-xl font-bold text-gray-900 mb-2'>Cuadre</h3>
+                                    {dataAMostrar.length > 0 && dataLiquidacion.length > 0 && (
+                                    // Validar que las fechas sean iguales
+                                    
+                                    dataAMostrar[0].fechaLiquidacion === dataLiquidacion[0].fechaLiquidacion && (                                       
+                                        <h2>
+                                            {resultadoMap}
+                                        </h2>
+                                    )
+                                )}
                                 </div>
                                 <div className='flex-shrink-0'>
                                     <button  
@@ -43,7 +42,7 @@ export default function page () {
                                     
                                 </div>
                             </div>
-                            <TableCuadre mostrarCuadre={mostrarCuadre} data={data}/>
+                            <TableCuadre mostrarCuadre={mostrarCuadre} data={dataAMostrar}/>
                         </div>
                 </div>
             </div>    

@@ -448,7 +448,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
                         
                             onChange={onChange}
                             value={prestamo.valorAbono}
-                            type="number"
+                            type="text"
                             name="valorAbono"
                             label="Valor Abono"
                             variant="outlined"
