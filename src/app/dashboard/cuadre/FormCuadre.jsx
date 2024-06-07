@@ -144,14 +144,24 @@ export const FormCuadre = () => {
     };
 
     useEffect(() => {
+        const gastosNum = parseFloat(gastos);
+        const prestamosNum = parseFloat(prestamo);
         if (baseAnterior && prestamo && totalCobre && gastos) {
-            const resultOpe = baseAnterior + totalCobre
-            if (resultOpe) {
-                const restaOpe = prestamo - gastos
-                setBase(restaOpe)
-            }
+    
+            // Convertir baseAnterior de string a número
+            const baseAnteriorNum = parseFloat(baseAnterior);  // Uso de parseFloat para manejar decimales
+            
+            
+    
+            const resultOpe = baseAnteriorNum + totalCobre;
+            console.log("base1 ", resultOpe);
+            
         }
+        const restaOpe = prestamosNum - gastosNum;
+        console.log("base ", restaOpe);
+        setBase(restaOpe);
     }, [prestamo, totalCobre, baseAnterior]);
+
 
     
 
