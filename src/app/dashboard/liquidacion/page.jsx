@@ -76,13 +76,11 @@ export default function Page() {
     }
 
 
+
     const actualizarMostrarLiquidacion = (value) => {
         setMostrarLiquidacion(value);
     }
 
-    const resultadoMap = dataAMostrar.map((data) => parseFloat(data.valorAbono))
-                                .reduce((acumulador, saldo) => acumulador + saldo, 0);
-    // setDataAMostrar(resultadoMap)
 
     return (
         <div>
@@ -95,17 +93,11 @@ export default function Page() {
                         <div className='mb-4 flex items-center justify-between'>
                             <div>
                                 <h3 className='text-xl font-bold text-gray-900 mb-2'>Liquidacion</h3>
+                                {fechaMostrar && dataAMostrar.length > 0 ? (
+                                    <h2>{dataAMostrar.map((data) => parseFloat(data.valorAbono)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}</h2>
+                                    ) : "No hay nada"}
 
-
-                                {dataAMostrar.length > 0 && dataLiquidacion.length > 0 && (
-                                    // Validar que las fechas sean iguales
-                                    
-                                    dataAMostrar[0].fechaLiquidacion === dataLiquidacion[0].fechaLiquidacion && (                                       
-                                        <h2>
-                                            {resultadoMap}
-                                        </h2>
-                                    )
-                                )}
+                                
                             </div>
                             <div className='flex-shrink-0'>
                                 <button disabled={mostrarLiquidacion}

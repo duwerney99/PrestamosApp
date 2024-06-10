@@ -2,9 +2,9 @@ import { IconButton } from '@mui/material';
 import { useState } from 'react'
 
 
-export const TableCuadre = ({ mostrarCuadre, data}) => {
+export const TableCuadre = ({ mostrarCrearCuadre, data}) => {
     
-    const actualizarMostrarCuadre = (value) => {
+    const actualizarMostrarCrearCuadre = (value) => {
         setMostrarCuadre(value);
     }
 
@@ -20,7 +20,7 @@ export const TableCuadre = ({ mostrarCuadre, data}) => {
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Liquidacion   
+                                Codigo Ruta   
                                 </th>
                                 <th
                                 scope='col'
@@ -30,27 +30,32 @@ export const TableCuadre = ({ mostrarCuadre, data}) => {
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Codigo Cobrador
+                                Nombre Ruta
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Base liquidacion   
+                                Base Anterior   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Fecha Desde   
+                                Total Cobrado
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Fecha Hasta   
+                                Prestamos   
                                 </th>
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                Dias Liquidados   
+                                Gastos   
+                                </th>
+                                <th
+                                scope='col'
+                                className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                Total Base   
                                 </th>
                             </tr>
                         </thead>
@@ -58,25 +63,28 @@ export const TableCuadre = ({ mostrarCuadre, data}) => {
                             {data.map((item) => (
                                 <tr key={item?.codigo}>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.liquidacion}
+                                        {item?.codigo}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.fechaLiquidacion}
+                                        {item?.fecha}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.codigoCobrador}
+                                        {item?.ruta}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.baseLiquidacion}
+                                        {item?.baseAnterior}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.fechaDesde}
+                                        {item?.totalCobre}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.fechaHasta}
+                                        {item?.prestamo}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
-                                        {item?.diasLiquidados}
+                                        {item?.gastos}
+                                    </td>
+                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                        {item?.base}
                                     </td>
                                 </tr>
                             ))}

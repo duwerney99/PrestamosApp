@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react';
 import { TextField, InputLabel, AlertTitle, Alert } from '@mui/material';
 import { consultarRutas } from '@firebase/services/rutas';
-import { LIQUIDACION, RUTAS, PRESTAMOS } from '@firebase/services/references';
+import { LIQUIDACION, RUTAS, PRESTAMOS, CUADRE } from '@firebase/services/references';
 import { consultarLiquidacion, filtrarLiquidacion } from '@firebase/services/liquidacion';
+import { agregarCuadre } from '@firebase/services/cuadre';
 import { filtrarPrestamo } from '@firebase/services/prestamos';
 
-export const FormCuadre = () => {
-    const [cuadre, setCuadre] = useState({
-        liquidacion: '',
-        fechaLiquidacion: '',
-        codigoCobrador: '',
-        baseLiquidacion: '',
-        fechaDesde: '',
-        fechaHasta: '',
-        diasLiquidados: ''
-    });
+export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
+    const [cuadre, setCuadre] = useState({ });
     const [codigo, setCodigo] = useState('');
     const [ruta, setRuta] = useState('');
     const [totalCobre, setTotalCobre] = useState('');
@@ -22,6 +15,7 @@ export const FormCuadre = () => {
     const [baseAnterior, setBaseAnterior] = useState('');
     const [gastos, setGastos] = useState('');
     const [base, setBase] = useState('');
+    const [fecha, setFecha] = useState('');
 
 
     const searchPrestamos = async (fecha) => {
@@ -36,6 +30,10 @@ export const FormCuadre = () => {
         }
     }
 
+    
+    const handleClickCancel = () => {
+        actualizarMostrarCrearCuadre(false);
+    };
 
     const searchRuta = async (e) => {
         const codigo = e.target.value;
@@ -110,14 +108,13 @@ export const FormCuadre = () => {
 
     const handleFechaLiquidacionChange = async (e) => {
         const fecha = e.target.value;
-        
-
+        setFecha(fecha)
         try {
             const searchPrestamo = await searchPrestamos(fecha)
-            
+            console.log("search ", searchPrestamo)
             if (searchPrestamo) {
                 const sumaPrestamos = searchPrestamo.reduce((acc, item) => {
-                    const valorPrestamo = parseFloat(item.valorAPagar);
+                    const valorPrestamo = parseFloat(item.saldoActual);
                     return acc + (isNaN(valorPrestamo) ? 0 : valorPrestamo);
                 }, 0);
                 setPrestamo(sumaPrestamos)
@@ -143,24 +140,48 @@ export const FormCuadre = () => {
        
     };
 
-    useEffect(() => {
-        const gastosNum = parseFloat(gastos);
-        const prestamosNum = parseFloat(prestamo);
+
+    const handleClickSave = async () => {
+        // setInitialComponent(false)
+        console.log('fechaa', fecha)
+        try {
+            const cuadreRes = await agregarCuadre(CUADRE, {
+                ruta,
+                codigo,
+                totalCobre, 
+                gastos,
+                prestamo,
+                baseAnterior,
+                fecha,
+                base
+            })
+            console.log("Cuadre guardado: ", cuadreRes);
+            actualizarMostrarCrearCuadre(false)
+        } 
+        catch (e) {
+            console.error("Error al guardar el cuadre: ", e);
+        }
+    }
+
+    useEffect(() => { 
         if (baseAnterior && prestamo && totalCobre && gastos) {
-    
             // Convertir baseAnterior de string a número
             const baseAnteriorNum = parseFloat(baseAnterior);  // Uso de parseFloat para manejar decimales
-            
-            
+            const totalCobreNum = parseFloat(totalCobre);
+            const gastosNum = parseFloat(gastos);
+            const prestamosNum = parseFloat(prestamo);
     
-            const resultOpe = baseAnteriorNum + totalCobre;
-            console.log("base1 ", resultOpe);
-            
+            if (!isNaN(baseAnteriorNum) && !isNaN(prestamosNum) && !isNaN(totalCobreNum) && !isNaN(gastosNum)) {
+                var resultOpe = baseAnteriorNum + totalCobreNum;  // Sumar baseAnteriorNum y totalCobreNum
+                resultOpe = resultOpe - prestamosNum - gastosNum; // Sumar prestamo y restar gastos
+                console.log("base1", resultOpe);
+    
+                setBase(resultOpe);
+            } else {
+                console.error("Error: uno o más valores no son números válidos.");
+            }
         }
-        const restaOpe = prestamosNum - gastosNum;
-        console.log("base ", restaOpe);
-        setBase(restaOpe);
-    }, [prestamo, totalCobre, baseAnterior]);
+    }, [prestamo, totalCobre, baseAnterior, gastos]);
 
 
     
@@ -269,6 +290,18 @@ export const FormCuadre = () => {
                         </div>
                     </div>
                 </div>
+                <div className="flex justify-end">
+                    <div className="mt-6">
+                        <button
+                        onClick={handleClickCancel}
+                        className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
+                    </div>
+                    <div className="mt-6 ml-4">
+                        <button
+                            onClick={handleClickSave}
+                            className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
+                    </div>
+            </div>
             </div>
         </div>
     );
