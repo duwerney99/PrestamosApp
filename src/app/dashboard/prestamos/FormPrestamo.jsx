@@ -76,28 +76,39 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
         const codigo = e.target.value;
         const codigoClienteNumero = parseInt(codigo, 10);
         setCodigo(codigo);
+        let timeoutId;
+    
         if (codigo.trim() !== '') {
-            try {
-                const clienteRes = await consultarClientesID(CLIENTES, codigoClienteNumero); // Consultar cliente por código
-                console.log("Cliente ", clienteRes)
-                if (clienteRes.statusResponse) {
-                    const cliente = clienteRes.data;
-                    setCliente({
-                        ...cliente,
-                        codigo: codigo,
-                        nombre: cliente[0].nombre,
-                        nombreRuta: cliente[0].codigoRuta
-                    });
-                    setDisabled(false); // Activar campos
-                } else {
-                    setCliente({
-                        codigo: codigo,
-                        nombre: '', // Reiniciar nombre del cliente si no se encuentra el código
-                    });
-                }
-            } catch (error) {
-                console.error("Error al consultar el cliente:", error);
+            // Cancelar el timeout anterior si existe
+            if (timeoutId) {
+                clearTimeout(timeoutId);
             }
+    
+            // Establecer un nuevo timeout
+            timeoutId = setTimeout(async () => {
+                try {
+                    const clienteRes = await consultarClientesID(CLIENTES, codigoClienteNumero); // Consultar cliente por código
+                    console.log("Cliente ", clienteRes)
+                    if (clienteRes.statusResponse) {
+                        const cliente = clienteRes.data;
+                        setCliente({
+                            ...cliente,
+                            codigo: codigo,
+                            nombre: cliente[0].nombre,
+                            nombreRuta: cliente[0].codigoRuta
+                        });
+                        setDisabled(false); // Activar campos
+                    } else {
+                        setCliente({
+                            codigo: codigo,
+                            nombre: '', // Reiniciar nombre del cliente si no se encuentra el código
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error al consultar el cliente:", error);
+                }
+            }, 2000); // Esperar 500ms después de que el usuario deje de escribir
+    
         } else {
             setCliente({
                 codigo: '',
@@ -107,6 +118,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
             setDisabled(true); // Mantener campos desactivados si el código está vacío
         }
     };
+    
 
     const handleClickSave = async () => {
         setInitialComponent(false)
