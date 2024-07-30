@@ -102,11 +102,11 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.diasPago}
                                         </td>
-                                        <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                        {/* <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             <IconButton disabled={mostrarCrearPrestamo} onClick={() => handleClick(item)} aria-label="Editar">
                                             <PencilSquareIcon color={colorIcon} width={20} height={20}/>
                                             </IconButton> 
-                                        </td>
+                                        </td> */}
                                         {modalAbierto && (
                                             <ModalEdit onClose={() => setModalAbierto(false)} data={data} />
                                         )}

@@ -8,24 +8,6 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
 
     console.log("Data ", data)
 
-    const liquidReducers = useSelector((state) => state.liquidReduce.liquidReduce);
-
-    // var codigoCliente = '';
-
-    // const clienteIndex = data.map((item) => {
-    //     codigoCliente = item.codigoCliente;
-
-    //     return codigoCliente
-    // });
-
-    // console.log("clienteIndex", clienteIndex)
-
-    // console.log("liquid", liquidReducers)
-    // const existingClientIndex = liquidReducers.findIndex(liquidItem => liquidItem.codigoCliente === codigoCliente);
-    // console.log("existingClientIndex", existingClientIndex);
-
-    
-
     const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
    
 
@@ -35,8 +17,6 @@ export const TableLiquidacion = ({ mostrarLiquidacion, data, cambiarFecha }) => 
     }
 
     const handleFechaSeleccionadaChange = (date) => {
-        const fechaFormateada = new Date(date);
-        fechaFormateada.setHours(fechaFormateada.getHours());
         setFechaSeleccionada(date);
         cambiarFecha(date);
     };

@@ -5,9 +5,11 @@ import { LIQUIDACION, RUTAS, PRESTAMOS, CUADRE } from '@firebase/services/refere
 import { consultarLiquidacion, filtrarLiquidacion } from '@firebase/services/liquidacion';
 import { agregarCuadre } from '@firebase/services/cuadre';
 import { filtrarPrestamo } from '@firebase/services/prestamos';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'; // Si quieres usar tablas automáticas
 
-export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
-    const [cuadre, setCuadre] = useState({ });
+export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
+    const [cuadre, setCuadre] = useState({});
     const [codigo, setCodigo] = useState('');
     const [ruta, setRuta] = useState('');
     const [totalCobre, setTotalCobre] = useState('');
@@ -23,14 +25,14 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
             const response = await filtrarPrestamo(PRESTAMOS, fecha, ruta);
             if (response.data) {
                 return response.data
-                
+
             }
-        } catch(e) {
+        } catch (e) {
 
         }
     }
 
-    
+
     const handleClickCancel = () => {
         actualizarMostrarCrearCuadre(false);
     };
@@ -42,20 +44,20 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
         if (codigo.trim() !== '') {
             try {
 
-                
+
                 const result = await consultarRutas(RUTAS, codigo);
                 if (result.statusResponse) {
                     const rutaEncontrada = result.data
-                    
+
 
                     const rutaFiltrada = rutaEncontrada.find(ruta => ruta.codigoRuta === codigo);
-                    
+
 
                     if (rutaFiltrada) {
-                       
+
                         setRuta(rutaFiltrada.ruta);
-                    } 
-                    
+                    }
+
                 } else {
                     console.log("Error al consultar la ruta:");
                 }
@@ -73,9 +75,9 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
             const result = await filtrarLiquidacion(LIQUIDACION, fecha, ruta);
             if (result.statusResponse) {
                 const resultLiquidacion = result.data;
-                
+
                 if (resultLiquidacion.length > 0) {
-                    
+
                     return resultLiquidacion;
                 } else {
                     throw new Error('Liquidación no encontrada para la fecha y código de ruta proporcionados');
@@ -94,8 +96,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
         const name = e.target.name;
         const value = e.target.value;
 
-        if (name == "baseAnterior"){
-            console.log("value base ", value)
+        if (name == "baseAnterior") {
             setBaseAnterior(value)
         } else if (name == "gastos") {
             setGastos(value)
@@ -120,7 +121,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                 setPrestamo(sumaPrestamos)
             }
             const searchResult = await searchLiquidacion(fecha)
-            
+
             if (searchResult) {
                 // Sumar los valores de `valorAbono` de cada ítem en el array
                 const sumaValorAbono = searchResult.reduce((acc, item) => {
@@ -129,15 +130,15 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                     return acc + (isNaN(valorAbonoNumerico) ? 0 : valorAbonoNumerico);
                 }, 0);
                 setTotalCobre(sumaValorAbono)
-                
+
             } else {
                 console.log("No se encontraron datos para la fecha proporcionada.");
             }
-            
+
         } catch {
             console.error("Error al buscar la liquidación:");
         }
-       
+
     };
 
 
@@ -148,7 +149,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
             const cuadreRes = await agregarCuadre(CUADRE, {
                 ruta,
                 codigo,
-                totalCobre, 
+                totalCobre,
                 gastos,
                 prestamo,
                 baseAnterior,
@@ -157,34 +158,49 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
             })
             console.log("Cuadre guardado: ", cuadreRes);
             actualizarMostrarCrearCuadre(false)
-        } 
+        }
         catch (e) {
             console.error("Error al guardar el cuadre: ", e);
         }
     }
 
-    useEffect(() => { 
-        if (baseAnterior && prestamo && totalCobre && gastos) {
-            // Convertir baseAnterior de string a número
-            const baseAnteriorNum = parseFloat(baseAnterior);  // Uso de parseFloat para manejar decimales
-            const totalCobreNum = parseFloat(totalCobre);
-            const gastosNum = parseFloat(gastos);
-            const prestamosNum = parseFloat(prestamo);
-    
-            if (!isNaN(baseAnteriorNum) && !isNaN(prestamosNum) && !isNaN(totalCobreNum) && !isNaN(gastosNum)) {
-                var resultOpe = baseAnteriorNum + totalCobreNum;  // Sumar baseAnteriorNum y totalCobreNum
-                resultOpe = resultOpe - prestamosNum - gastosNum; // Sumar prestamo y restar gastos
-                console.log("base1", resultOpe);
-    
-                setBase(resultOpe);
-            } else {
-                console.error("Error: uno o más valores no son números válidos.");
-            }
+    useEffect(() => {
+
+        // Convertir baseAnterior de string a número
+        const baseAnteriorNum = parseFloat(baseAnterior);  // Uso de parseFloat para manejar decimales
+        const totalCobreNum = parseFloat(totalCobre);
+        const gastosNum = parseFloat(gastos) || 0;
+        const prestamosNum = parseFloat(prestamo) || 0;
+
+        if (!isNaN(baseAnteriorNum) || !isNaN(prestamosNum) || !isNaN(totalCobreNum) || !isNaN(gastosNum)) {
+            console.log("value base ", gastosNum)
+            var resultOpe = baseAnteriorNum + totalCobreNum;  // Sumar baseAnteriorNum y totalCobreNum
+            resultOpe = resultOpe - prestamosNum - gastosNum; // Sumar prestamo y restar gastos
+            console.log("base1", resultOpe);
+
+            setBase(resultOpe);
+        } else {
+            console.error("Error: uno o más valores no son números válidos.");
         }
+
     }, [prestamo, totalCobre, baseAnterior, gastos]);
 
+    const generatePDF = () => {
+        const doc = new jsPDF();
 
-    
+        doc.text("Reporte de Cuadre", 20, 20);
+        doc.text(`Fecha: ${fecha}`, 20, 30);
+        doc.text(`Código: ${codigo}`, 20, 40);
+        doc.text(`Ruta: ${ruta}`, 20, 50);
+        doc.text(`Total Cobrado: ${totalCobre}`, 20, 60);
+        doc.text(`Préstamos: ${prestamo}`, 20, 70);
+        doc.text(`Gastos: ${gastos}`, 20, 80);
+        doc.text(`Base Anterior: ${baseAnterior}`, 20, 90);
+        doc.text(`Base: ${base}`, 20, 100);
+
+        doc.save(`Cuadre_${fecha}.pdf`);
+    };
+
 
     return (
         <div className='w-1/2 grid grid-cols-1 2xl:grid-cols-1 xl:gap-4 my-4 justify-center items-center'>
@@ -249,8 +265,8 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                                 label="Total Cobrado"
                                 variant="outlined"
                                 size="medium"
-                                style={{ marginRight: '1rem', marginBottom: '1rem'}}
-                                disabled
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+
                             />
                         </div>
                         <div className='flex'>
@@ -262,7 +278,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                                 variant="outlined"
                                 size="medium"
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
-                                disabled
+
                             />
                         </div>
                         <div className='flex'>
@@ -285,7 +301,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                                 variant="outlined"
                                 size="medium"
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
-                                disabled
+
                             />
                         </div>
                     </div>
@@ -293,15 +309,20 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre}) => {
                 <div className="flex justify-end">
                     <div className="mt-6">
                         <button
-                        onClick={handleClickCancel}
-                        className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
+                            onClick={handleClickCancel}
+                            className="py-3 w-40 text-xl text-white bg-gray-400 rounded-2xl">Cancelar</button>
                     </div>
                     <div className="mt-6 ml-4">
                         <button
                             onClick={handleClickSave}
                             className="py-3 w-40 text-xl text-white bg-green-400 rounded-2xl">Guardar</button>
                     </div>
-            </div>
+                    <div className="mt-6 ml-4">
+                        <button
+                            onClick={generatePDF}
+                            className="py-3 w-40 text-xl text-white bg-blue-400 rounded-2xl">Exportar PDF</button>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -10,6 +10,17 @@ const firebaseConfig = {
   measurementId: "G-FFK7GSVGH7"
 };
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBtdrHzV6CuG5AzPniocKKk-nzSN4AXIac",
+//   authDomain: "prestamosbeta-80c50.firebaseapp.com",
+//   projectId: "prestamosbeta-80c50",
+//   storageBucket: "prestamosbeta-80c50.appspot.com",
+//   messagingSenderId: "908465413157",
+//   appId: "1:908465413157:web:2bd562871f07c9a54473cc",
+//   measurementId: "G-B3ST2JC9N5"
+// };
+
+
 export default function firebase () {
     const apps = getApps()
     if (!apps.length) initializeApp(firebaseConfig)
