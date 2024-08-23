@@ -264,17 +264,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
                             />
                         </div>
-                        <div className='flex'>
-                            <TextField
-                                onChange={onChange}
-                                type="number"
-                                name="intereses"
-                                label="Intereses"
-                                variant="outlined"
-                                size="medium"
-                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
-                            />
-                        </div>
+                        
                         <div className='flex'>
                             <TextField
                                 value={totalCobre}
@@ -305,6 +295,17 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
                                 type="number"
                                 name="gastos"
                                 label="Gastos"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="intereses"
+                                label="Intereses"
                                 variant="outlined"
                                 size="medium"
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
