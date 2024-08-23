@@ -15,6 +15,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
     const [totalCobre, setTotalCobre] = useState('');
     const [prestamo, setPrestamo] = useState('');
     const [baseAnterior, setBaseAnterior] = useState('');
+    const [intereses, setInteres] = useState('');
     const [gastos, setGastos] = useState('');
     const [base, setBase] = useState('');
     const [fecha, setFecha] = useState('');
@@ -100,7 +101,10 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
             setBaseAnterior(value)
         } else if (name == "gastos") {
             setGastos(value)
+        } else if (name == "intereses") {
+            setInteres(value)
         }
+        
         setCuadre({
             ...cuadre,
             [name]: value,
@@ -153,6 +157,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
                 gastos,
                 prestamo,
                 baseAnterior,
+                intereses,
                 fecha,
                 base
             })
@@ -171,11 +176,12 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
         const totalCobreNum = parseFloat(totalCobre);
         const gastosNum = parseFloat(gastos) || 0;
         const prestamosNum = parseFloat(prestamo) || 0;
+        const interesesNum = parseFloat(intereses);
 
         if (!isNaN(baseAnteriorNum) || !isNaN(prestamosNum) || !isNaN(totalCobreNum) || !isNaN(gastosNum)) {
             console.log("value base ", gastosNum)
             var resultOpe = baseAnteriorNum + totalCobreNum;  // Sumar baseAnteriorNum y totalCobreNum
-            resultOpe = resultOpe - prestamosNum - gastosNum; // Sumar prestamo y restar gastos
+            resultOpe = resultOpe - prestamosNum - gastosNum - interesesNum; // Sumar prestamo y restar gastos
             console.log("base1", resultOpe);
 
             setBase(resultOpe);
@@ -183,7 +189,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
             console.error("Error: uno o más valores no son números válidos.");
         }
 
-    }, [prestamo, totalCobre, baseAnterior, gastos]);
+    }, [prestamo, totalCobre, baseAnterior, gastos, intereses]);
 
     const generatePDF = () => {
         const doc = new jsPDF();
@@ -196,6 +202,7 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
         doc.text(`Préstamos: ${prestamo}`, 20, 70);
         doc.text(`Gastos: ${gastos}`, 20, 80);
         doc.text(`Base Anterior: ${baseAnterior}`, 20, 90);
+        doc.text(`Intereses: ${intereses}`, 20, 90);
         doc.text(`Base: ${base}`, 20, 100);
 
         doc.save(`Cuadre_${fecha}.pdf`);
@@ -252,6 +259,17 @@ export const FormCuadre = ({ actualizarMostrarCrearCuadre }) => {
                                 type="number"
                                 name="baseAnterior"
                                 label="Base Anterior"
+                                variant="outlined"
+                                size="medium"
+                                style={{ marginRight: '1rem', marginBottom: '1rem' }}
+                            />
+                        </div>
+                        <div className='flex'>
+                            <TextField
+                                onChange={onChange}
+                                type="number"
+                                name="intereses"
+                                label="Intereses"
                                 variant="outlined"
                                 size="medium"
                                 style={{ marginRight: '1rem', marginBottom: '1rem' }}
