@@ -1,13 +1,33 @@
 import { IconButton } from '@mui/material';
 import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
+import { TrashIcon } from '@heroicons/react/24/solid';
+import { CLIENTES } from '@firebase/services/references';
+import { eliminarCliente } from '@firebase/services/clientes';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const colorIcon = '#84cc16';
+export const colorIcon2 = '#e53935';
 
 export const TableClient = ({mostrarCrearCliente, data}) => {
 
+
     const handleClick = (item) => {
+
     };
-    console.log("Data TableClient ", data)
+
+    async function handleEliminar(id) {
+        try {
+          const result = await eliminarCliente(CLIENTES, id);
+          if (result.success) {
+            console.log(result.message);
+            toast.success("Cliente eliminado correctamente, RECARGUE LA PAGINA");
+          }
+        } catch (error) {
+          console.error("Error eliminando el cliente:", error);
+        }
+      }
+    
 
     return (
         <div className='w-full flex flex-col mt-8'>
@@ -62,12 +82,18 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             <IconButton disabled={mostrarCrearCliente} onClick={() => handleClick(item)} aria-label="Editar">
                                                 <PencilSquareIcon color={colorIcon} width={20} height={20}/>
-                                            </IconButton> 
+                                            </IconButton>
+                                            <IconButton disabled={mostrarCrearCliente} onClick={() => handleEliminar(item.id)} aria-label="Eliminar">
+                                                <TrashIcon color={colorIcon2} width={20} height={20}/>
+                                            </IconButton>  
                                         </td>
+                                        
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+
+                        <ToastContainer />
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, runTransaction , getDocs, getFirestore, setDoc, deleteDoc } from "firebase/firestore";
 
 
 
@@ -8,18 +8,22 @@ export async function obtenerSiguienteCodigoYActualizar() {
   const db = getFirestore();
   const contadorDocRef = doc(db, 'ContadoresCliente', 'cliente');
   try {
-    const docSnap = await getDoc(contadorDocRef);
-    let nuevoCodigo;
-    if (docSnap.exists()) {
-      // Si el documento del contador existe, obtenemos el valor actual del contador y lo incrementamos en 1
-      const contadorActual = docSnap.data().valor;
-      nuevoCodigo = contadorActual + 1;
-      await setDoc(contadorDocRef, { valor: nuevoCodigo }, { merge: true });
-    } else {
-      // Si el documento del contador no existe (primera vez), inicializamos el contador con un valor inicial de 1
-      nuevoCodigo = 1;
-      await setDoc(contadorDocRef, { valor: nuevoCodigo });
-    }
+    const nuevoCodigo = await runTransaction(db, async (transaction) => {
+      const docSnap = await transaction.get(contadorDocRef);
+
+      let nuevoCodigo;
+      if (docSnap.exists()) {
+        const contadorActual = docSnap.data().valor;
+        nuevoCodigo = contadorActual + 1;
+        transaction.update(contadorDocRef, { valor: nuevoCodigo });
+      } else {
+        nuevoCodigo = 1;
+        transaction.set(contadorDocRef, { valor: nuevoCodigo });
+      }
+
+      return nuevoCodigo;
+    });
+
     return nuevoCodigo;
   } catch (error) {
     console.error("Error al obtener el siguiente código y actualizar el contador: ", error);
@@ -73,6 +77,19 @@ export async function agregarCliente(reference, id, info, nuevoCodigo) {
   }
 
   
+}
+
+
+export async function eliminarCliente(reference, id) {
+  const db = getFirestore();
+  try {
+    const docRef = doc(db, reference, id);
+    await deleteDoc(docRef);
+    return { success: true, message: "Cliente eliminado correctamente" };
+  } catch (error) {
+    console.error("Error al eliminar el cliente: ", error);
+    throw error;
+  }
 }
 
 
