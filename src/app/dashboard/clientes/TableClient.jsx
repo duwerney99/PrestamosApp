@@ -16,9 +16,9 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
 
     };
 
-    async function handleEliminar(id) {
+    async function handleEliminar(item) {
         try {
-          const result = await eliminarCliente(CLIENTES, id);
+          const result = await eliminarCliente(CLIENTES, item.codigo);
           if (result.success) {
             console.log(result.message);
             toast.success("Cliente eliminado correctamente, RECARGUE LA PAGINA");
@@ -83,7 +83,7 @@ export const TableClient = ({mostrarCrearCliente, data}) => {
                                             <IconButton disabled={mostrarCrearCliente} onClick={() => handleClick(item)} aria-label="Editar">
                                                 <PencilSquareIcon color={colorIcon} width={20} height={20}/>
                                             </IconButton>
-                                            <IconButton disabled={mostrarCrearCliente} onClick={() => handleEliminar(item.id)} aria-label="Eliminar">
+                                            <IconButton disabled={mostrarCrearCliente} onClick={() => handleEliminar(item)} aria-label="Eliminar">
                                                 <TrashIcon color={colorIcon2} width={20} height={20}/>
                                             </IconButton>  
                                         </td>

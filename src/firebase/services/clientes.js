@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, runTransaction , getDocs, getFirestore, setDoc, deleteDoc } from "firebase/firestore";
+import { collection, doc, getDoc, runTransaction , query, getDocs, getFirestore, setDoc, deleteDoc, where} from "firebase/firestore";
 
 
 
@@ -80,11 +80,25 @@ export async function agregarCliente(reference, id, info, nuevoCodigo) {
 }
 
 
-export async function eliminarCliente(reference, id) {
+export async function eliminarCliente(reference, codigo) {
   const db = getFirestore();
   try {
-    const docRef = doc(db, reference, id);
-    await deleteDoc(docRef);
+    const q = query(collection(db, reference), where("codigo", "==", codigo));
+    const querySnapshot = await getDocs(q);
+
+    // Verificar si se encontró el documento
+    if (querySnapshot.empty) {
+      return { success: false, message: "No se encontró ningún cliente con ese código" };
+    }
+
+    // Eliminar el documento encontrado
+    let docId = "";
+    querySnapshot.forEach((docSnap) => {
+      docId = docSnap.id;
+    });
+
+    // Si se encontró el documento, eliminarlo
+    await deleteDoc(doc(db, reference, docId));
     return { success: true, message: "Cliente eliminado correctamente" };
   } catch (error) {
     console.error("Error al eliminar el cliente: ", error);
