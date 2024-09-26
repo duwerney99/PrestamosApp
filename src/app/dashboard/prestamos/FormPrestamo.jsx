@@ -6,6 +6,8 @@ import { agregarPrestamo, obtenerSiguienteCodigoYActualizar} from '@firebase/ser
 import { CLIENTES, PRESTAMOS } from '@firebase/services/references';
 
 import { consultarClientesID } from '@firebase/services/clientes';
+import { toast } from 'react-toastify';
+
 
 
 const statesClients = [
@@ -140,12 +142,15 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
                 // Actualizar el estado solo si el préstamo se agregó correctamente
                 setDataPrestamo([...dataPrestamo, prestamo]);
                 actualizarMostrarCrearPrestamo(false);
+                toast.success("Prestamo agregado correctamente!!")
             } else {
                 console.error("Error al agregar el préstamo: ", prestamoRes.error);
+                alert("Error al agregar el préstamo.");
                 // Manejar el error aquí
             }
         } catch (error) {
             console.error("Error al agregar el préstamo: ", error);
+            alert("Ocurrió un error inesperado.");
             // Manejar el error aquí
         }
         
@@ -319,6 +324,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
                         style={{ marginRight: '1rem' }}
                         fullWidth
                         disabled={!disabled}
+                        
                      />
                     <TextField
                         value={cliente.nombreRuta || ''}

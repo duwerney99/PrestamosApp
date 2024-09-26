@@ -58,7 +58,41 @@ export async function obtenerSiguienteCodigoYActualizar() {
     }
     return result;
   };
+
+
   
+  export const clientReportsFind = async (reference) => {
+    const result = { statusResponse: false, data: null, error: null };
+    try {
+        const db = getFirestore();
+        const collectionRef = collection(db, reference);
+        
+        
+        const today = new Date().toISOString().split('T')[0]; 
+        console.log("today ", today)
+        
+        const q = query(collectionRef, where("vencimientoPrestamo", "<", today)); // O ajusta el estado según lo que uses
+        const data = await getDocs(q);
+        
+        if (data.empty) {
+            result.error = "No hay clientes en mora.";
+            return result;
+        }
+        
+        const clientesEnMora = data.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        
+        result.statusResponse = true;
+        result.data = clientesEnMora;
+        return clientesEnMora; 
+    } catch (error) {
+        console.error("Error al consultar clientes en mora:", error);
+        result.error = `Error: ${error.message}`;
+    }
+    return result;
+};
 
 
 

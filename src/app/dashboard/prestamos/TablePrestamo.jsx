@@ -1,28 +1,18 @@
 import {useState, useEffect} from 'react';
-import { IconButton } from '@mui/material';
-import firebase from 'firebase/app';
+
 
 import { ModalEdit } from "./ModalEdit"
 import 'firebase/firestore';
-
-import PencilSquareIcon from '@heroicons/react/24/solid/PencilSquareIcon';
 
 export const colorIcon = '#84cc16';
 
 
 export const TablePrestamo = ({mostrarCrearPrestamo, data}) => { 
-    
-
-    
-
     const [modalAbierto, setModalAbierto] = useState(false);
 
     const handleClick = (item) => {
-
-
         setModalAbierto(true);
     };
-
 
     return (
         <div className='w-full flex flex-col mt-8' >

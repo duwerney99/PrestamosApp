@@ -3,8 +3,8 @@ import { PRESTAMOS } from "@firebase/services/references"
 import { FormPrestamo } from "./FormPrestamo"
 import { TablePrestamo } from "./TablePrestamo"
 import { useEffect, useState } from 'react'
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { consultarPrestamos } from "@firebase/services/prestamos"
+import { FormControl, InputLabel, Select, MenuItem, Modal, Box, Typography } from '@mui/material'
+import { clientReportsFind, consultarPrestamos } from "@firebase/services/prestamos"
 import { RUTAS } from '@firebase/services/references';
 import { consultarRutas } from '@firebase/services/rutas';
 
@@ -15,8 +15,13 @@ export default function Page() {
     const [dataPrestamo, setDataPrestamo] = useState([]);
     const [rutas, setRutas] = useState([]);
     const [dataPrestamoStatic, setDataPrestamoStatic] = useState([]);
+    const [clientesEnMora, setClientesEnMora] = useState([]);
+    const [mostrarMora, setMostrarMora] = useState(false);
 
     useEffect(() => {
+
+        console.log("dataPrestamo ", dataPrestamo)
+
         async function fetchPrestamo() {
             const response = await consultarPrestamos(PRESTAMOS);
             if (response.data) {
@@ -25,8 +30,8 @@ export default function Page() {
                 setDataPrestamo(sortedClientes);
                 setDataPrestamoStatic(sortedClientes);
             }
-            
-            const resultRuta = await consultarRutas(RUTAS); 
+
+            const resultRuta = await consultarRutas(RUTAS);
             if (resultRuta.statusResponse) {
                 setRutas(resultRuta.data);
             } else {
@@ -34,13 +39,28 @@ export default function Page() {
             }
         }
         fetchPrestamo();
+
+
     }, []);
 
 
 
+    async function reportClients() {
+        const report = await clientReportsFind(PRESTAMOS)
+        console.log("report ", report)
+
+        if (report) {
+            setClientesEnMora(report);
+            setMostrarMora(true);
+        } else {
+            console.error(report.error);
+        }
+    }
+
+
     const onChange = (e) => {
         const value = e.target.value
-        
+
         const dataFiltrada = dataPrestamoStatic.filter((prestamo) => prestamo.nombreRuta === value)
 
         setDataPrestamo(dataFiltrada)
@@ -51,6 +71,10 @@ export default function Page() {
     const actualizarMostrarCrearPrestamo = (value) => {
         setMostrarCrearPrestamo(value);
     }
+
+    const handleClose = () => {
+        setMostrarMora(false); // Cambia el estado para cerrar el modal
+    };
 
 
 
@@ -66,24 +90,74 @@ export default function Page() {
                             <div>
                                 <h3 className='text-xl font-bold text-gray-900 mb-2'>Prestamos</h3>
                                 <h2>{dataPrestamo.map((data) => parseFloat(data.valorAPagar)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}</h2>
-                                <FormControl fullWidth>
-                                    <InputLabel>Rutas</InputLabel>
-                                    <Select
-                                        label="rutas"
-                                        name='rutas'
-                                        variant="outlined"
-                                        size="small"
-                                        style={{ marginRight: '1rem' }}   
-                                        onChange={onChange}
-                                        
+                                <div>
+                                    <FormControl fullWidth style={{ marginBottom: '1rem' }}>
+                                        <InputLabel>Rutas</InputLabel>
+                                        <Select
+                                            label="rutas"
+                                            name='rutas'
+                                            variant="outlined"
+                                            size="small"
+                                            style={{ marginRight: '1rem' }}
+                                            onChange={onChange}
+
+                                        >
+                                            {rutas.map((ruta) => (
+                                                <MenuItem key={ruta.id} value={ruta.ruta}>
+                                                    {ruta.ruta}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+
+                            </div>
+                            <div >
+                                <h2 style={{ marginLeft: '4rem' }}>
+                                    {/* Calcular el total de valor a pagar de todos los clientes en mora */}
+                                    {clientesEnMora.map((data) => parseFloat(data.valorAPagar)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}
+                                </h2>
+                                <button className="py-2 w-60 text-xl text-white bg-green-400 rounded-2xl hover:bg-red-500" onClick={() => reportClients(setClientesEnMora, setMostrarMora)}>Consultar Clientes en Mora</button>
+
+                                <Modal
+                                    open={mostrarMora}
+                                    onClose={handleClose}
+                                    aria-labelledby="clientes-en-mora-modal"
+                                    aria-describedby="clientes-en-mora-description"
+                                >
+                                    <Box
+                                        sx={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            left: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            width: 500,
+                                            bgcolor: 'background.paper',
+                                            border: '2px solid #000',
+                                            boxShadow: 24,
+                                            p: 4,
+                                        }}
                                     >
-                                        {rutas.map((ruta) => (
-                                            <MenuItem key={ruta.id} value={ruta.ruta}>
-                                                {ruta.ruta}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                        <Typography id="clientes-en-mora-modal" variant="h6" component="h2">
+                                            Clientes en Mora
+                                        </Typography>
+                                        <Typography id="clientes-en-mora-description" sx={{ mt: 2 }}>
+                                            {clientesEnMora.length > 0 ? (
+                                                <ul className="boxShadow-2">
+                                                    {clientesEnMora.map((cliente) => (
+                                                        <li key={cliente.id}>
+                                                            {cliente.codigo} - {cliente.nombre} - {cliente.valorAPagar} - Vencimiento: {cliente.vencimientoPrestamo}
+                                                        </li>
+                                                    ))}
+                                                    
+                                                </ul>
+                                            ) : (
+                                                <p>No hay clientes en mora.</p>
+                                            )}
+                                        </Typography>
+                                    </Box>
+                                </Modal>
+
                             </div>
                             <div className='flex-shrink-0'>
                                 <button disabled={mostrarCrearPrestamo}
@@ -95,7 +169,7 @@ export default function Page() {
 
                             </div>
                         </div>
-                        {dataPrestamo && dataPrestamo.length > 0 && <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={dataPrestamo} />}
+                        {dataPrestamo && dataPrestamo.length > 0 && <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={dataPrestamo} moraClients={mostrarMora ? clientesEnMora : []} />}
                     </div>
                 </div>
             </div>

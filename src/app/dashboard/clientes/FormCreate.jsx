@@ -8,6 +8,7 @@ import { Cliente } from '@pages/model/clientes/model';
 
 import { consultarRutas } from '@firebase/services/rutas';
 import { Height } from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
 
 
@@ -72,11 +73,14 @@ export const FormCreate = ({ dataCliente, setDataCliente, actualizarMostrarCrear
             if (respuesta.success) {
                 setDataCliente([...dataCliente, cliente]);
                 actualizarMostrarCrearCliente(false);
+                toast.success("Cliente agregado!!")
             } else {
                 console.error("Error al agregar el cliente: ", respuesta.error);
+                toast.error("Error al agregar el cliente")
             }
         } catch (error) {
             console.error("Error al agregar el cliente: ", error);
+            toast.error("El cliente no fue agregado")
             // Manejar el error aquí
         }
 
