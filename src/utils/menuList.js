@@ -4,6 +4,7 @@ import LogOutIcon from '@components/common/icons/LogOutIcon'
 import PrestamoIcon from '@components/common/icons/PrestamoIcon'
 import LiquidacionIcon from '@components/common/icons/LiquidacionIcon'
 import CuadreIcon from '@components/common/icons/CuadreIcon'
+import PointIcon from '@components/common/icons/PointIcon'
 import RutasIcon from '@components/common/icons/RutasIcon'
 
 export const colorIcon = '#6B7280'
@@ -16,6 +17,7 @@ export const menuList = [
     { label: 'Liquidacion', href: '/dashboard/liquidacion', icon: <LiquidacionIcon color={colorIcon} width={20} height={20} /> },
     { label: 'Rutas', href: '/dashboard/rutas', icon: <RutasIcon color={colorIcon} width={20} height={20} /> },
     { label: 'Cuadre', href: '/dashboard/cuadre', icon: <CuadreIcon color={colorIcon} width={20} height={20} /> },
+    { label: 'CierreMes', href: '/dashboard/cierre', icon: <PointIcon color={colorIcon} width={20} height={20} /> },
 ]
 
 export const menuDropdown = [

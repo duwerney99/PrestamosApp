@@ -50,7 +50,11 @@ export default function Page() {
         console.log("report ", report)
 
         if (report) {
-            setClientesEnMora(report);
+            const ruta = rutas.map((ruta) => (ruta.ruta))
+            console.log("ruta ", ruta)
+            const clientesFiltradosPorRuta = report.map((cliente) => cliente.nombreRuta === ruta);
+            console.log("Data filtrada ", clientesFiltradosPorRuta)
+            setClientesEnMora(clientesFiltradosPorRuta);
             setMostrarMora(true);
         } else {
             console.error(report.error);
