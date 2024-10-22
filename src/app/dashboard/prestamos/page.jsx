@@ -15,8 +15,8 @@ export default function Page() {
     const [dataPrestamo, setDataPrestamo] = useState([]);
     const [rutas, setRutas] = useState([]);
     const [dataPrestamoStatic, setDataPrestamoStatic] = useState([]);
-    const [clientesEnMora, setClientesEnMora] = useState([]);
-    const [mostrarMora, setMostrarMora] = useState(false);
+    
+    
 
     useEffect(() => {
 
@@ -43,25 +43,6 @@ export default function Page() {
 
     }, []);
 
-
-
-    async function reportClients() {
-        const report = await clientReportsFind(PRESTAMOS)
-        console.log("report ", report)
-
-        if (report) {
-            const ruta = rutas.map((ruta) => (ruta.ruta))
-            console.log("ruta ", ruta)
-            const clientesFiltradosPorRuta = report.map((cliente) => cliente.nombreRuta === ruta);
-            console.log("Data filtrada ", clientesFiltradosPorRuta)
-            setClientesEnMora(clientesFiltradosPorRuta);
-            setMostrarMora(true);
-        } else {
-            console.error(report.error);
-        }
-    }
-
-
     const onChange = (e) => {
         const value = e.target.value
 
@@ -76,10 +57,7 @@ export default function Page() {
         setMostrarCrearPrestamo(value);
     }
 
-    const handleClose = () => {
-        setMostrarMora(false); // Cambia el estado para cerrar el modal
-    };
-
+  
 
 
     return (
@@ -116,53 +94,7 @@ export default function Page() {
                                 </div>
 
                             </div>
-                            <div >
-                                <h2 style={{ marginLeft: '4rem' }}>
-                                    {/* Calcular el total de valor a pagar de todos los clientes en mora */}
-                                    {clientesEnMora.map((data) => parseFloat(data.valorAPagar)).reduce((acomuldor, saldo) => acomuldor + saldo, 0)}
-                                </h2>
-                                <button className="py-2 w-60 text-xl text-white bg-green-400 rounded-2xl hover:bg-red-500" onClick={() => reportClients(setClientesEnMora, setMostrarMora)}>Consultar Clientes en Mora</button>
-
-                                <Modal
-                                    open={mostrarMora}
-                                    onClose={handleClose}
-                                    aria-labelledby="clientes-en-mora-modal"
-                                    aria-describedby="clientes-en-mora-description"
-                                >
-                                    <Box
-                                        sx={{
-                                            position: 'absolute',
-                                            top: '50%',
-                                            left: '50%',
-                                            transform: 'translate(-50%, -50%)',
-                                            width: 500,
-                                            bgcolor: 'background.paper',
-                                            border: '2px solid #000',
-                                            boxShadow: 24,
-                                            p: 4,
-                                        }}
-                                    >
-                                        <Typography id="clientes-en-mora-modal" variant="h6" component="h2">
-                                            Clientes en Mora
-                                        </Typography>
-                                        <Typography id="clientes-en-mora-description" sx={{ mt: 2 }}>
-                                            {clientesEnMora.length > 0 ? (
-                                                <ul className="boxShadow-2">
-                                                    {clientesEnMora.map((cliente) => (
-                                                        <li key={cliente.id}>
-                                                            {cliente.codigo} - {cliente.nombre} - {cliente.valorAPagar} - Vencimiento: {cliente.vencimientoPrestamo}
-                                                        </li>
-                                                    ))}
-                                                    
-                                                </ul>
-                                            ) : (
-                                                <p>No hay clientes en mora.</p>
-                                            )}
-                                        </Typography>
-                                    </Box>
-                                </Modal>
-
-                            </div>
+                            
                             <div className='flex-shrink-0'>
                                 <button disabled={mostrarCrearPrestamo}
                                     onClick={() => setMostrarCrearPrestamo(true)}
@@ -173,7 +105,7 @@ export default function Page() {
 
                             </div>
                         </div>
-                        {dataPrestamo && dataPrestamo.length > 0 && <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={dataPrestamo} moraClients={mostrarMora ? clientesEnMora : []} />}
+                        {dataPrestamo && dataPrestamo.length > 0 && <TablePrestamo mostrarCrearPrestamo={mostrarCrearPrestamo} data={dataPrestamo}  />}
                     </div>
                 </div>
             </div>

@@ -10,7 +10,6 @@ export const FormCierre = () => {
     return (
         <>
         <Box>
-            <Button>Hola</Button>
         </Box>
         </>
 
