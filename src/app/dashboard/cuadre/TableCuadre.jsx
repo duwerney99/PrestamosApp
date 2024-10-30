@@ -55,6 +55,11 @@ export const TableCuadre = ({ mostrarCrearCuadre, data}) => {
                                 <th
                                 scope='col'
                                 className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                Intereses   
+                                </th>
+                                <th
+                                scope='col'
+                                className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
                                 Total Base   
                                 </th>
                             </tr>
@@ -82,6 +87,9 @@ export const TableCuadre = ({ mostrarCrearCuadre, data}) => {
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.gastos}
+                                    </td>
+                                    <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
+                                        {item?.intereses}
                                     </td>
                                     <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                         {item?.base}

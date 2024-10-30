@@ -2,17 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { FormCierre } from "./FormCierre";
-import { PRESTAMOS, RUTAS } from "@firebase/services/references";
+import { CUADRE, LIQUIDACION, PRESTAMOS, RUTAS } from "@firebase/services/references";
 import { Box, Modal, Typography, Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
-import { clientReportsFind, consultarPrestamos } from "@firebase/services/prestamos";
+import { clientReportsFind } from "@firebase/services/prestamos";
 import { consultarRutas } from "@firebase/services/rutas";
+import { consultarCuadres } from "@firebase/services/cuadre";
+import { consultarLiquidacion } from "@firebase/services/liquidacion";
 
 export default function Page() {
     const [clientesEnMora, setClientesEnMora] = useState([]);
     const [mostrarMora, setMostrarMora] = useState(false);
     const [rutas, setRutas] = useState([]);
-    const [rutaSeleccionada, setRutaSeleccionada] = useState(""); // Estado para la ruta seleccionada
-    const [gananciasTotales, setGananciasTotales] = useState(0); // Estado para las ganancias
+    const [rutaSeleccionada, setRutaSeleccionada] = useState("");
+    const [gananciasTotales, setGananciasTotales] = useState(0);
+    const [gastosTotales, setGastosTotales] = useState(0);
+    const [liquidacionCartera, setLiquidacionCartera] = useState(0);
+
+    const [mostrarGanancias, setMostrarGanancias] = useState(false);
+    const [mostrarGastos, setMostrarGastos] = useState(false);
+    const [mostrarCartera, setMostrarCartera] = useState(false);
 
     // Cargar rutas al montar el componente
     useEffect(() => {
@@ -46,37 +54,62 @@ export default function Page() {
 
     // Función para calcular las ganancias totales de los préstamos filtrados por la ruta seleccionada
     async function calcularGanancias() {
-        const prestamos = await consultarPrestamos(PRESTAMOS);
+        const prestamos = await consultarCuadres(CUADRE);
         if (prestamos.statusResponse) {
             console.log("rutaSeleccionada", rutaSeleccionada)
+            console.log("prestamos ", prestamos)
             // Filtrar los préstamos por la ruta seleccionada
             const prestamosFiltradosPorRuta = prestamos.data.filter(
-                (prestamo) => prestamo.nombreRuta === rutaSeleccionada
+                (prestamo) => prestamo.ruta === rutaSeleccionada
             );
-            console.log("ruta filtr", prestamosFiltradosPorRuta)
-
-            // Calcular las ganancias de los préstamos filtrados
-            const ganancias = prestamosFiltradosPorRuta.reduce((totalGanancias, prestamo) => {
-                const saldoActual = parseFloat(prestamo.saldoActual);
-                console.log("saldoActualr", saldoActual)
-                const intereses = parseFloat(prestamo.intereses) / 100;
-                console.log("intereses", intereses)
-                const saldoAPagar = saldoActual * (1 + intereses)
-                console.log("saldoAPagar", saldoAPagar);
-                const ganancia = saldoAPagar - saldoActual;
-                console.log("ganancia", ganancia)
-                const resultado = totalGanancias + ganancia
-                console.log("resultado", resultado)
-                return resultado;
-            }, 0);
-            console.log("ruta filtr", prestamosFiltradosPorRuta)
-
+            const ganancias = prestamosFiltradosPorRuta.reduce(
+                (total, prestamo) => total + (Number(prestamo.intereses) || 0),
+                0
+            );
             setGananciasTotales(ganancias);
+            setMostrarGanancias(true);
         } else {
             console.error(prestamos.error);
         }
     }
 
+    async function calcularGastos() {
+        const prestamos = await consultarCuadres(CUADRE);
+        if (prestamos.statusResponse) {
+            const prestamosFiltradosPorRuta = prestamos.data.filter(
+                (prestamo) => prestamo.ruta === rutaSeleccionada
+            );
+
+            const gastos = prestamosFiltradosPorRuta.reduce(
+                (total, prestamo) => total + (Number(prestamo.gastos) || 0),
+                0
+            );
+            setGastosTotales(gastos);
+            setMostrarGastos(true);
+        } else {
+            console.error(prestamos.error);
+        }
+    }
+
+    async function calcularCartera() {
+        const liquidacion = await consultarLiquidacion(LIQUIDACION);
+        if (liquidacion.statusResponse) {
+            const liquidacionFiltradosPorRuta = liquidacion.data.filter(
+                (liquidacion) => liquidacion.codigoRuta === rutaSeleccionada
+            );
+
+            const totalCartera = liquidacionFiltradosPorRuta.reduce(
+                (total, liquidacion) => total + (Number(liquidacion.saldoObtener) || 0),
+                0
+            );
+            console.log("totalCartera ", totalCartera)
+
+            setLiquidacionCartera(totalCartera);
+            setMostrarCartera(true);
+        } else {
+            console.error(prestamos.error);
+        }
+    }
 
     const handleClose = () => {
         setMostrarMora(false);
@@ -111,7 +144,7 @@ export default function Page() {
                 {/* Mostrar total de valor a pagar */}
                 {clientesEnMora.length > 0 && (
                     <Typography variant="h6" sx={{ mb: 2 }}>
-                        Total a pagar: {clientesEnMora
+                        Total a pagar clientes mora: {clientesEnMora
                             .map((data) => parseFloat(data.valorAPagar))
                             .reduce((acumulador, saldo) => acumulador + saldo, 0)}
                     </Typography>
@@ -141,9 +174,41 @@ export default function Page() {
                 </Button>
 
                 {/* Mostrar ganancias totales */}
-                {gananciasTotales > 0 && (
+                {mostrarGanancias >= 0 && (
                     <Typography variant="h6" sx={{ mb: 2 }}>
                         Ganancias Totales: {gananciasTotales}
+                    </Typography>
+                )}
+
+                <Button
+                    variant="contained"
+                    color="warning"
+                    size="large"
+                    onClick={calcularGastos}
+                    sx={{ mb: 4 }}
+                >
+                    Calcular Gastos Totales
+                </Button>
+
+                {mostrarGastos >= 0 && (
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                        Gastos Totales: {gastosTotales}
+                    </Typography>
+                )}
+
+                <Button
+                    variant="contained"
+                    color="success"
+                    size="large"
+                    onClick={calcularCartera}
+                    sx={{ mb: 4 }}
+                >
+                    Total cartera
+                </Button>
+
+                {mostrarCartera >= 0 && (
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                        Total Cartera: {liquidacionCartera}
                     </Typography>
                 )}
             </Box>
