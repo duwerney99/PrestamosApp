@@ -14,7 +14,7 @@ export default function Page () {
         async function fetchCliente() {
             const response = await consultarClientes(CLIENTES, null);
             if (response.data) {
-                const sortedClientes = response.data.sort((a, b) => a.codigo - b.codigo);
+                const sortedClientes = response.data.sort((a, b) => b.codigo - a.codigo);
                 setDataCliente(sortedClientes);
             }
         }
