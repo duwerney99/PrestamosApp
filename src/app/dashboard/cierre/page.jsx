@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { FormCierre } from "./FormCierre";
 import { CUADRE, LIQUIDACION, PRESTAMOS, RUTAS } from "@firebase/services/references";
 import { Box, Modal, Typography, Select, MenuItem, FormControl, InputLabel, Button, TextField } from "@mui/material";
-import { clientReportsFind } from "@firebase/services/prestamos";
+import { clientReportsFind, consultarPrestamos } from "@firebase/services/prestamos";
 import { consultarRutas } from "@firebase/services/rutas";
 import { consultarCuadres } from "@firebase/services/cuadre";
 import { consultarLiquidacion } from "@firebase/services/liquidacion";
@@ -96,16 +96,18 @@ export default function Page() {
 
     async function calcularCartera() {
         const liquidacion = await consultarLiquidacion(LIQUIDACION);
-        if (liquidacion.statusResponse) {
+        const prestamos = await consultarPrestamos(PRESTAMOS);
+        console.log("prestamos ", prestamos)
+        if (prestamos.statusResponse) {
             const elementosFiltrados = [];
             const inicio = new Date(fechaInicio);
             const fin = new Date(fechaFin);
 
-            liquidacion.data.forEach((item) => {
-                const fechaLiquidacion = new Date(item.fechaLiquidacion);
+            prestamos.data.forEach((item) => {
+                const fechaLiquidacion = new Date(item.fechaPrestamo);
                 console.log("fechaLiquidacion ", fechaLiquidacion);
                 if (
-                    item.codigoRuta === rutaSeleccionada &&
+                    item.nombreRuta === rutaSeleccionada &&
                     fechaLiquidacion >= inicio &&
                     fechaLiquidacion <= fin
                 ) {
@@ -115,12 +117,8 @@ export default function Page() {
 
             console.log("elementos ", elementosFiltrados)
 
-            elementosFiltrados.forEach((item, index) => {
-                console.log(`Elemento ${index + 1}: Fecha de Liquidación - ${item.fechaLiquidacion}`);
-            });
-
             const totalCartera = elementosFiltrados.reduce(
-                (total, item) => total + (Number(item.saldoObtener) || 0),
+                (total, item) => total + (Number(item.valorAPagar) || 0),
                 0
             );
 
