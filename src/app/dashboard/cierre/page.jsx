@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { FormCierre } from "./FormCierre";
 import { CUADRE, LIQUIDACION, PRESTAMOS, RUTAS } from "@firebase/services/references";
-import { Box, Modal, Typography, Select, MenuItem, FormControl, InputLabel, Button } from "@mui/material";
+import { Box, Modal, Typography, Select, MenuItem, FormControl, InputLabel, Button, TextField } from "@mui/material";
 import { clientReportsFind } from "@firebase/services/prestamos";
 import { consultarRutas } from "@firebase/services/rutas";
 import { consultarCuadres } from "@firebase/services/cuadre";
@@ -21,6 +21,9 @@ export default function Page() {
     const [mostrarGanancias, setMostrarGanancias] = useState(false);
     const [mostrarGastos, setMostrarGastos] = useState(false);
     const [mostrarCartera, setMostrarCartera] = useState(false);
+
+    const [fechaInicio, setFechaInicio] = useState("");
+    const [fechaFin, setFechaFin] = useState("");
 
     // Cargar rutas al montar el componente
     useEffect(() => {
@@ -94,16 +97,34 @@ export default function Page() {
     async function calcularCartera() {
         const liquidacion = await consultarLiquidacion(LIQUIDACION);
         if (liquidacion.statusResponse) {
-            const liquidacionFiltradosPorRuta = liquidacion.data.filter(
-                (liquidacion) => liquidacion.codigoRuta === rutaSeleccionada
-            );
+            const elementosFiltrados = [];
+            const inicio = new Date(fechaInicio);
+            const fin = new Date(fechaFin);
 
-            const totalCartera = liquidacionFiltradosPorRuta.reduce(
-                (total, liquidacion) => total + (Number(liquidacion.saldoObtener) || 0),
+            liquidacion.data.forEach((item) => {
+                const fechaLiquidacion = new Date(item.fechaLiquidacion);
+                console.log("fechaLiquidacion ", fechaLiquidacion);
+                if (
+                    item.codigoRuta === rutaSeleccionada &&
+                    fechaLiquidacion >= inicio &&
+                    fechaLiquidacion <= fin
+                ) {
+                    elementosFiltrados.push(item);
+                }
+            });
+
+            console.log("elementos ", elementosFiltrados)
+
+            elementosFiltrados.forEach((item, index) => {
+                console.log(`Elemento ${index + 1}: Fecha de Liquidación - ${item.fechaLiquidacion}`);
+            });
+
+            const totalCartera = elementosFiltrados.reduce(
+                (total, item) => total + (Number(item.saldoObtener) || 0),
                 0
             );
-            console.log("totalCartera ", totalCartera)
 
+            console.log("totalCartera ", totalCartera);
             setLiquidacionCartera(totalCartera);
             setMostrarCartera(true);
         } else {
@@ -140,6 +161,27 @@ export default function Page() {
                         ))}
                     </Select>
                 </FormControl>
+
+                <TextField
+                    label="Fecha de Inicio"
+                    type="date"
+                    value={fechaInicio}
+                    onChange={(e) => setFechaInicio(e.target.value)}
+                    sx={{ mb: 2, mr: 2 }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+                <TextField
+                    label="Fecha de Fin"
+                    type="date"
+                    value={fechaFin}
+                    onChange={(e) => setFechaFin(e.target.value)}
+                    sx={{ mb: 2 }}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
 
                 {/* Mostrar total de valor a pagar */}
                 {clientesEnMora.length > 0 && (
