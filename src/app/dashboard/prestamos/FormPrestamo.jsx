@@ -77,6 +77,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     const handleCodigoChange = async (e) => {
         const codigo = e.target.value;
         const codigoClienteNumero = parseInt(codigo, 10);
+        console.log("codigo ", codigo)
         setCodigo(codigo);
         let timeoutId;
     
@@ -273,7 +274,7 @@ export const FormPrestamo = ( { dataPrestamo, setDataPrestamo, actualizarMostrar
     };
 
     const [prestamo, setPrestamo] = useState({ 
-        codigo: null,
+        codigo: '',
         nombreCliente: '',
         nombreRuta: '',
         saldoActual: 0,

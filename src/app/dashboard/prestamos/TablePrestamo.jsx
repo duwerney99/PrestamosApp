@@ -1,14 +1,20 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 
 import { ModalEdit } from "./ModalEdit"
 import 'firebase/firestore';
+import { TablePagination } from '@mui/material';
 
 export const colorIcon = '#84cc16';
 
 
-export const TablePrestamo = ({mostrarCrearPrestamo, data}) => { 
+export const TablePrestamo = ({ mostrarCrearPrestamo, data }) => {
     const [modalAbierto, setModalAbierto] = useState(false);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const dataPaginated = data.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+
 
     const handleClick = (item) => {
         setModalAbierto(true);
@@ -23,50 +29,50 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                             <thead className='bg-gray-50'>
                                 <tr>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Código   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Código
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Nombre Cliente   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Nombre Cliente
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Valor a Pagar   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Valor a Pagar
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Valor abono   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Valor abono
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Fecha prestamo   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Fecha prestamo
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Fecha Vencimiento   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Fecha Vencimiento
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Intereses   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Intereses
                                     </th>
                                     <th
-                                    scope='col'
-                                    className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                                    Dias pago   
+                                        scope='col'
+                                        className='p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
+                                        Dias pago
                                     </th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody className='bg-white'>
-                                {data.map((item) => (
+                                {dataPaginated.map((item) => (
                                     <tr key={item?.codigo}>
                                         <td className='p-4 whitespace-nowrap text-sm font-normal text-gray-900'>
                                             {item?.codigo}
@@ -100,12 +106,24 @@ export const TablePrestamo = ({mostrarCrearPrestamo, data}) => {
                                         {modalAbierto && (
                                             <ModalEdit onClose={() => setModalAbierto(false)} data={data} />
                                         )}
-                                        
+
                                     </tr>
-                                    
+
                                 ))}
                             </tbody>
                         </table>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]} // Opciones de filas por página
+                            component="div"
+                            count={data.length} // Cantidad total de datos
+                            rowsPerPage={rowsPerPage} // Cantidad de filas por página
+                            page={page} // Página actual
+                            onPageChange={(event, newPage) => setPage(newPage)} // Cambio de página
+                            onRowsPerPageChange={(event) => {
+                                setRowsPerPage(parseInt(event.target.value, 10));
+                                setPage(0); // Reiniciar a la primera página
+                            }}
+                        />
                     </div>
                 </div>
             </div>
